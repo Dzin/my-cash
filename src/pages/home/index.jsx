@@ -25,7 +25,8 @@ export default function Home() {
                 width: "12rem",
                 borderRadius: "1rem",
               }}
-              md={12}
+              sm={3}
+              xs={12}
             >
               <Paper sx={{ height: "100%" }}>Componente Receitas </Paper>
             </Grid>
@@ -36,7 +37,8 @@ export default function Home() {
                 width: "12rem",
                 borderRadius: "1rem",
               }}
-              md={12}
+              sm={3}
+              xs={12}
             >
               <Paper sx={{ height: "100%" }}>Componente Despesas </Paper>
             </Grid>
@@ -47,7 +49,8 @@ export default function Home() {
                 width: "12rem",
                 borderRadius: "1rem",
               }}
-              md={12}
+              sm={3}
+              xs={12}
             >
               <Paper sx={{ height: "100%" }}>Componente Balanço </Paper>
             </Grid>
