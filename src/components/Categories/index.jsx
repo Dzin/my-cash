@@ -14,6 +14,8 @@ import ArrowCircleUpOutlinedIcon from '@mui/icons-material/ArrowCircleUpOutlined
 import ArrowCircleDownOutlinedIcon from '@mui/icons-material/ArrowCircleDownOutlined';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import DeleteForeverOutlinedIcon from '@mui/icons-material/DeleteForeverOutlined';
+import Button from '@mui/material/Button';
+import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 
 export default function Categories() {
     const [categories, setCategories] = useState([]);
@@ -35,6 +37,10 @@ export default function Categories() {
                 console.log(`Erro: ${err}`);
             });
     }, []);
+
+    const addCategory = () => {
+
+    }
 
     const editCategory = ( id ) => {
 
@@ -104,6 +110,11 @@ export default function Categories() {
                 ))
             }
             </List>
+            <Button variant="contained" sx={{
+                backgroundColor: "#000000",
+            }} endIcon={<AddOutlinedIcon />} onClick={ () => addCategory() }>
+                Adicionar
+            </Button>
         </>
     );
 }
