@@ -63,7 +63,7 @@ export default function Categories() {
                     justifyContent: "end",
                     alignItems: "center",
                     gap: "1rem",
-                }} >
+                }}>
                     <FormControlLabel sx={{
                         margin: 0,
                     }} control={<Switch size="medium" onChange={ (e) => { e.target.checked ? setCategoryFilter([...categoryFilter, "receita"]) : setCategoryFilter(categoryFilter.filter( filter => filter !== "receita" )) } } />} label="Entrada" />
@@ -73,11 +73,19 @@ export default function Categories() {
                 </FormGroup>
             </Grid>
 
-            <List sx={{ width: "100%" }} >
+            <List sx={{
+                width: "100%"
+            }}>
             {
                 filteredCategories.map( category => (
-                    <ListItem key={ category.id }>
-                        <ListItemIcon>
+                    <ListItem key={category.id} sx={{
+                        paddingLeft: "0",
+                        paddingRight: "0",
+                    }}>
+                        <ListItemIcon sx={{
+                            minWidth: "0",
+                            marginRight: "10px",
+                        }} >
                             {
                                 category.tipo === "despesa" ?
                                     <ArrowCircleDownOutlinedIcon fontSize="medium" sx={{ color: "#E53E3E" }} />
