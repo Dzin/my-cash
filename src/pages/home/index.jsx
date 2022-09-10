@@ -17,6 +17,7 @@ function CardTop(props) {
       sx={{
         height: "5rem",
         borderRadius: "1rem",
+        margin: { xs: "0 0.5rem" },
       }}
       sm={3}
       xs={12}
@@ -28,7 +29,13 @@ function CardTop(props) {
 }
 function CardBotton(props) {
   return (
-    <Grid item sx={{ height: "21rem" }} xs={12} sm={4} {...props}>
+    <Grid
+      item
+      sx={{ height: "21rem", margin: { xs: "0 0.5rem" } }}
+      xs={12}
+      sm={4}
+      {...props}
+    >
       <Paper sx={{ height: "100%" }}>{props.children}</Paper>
     </Grid>
   );
