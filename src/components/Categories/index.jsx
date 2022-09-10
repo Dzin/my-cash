@@ -15,7 +15,6 @@ import ArrowCircleDownOutlinedIcon from '@mui/icons-material/ArrowCircleDownOutl
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import DeleteForeverOutlinedIcon from '@mui/icons-material/DeleteForeverOutlined';
 import Button from '@mui/material/Button';
-import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 
 export default function Categories() {
     const [categories, setCategories] = useState([]);
