@@ -220,10 +220,10 @@ export default function Home() {
         </Grid>
         <Grid item width={"100%"}>
           <Grid container spacing={2} justifyContent="center">
-            <CardBotton xs={12} sm={6}>
+            <CardBotton xs={12} md={6}>
               Componente Transações
             </CardBotton>
-            <CardBotton xs={12} sm={6}>
+            <CardBotton xs={12} md={6}>
               Componente Categorias
             </CardBotton>
           </Grid>
