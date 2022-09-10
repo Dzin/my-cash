@@ -22,8 +22,6 @@ export default function Categories() {
     const [categoryFilter, setCategoryFilter] = useState([]);
 
     const filteredCategories = categoryFilter.length > 0 ? categories.filter(category => categoryFilter.includes(category.tipo)) : categories;
-    
-    console.log(categoryFilter);
 
     useEffect(() => {
         fetch(`https://gama-academy-api.herokuapp.com/categoria`)
@@ -39,15 +37,15 @@ export default function Categories() {
     }, []);
 
     const addCategory = () => {
-
+        console.log("Adicionar categoria!");
     }
 
     const editCategory = ( id ) => {
-
+        console.log("Editar categoria!");
     }
 
     const deleteCategory = ( id ) => {
-
+        console.log("Deletar categoria!");
     }
 
     return (
@@ -90,7 +88,7 @@ export default function Categories() {
                     }}>
                         <ListItemIcon sx={{
                             minWidth: "0",
-                            marginRight: "10px",
+                            marginRight: "0.5rem",
                         }} >
                             {
                                 category.tipo === "despesa" ?
@@ -111,8 +109,14 @@ export default function Categories() {
             }
             </List>
             <Button variant="contained" sx={{
-                backgroundColor: "#000000",
-            }} endIcon={<AddOutlinedIcon />} onClick={ () => addCategory() }>
+                backgroundColor: "none",
+                backgroundImage: "linear-gradient(to bottom right, #658DD1 , #2D3748)",
+                padding: "0.4rem 2rem",
+                fontSize: "0.9rem",
+                fontWeight: "bold",
+                textTransform: "none",
+                borderRadius: "0.5rem"
+            }} onClick={ () => addCategory() }>
                 Adicionar
             </Button>
         </>
