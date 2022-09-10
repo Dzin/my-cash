@@ -14,7 +14,8 @@ import {
   GridFullContent,
   BackgroundColor,
 } from "./style";
-
+// SERVICES
+import api from "../../services/api";
 function CardTop(props) {
   let data;
   switch (props.type) {
@@ -144,14 +145,8 @@ function Copyrights() {
 export default function Home() {
   const [transations, setTransations] = useState([]);
   useEffect(() => {
-    fetch("https://gama-academy-api.herokuapp.com/transacao", {
-      method: "GET",
-      mode: "cors",
-      cache: "default",
-    }).then((res) => {
-      res.json().then((res) => {
-        setTransations(res);
-      });
+    api.get("/transacao").then((res) => {
+      setTransations(res.data);
     });
   }, []);
 
