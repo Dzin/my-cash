@@ -1,82 +1,88 @@
 import React from "react";
-import { Container, Typography, Grid, Paper, Box } from "@mui/material";
+//MUI
+import { Container, Typography, Grid, Paper } from "@mui/material";
+//IMGS
+import Logo from "../../assets/imgs/logo.png";
+//STYLES
+import {
+  BackgroundHeaderImage,
+  BackgroundHeaderFilter,
+  GridFullContent,
+} from "./style";
+
+function CardTop(props) {
+  return (
+    <Grid
+      item
+      sx={{
+        height: "5rem",
+        borderRadius: "1rem",
+      }}
+      sm={3}
+      xs={12}
+      {...props}
+    >
+      <Paper sx={{ height: "100%" }}>{props.children}</Paper>
+    </Grid>
+  );
+}
+function CardBotton(props) {
+  return (
+    <Grid item sx={{ height: "21rem" }} xs={12} sm={4} {...props}>
+      <Paper sx={{ height: "100%" }}>{props.children}</Paper>
+    </Grid>
+  );
+}
+function Copyrights() {
+  return (
+    <Typography
+      sx={{
+        position: "fixed",
+        bottom: 0,
+        textAlign: "center",
+        width: "100%",
+        color: "#A0AEC0",
+      }}
+      variant="caption"
+    >
+      {`MyCash @ ${new Date().getFullYear()} - Todos os direitos reservados - Feito com ❤️ por `}
+      <Typography variant="caption" sx={{ color: "#344767" }} fontWeight="bold">
+        Gama Academy
+      </Typography>
+    </Typography>
+  );
+}
 
 export default function Home() {
   return (
-    <Container sx={{ height: "100vh" }}>
-      <Grid
-        container
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-          margin: "4.4rem 0 0 0",
-          gap: "2.5rem",
-        }}
-      >
-        <Grid item>LOGO</Grid>
-        <Grid item>
-          <Grid container sx={{ gap: "1rem" }} justifyContent="center">
-            <Grid
-              item
-              sx={{
-                height: "5rem",
-                width: "12rem",
-                borderRadius: "1rem",
-              }}
-              sm={3}
-              xs={12}
-            >
-              <Paper sx={{ height: "100%" }}>Componente Receitas </Paper>
-            </Grid>
-            <Grid
-              item
-              sx={{
-                height: "5rem",
-                width: "12rem",
-                borderRadius: "1rem",
-              }}
-              sm={3}
-              xs={12}
-            >
-              <Paper sx={{ height: "100%" }}>Componente Despesas </Paper>
-            </Grid>
-            <Grid
-              item
-              sx={{
-                height: "5rem",
-                width: "12rem",
-                borderRadius: "1rem",
-              }}
-              sm={3}
-              xs={12}
-            >
-              <Paper sx={{ height: "100%" }}>Componente Balanço </Paper>
-            </Grid>
-          </Grid>
-        </Grid>
-        <Grid item>
-          <Grid container sx={{ gap: "1.3rem" }} justifyContent="center">
-            <Grid item>
-              <Paper sx={{ height: "100%" }}>Componente Transações </Paper>
-            </Grid>
-            <Grid item>
-              <Paper sx={{ height: "100%" }}>Componente Categorias </Paper>
-            </Grid>
-          </Grid>
-        </Grid>
-      </Grid>
+    <Container sx={{ height: "100vh", posititon: "relative" }}>
+      <BackgroundHeaderFilter />
+      <BackgroundHeaderImage />
 
-      <Typography
-        sx={{
-          position: "fixed",
-          bottom: 0,
-          textAlign: "center",
-          width: "100%",
-        }}
-        variant="caption"
-      >{`@ ${new Date().getFullYear()} MyCash - Todos os direitos reservados - Feito com ❤️ por Gama Academy`}</Typography>
+      <GridFullContent container>
+        <Grid item>
+          <img src={Logo} />
+        </Grid>
+        <Grid item width="100%">
+          <Grid
+            container
+            justifyContent="center"
+            alignItems={"center"}
+            sx={{ gap: "1rem" }}
+          >
+            <CardTop>Componente Receitas </CardTop>
+            <CardTop>Componente Despesas </CardTop>
+            <CardTop>Componente Balanço </CardTop>
+          </Grid>
+        </Grid>
+        <Grid item width={"100%"}>
+          <Grid container sx={{ gap: "1.3rem" }} justifyContent="center">
+            <CardBotton>Componente Transações</CardBotton>
+            <CardBotton>Componente Categorias</CardBotton>
+          </Grid>
+        </Grid>
+      </GridFullContent>
+      <Copyrights />
     </Container>
   );
 }
