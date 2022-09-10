@@ -16,27 +16,26 @@ import {
 } from "./style";
 // SERVICES
 import api from "../../services/api";
+
 function CardTop(props) {
   let data;
+
+  const receita = props.transations
+    .filter((transation) => transation.tipo.toLowerCase() === "receita")
+    .reduce((acc, obj) => acc + obj.valor, 0);
+
+  const despesa = props.transations
+    .filter((transation) => transation.tipo.toLowerCase() === "despesa")
+    .reduce((acc, obj) => acc + obj.valor, 0);
+
   switch (props.type) {
     case "Receitas":
-      data = props.transations
-        .filter((transation) => transation.tipo.toLowerCase() === "receita")
-        .reduce((acc, obj) => acc + obj.valor, 0);
+      data = receita;
       break;
     case "Despesas":
-      data = props.transations
-        .filter((transation) => transation.tipo.toLowerCase() === "despesa")
-        .reduce((acc, obj) => acc + obj.valor, 0);
+      data = despesa;
       break;
     case "Balanço":
-      let despesa = props.transations
-        .filter((transation) => transation.tipo.toLowerCase() === "despesa")
-        .reduce((acc, obj) => acc + obj.valor, 0);
-      let receita = props.transations
-        .filter((transation) => transation.tipo.toLowerCase() === "receita")
-        .reduce((acc, obj) => acc + obj.valor, 0);
-
       data = receita - despesa;
       break;
   }
@@ -45,11 +44,23 @@ function CardTop(props) {
     <Grid
       item
       sx={{
-        height: "5rem",
+        height: "6rem",
+        display: { md: "flex" },
+        justifyContent: {
+          md: `${
+            props.type === "Receitas"
+              ? "flex-end"
+              : props.type === "Despesas"
+              ? "center"
+              : "flex-start"
+          }`,
+        },
       }}
       {...props}
     >
-      <Paper sx={{ height: "100%", borderRadius: "1.2rem" }}>
+      <Paper
+        sx={{ height: "100%", borderRadius: "1.2rem", width: { md: "14rem" } }}
+      >
         <Box
           sx={{
             display: "flex",
@@ -70,7 +81,9 @@ function CardTop(props) {
                     : data < 0
                     ? "#ff6a6a"
                     : "#2D3748"
-                  : "#2D3748"
+                  : props.type === "Receitas"
+                  ? "#5CAB7D"
+                  : "#ff6a6a"
               }`}
               fontWeight="700"
             >{`R$ ${data}`}</Typography>
@@ -100,9 +113,9 @@ function CardTop(props) {
               }}
             >
               {props.type === "Receitas" ? (
-                <AddIcon fontSize="10px" sx={{ color: "#5879B1" }} />
+                <AddIcon fontSize="0.625rem" sx={{ color: "#5879B1" }} />
               ) : props.type === "Despesas" ? (
-                <RemoveIcon fontSize="10px" sx={{ color: "#5879B1" }} />
+                <RemoveIcon fontSize="0.625rem" sx={{ color: "#5879B1" }} />
               ) : (
                 <AccountBalanceWalletIcon sx={{ color: "#ffffff" }} />
               )}
@@ -131,6 +144,7 @@ function Copyrights() {
         textAlign: "center",
         width: "100%",
         color: "#A0AEC0",
+        zIndex: 4,
       }}
       variant="caption"
     >
@@ -144,6 +158,7 @@ function Copyrights() {
 
 export default function Home() {
   const [transations, setTransations] = useState([]);
+
   useEffect(() => {
     api.get("/transacao").then((res) => {
       setTransations(res.data);
