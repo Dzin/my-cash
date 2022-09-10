@@ -37,6 +37,22 @@ export const GridFullContent = styled(Grid)(({ theme }) => ({
   justifyContent: "center",
   alignItems: "center",
   margin: "4.4rem 0 0 0",
-  width: "100%",
+  width: "calc(100% - 1rem)",
   gap: "1rem",
+}));
+
+export const BackgroundColor = styled(Box)(({ theme }) => ({
+  position: "absolute",
+  opacity: "0.85",
+  borderRadius: "1rem",
+  width: "100%",
+  margim: "0 0 0 0",
+  height: "100%",
+  background: "blue",
+  // backgroundImage: `url(${BackgroungHeader})`,
+  zIndex: -3,
+  top: 0,
+  // left: "calc(2.5%)",
+  right: 0,
+  backgroundSize: "cover",
 }));
