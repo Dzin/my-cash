@@ -46,34 +46,43 @@ export default function Categories() {
 
     return (
         <>
-            <Grid>
-                <Typography component="h3" sx={{ display: "inline-block" }}>Categorias</Typography>
+            <Grid sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                gap: "1rem",
+            }}>
+                <Typography component="h3" sx={{
+                    fontSize: "1.5rem",
+                    fontWeight: "bold",
+                    color: "#2D3748",
+                }}>Categorias</Typography>
                 <FormGroup sx={{
                     display: "flex",
                     flexDirection: "row",
                     justifyContent: "end",
                     alignItems: "center",
-                    gap: "2rem",
+                    gap: "1rem",
                 }} >
                     <FormControlLabel sx={{
                         margin: 0,
-                    }} control={<Switch size="medium" onChange={ (e) => { e.target.checked ? setCategoryFilter([...categoryFilter, 'receita']) : setCategoryFilter(categoryFilter.filter( filter => filter !== 'receita' )) } } />} label="Entrada" />
+                    }} control={<Switch size="medium" onChange={ (e) => { e.target.checked ? setCategoryFilter([...categoryFilter, "receita"]) : setCategoryFilter(categoryFilter.filter( filter => filter !== "receita" )) } } />} label="Entrada" />
                     <FormControlLabel sx={{
                         margin: 0,
-                    }} control={<Switch size="medium" onChange={ (e) => { e.target.checked ? setCategoryFilter([...categoryFilter, 'despesa']) : setCategoryFilter(categoryFilter.filter( filter => filter !== 'despesa' )) } } />} label="Saída" />
+                    }} control={<Switch size="medium" onChange={ (e) => { e.target.checked ? setCategoryFilter([...categoryFilter, "despesa"]) : setCategoryFilter(categoryFilter.filter( filter => filter !== "despesa" )) } } />} label="Saída" />
                 </FormGroup>
             </Grid>
 
-            <List sx={{ width: '100%' }} >
+            <List sx={{ width: "100%" }} >
             {
                 filteredCategories.map( category => (
                     <ListItem key={ category.id }>
                         <ListItemIcon>
                             {
-                                category.tipo === 'despesa' ?
-                                    <ArrowCircleDownOutlinedIcon fontSize="medium" sx={{ color: '#E53E3E' }} />
+                                category.tipo === "despesa" ?
+                                    <ArrowCircleDownOutlinedIcon fontSize="medium" sx={{ color: "#E53E3E" }} />
                                 :
-                                    <ArrowCircleUpOutlinedIcon fontSize="medium" sx={{ color: '#48BB78' }} />
+                                    <ArrowCircleUpOutlinedIcon fontSize="medium" sx={{ color: "#48BB78" }} />
                             }
                         </ListItemIcon>
                         <ListItemText primary={category.nome} />
