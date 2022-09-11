@@ -49,11 +49,12 @@ export default function Categories() {
                 justifyContent: "space-between",
                 gap: "1rem",
             }}>
-                <Typography component="h3" sx={{
-                    fontSize: "1.2rem",
-                    fontWeight: "bold",
-                    color: "#2D3748",
-                }}>Categorias</Typography>
+                <Typography
+                component="h3"
+                fontWeight="700"
+                fontSize="1.2rem"
+                color="#2D3748"
+                >Categorias</Typography>
                 <FormGroup sx={{
                     display: "flex",
                     flexDirection: "row",
@@ -113,12 +114,13 @@ export default function Categories() {
                 ))
             }
             </List>
-            <Button variant="contained" sx={{
+            <Button variant="contained"
+            fontSize="0.9rem"
+            fontWeight="700"
+            sx={{
                 backgroundColor: "none",
                 backgroundImage: "linear-gradient(to bottom right, #658DD1 , #2D3748)",
                 padding: "0.4rem 2rem",
-                fontSize: "0.9rem",
-                fontWeight: "bold",
                 textTransform: "none",
                 borderRadius: "0.5rem"
             }} onClick={ () => addCategory() }>
