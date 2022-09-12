@@ -1,5 +1,6 @@
 import React from "react";
+import { Transactions } from "../../components/Transactions";
 
 export default function Home() {
-  return <h1>Control Finances</h1>;
+  return <Transactions />;
 }
