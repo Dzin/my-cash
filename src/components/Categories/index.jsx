@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 // MUI
 import Grid from '@mui/material/Grid';
 import List from '@mui/material/List';
@@ -16,6 +16,7 @@ import ArrowCircleUpOutlinedIcon from '@mui/icons-material/ArrowCircleUpOutlined
 import ArrowCircleDownOutlinedIcon from '@mui/icons-material/ArrowCircleDownOutlined';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import DeleteForeverOutlinedIcon from '@mui/icons-material/DeleteForeverOutlined';
+import Loading from '../Loading';
 //STYLES
 
 export default function Categories(props) {
@@ -203,76 +204,79 @@ export default function Categories(props) {
                     }}
                 >
                 {
-                    filteredCategories.map( category => (
-                        <ListItem
-                            key={category.id}
-                            sx={{
-                                paddingTop: "0.2rem",
-                                paddingBottom: "0.2rem",
-                                paddingLeft: "0",
-                                paddingRight: "0",
-                            }}
-                        >
-                            <ListItemIcon
+                    props.loading ?
+                        <Loading />
+                    :
+                        filteredCategories.map( category => (
+                            <ListItem
+                                key={category.id}
                                 sx={{
-                                    minWidth: "0",
-                                    marginRight: "0.5rem",
+                                    paddingTop: "0.2rem",
+                                    paddingBottom: "0.2rem",
+                                    paddingLeft: "0",
+                                    paddingRight: "0",
                                 }}
                             >
-                                {
-                                    category.tipo === "despesa" ?
-                                        <ArrowCircleDownOutlinedIcon
-                                            fontSize="small"
-                                            sx={{
-                                                color: "#E53E3E"
-                                            }}
-                                        />
-                                    :
-                                        <ArrowCircleUpOutlinedIcon
-                                            fontSize="small"
-                                            sx={{
-                                                color: "#48BB78"
-                                            }}
-                                        />
-                                }
-                            </ListItemIcon>
-                            <ListItemText 
-                                primary={category.nome}
-                                primaryTypographyProps={{
-                                    fontSize: {
-                                        md: "0.9rem",
-                                        xs: "0.8rem",
+                                <ListItemIcon
+                                    sx={{
+                                        minWidth: "0",
+                                        marginRight: "0.5rem",
+                                    }}
+                                >
+                                    {
+                                        category.tipo === "despesa" ?
+                                            <ArrowCircleDownOutlinedIcon
+                                                fontSize="small"
+                                                sx={{
+                                                    color: "#E53E3E"
+                                                }}
+                                            />
+                                        :
+                                            <ArrowCircleUpOutlinedIcon
+                                                fontSize="small"
+                                                sx={{
+                                                    color: "#48BB78"
+                                                }}
+                                            />
                                     }
-                                }}
-                            />
-                            <IconButton
-                                aria-label="edit"
-                                onClick={
-                                    () => editCategory(category.id)
-                                }
-                            >
-                                <EditOutlinedIcon
-                                    fontSize="small"
-                                    sx={{
-                                        color: "#000000",
+                                </ListItemIcon>
+                                <ListItemText 
+                                    primary={category.nome}
+                                    primaryTypographyProps={{
+                                        fontSize: {
+                                            md: "0.9rem",
+                                            xs: "0.8rem",
+                                        }
                                     }}
                                 />
-                            </IconButton>
-                            <IconButton
-                                aria-label="delete"
-                                onClick={
-                                    () => deleteCategory(category.id)
-                                }
-                            >
-                                <DeleteForeverOutlinedIcon
-                                    fontSize="small"
-                                    sx={{
-                                        color: "#000000",
-                                    }}
-                                />
-                            </IconButton>
-                        </ListItem>     
-                    ))
+                                <IconButton
+                                    aria-label="edit"
+                                    onClick={
+                                        () => editCategory(category.id)
+                                    }
+                                >
+                                    <EditOutlinedIcon
+                                        fontSize="small"
+                                        sx={{
+                                            color: "#000000",
+                                        }}
+                                    />
+                                </IconButton>
+                                <IconButton
+                                    aria-label="delete"
+                                    onClick={
+                                        () => deleteCategory(category.id)
+                                    }
+                                >
+                                    <DeleteForeverOutlinedIcon
+                                        fontSize="small"
+                                        sx={{
+                                            color: "#000000",
+                                        }}
+                                    />
+                                </IconButton>
+                            </ListItem>     
+                        ))
                 }
                 </List>
                 <Button

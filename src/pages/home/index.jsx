@@ -162,10 +162,13 @@ export default function Home() {
   const [transations, setTransations] = useState([]);
 
   const [categories, setCategories] = useState([]);
+  const [loadingCategories, setLoadingCategories] = useState(false);
 
   useEffect(() => {
+    setLoadingCategories(true);
     api.get("/categoria").then( res => {
-      setCategories( res.data );
+      setCategories(res.data);
+      setLoadingCategories(false);
     });
 
     api.get("/transacao").then((res) => {
@@ -232,7 +235,7 @@ export default function Home() {
               Componente Transações
             </CardBotton>
             <CardBotton xs={12} md={6}>
-              <Categories categories={categories} />
+              <Categories categories={categories} loading={loadingCategories} />
             </CardBotton>
           </Grid>
         </Grid>
