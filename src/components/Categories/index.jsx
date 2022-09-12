@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from "react";
-import api from "../../services/api";
-
+import React, { useState } from "react";
+// MUI
 import Grid from '@mui/material/Grid';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
@@ -11,23 +10,18 @@ import IconButton from '@mui/material/IconButton';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
+import Button from '@mui/material/Button';
+//ICONS
 import ArrowCircleUpOutlinedIcon from '@mui/icons-material/ArrowCircleUpOutlined';
 import ArrowCircleDownOutlinedIcon from '@mui/icons-material/ArrowCircleDownOutlined';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import DeleteForeverOutlinedIcon from '@mui/icons-material/DeleteForeverOutlined';
-import Button from '@mui/material/Button';
 
-export default function Categories() {
-    const [categories, setCategories] = useState([]);
+
+export default function Categories(props) {
     const [categoryFilter, setCategoryFilter] = useState([]);
 
-    const filteredCategories = categoryFilter.length > 0 ? categories.filter(category => categoryFilter.includes(category.tipo)) : categories;
-
-    useEffect(() => {
-        api.get('/categoria').then(resp => {
-            setCategories(resp.data);
-        });
-    }, []);
+    const filteredCategories = categoryFilter.length > 0 ? props.categories.filter(category => categoryFilter.includes(category.tipo)) : props.categories;
 
     const addCategory = () => {
         console.log("Adicionar categoria!");
