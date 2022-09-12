@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
-//MUI
+// MUI
 import { Container, Typography, Grid, Paper, Box } from "@mui/material";
-//IMGS
+// IMGS
 import Logo from "../../assets/imgs/logo.png";
-//ICONS
+// ICONS
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
-//STYLES
+// STYLES
 import {
   BackgroundHeaderImage,
   BackgroundHeaderFilter,
@@ -16,6 +16,8 @@ import {
 } from "./style";
 // SERVICES
 import api from "../../services/api";
+// COMPONENTS
+import Categories from "../../components/Categories";
 
 function CardTop(props) {
   let data;
@@ -159,7 +161,13 @@ function Copyrights() {
 export default function Home() {
   const [transations, setTransations] = useState([]);
 
+  const [categories, setCategories] = useState([]);
+
   useEffect(() => {
+    api.get("/categoria").then( res => {
+      setCategories( res.data );
+    });
+
     api.get("/transacao").then((res) => {
       setTransations(res.data);
     });
@@ -224,7 +232,7 @@ export default function Home() {
               Componente Transações
             </CardBotton>
             <CardBotton xs={12} md={6}>
-              Componente Categorias
+              <Categories categories={categories} />
             </CardBotton>
           </Grid>
         </Grid>
