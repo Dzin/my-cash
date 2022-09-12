@@ -16,7 +16,7 @@ import ArrowCircleUpOutlinedIcon from '@mui/icons-material/ArrowCircleUpOutlined
 import ArrowCircleDownOutlinedIcon from '@mui/icons-material/ArrowCircleDownOutlined';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import DeleteForeverOutlinedIcon from '@mui/icons-material/DeleteForeverOutlined';
-
+//STYLES
 
 export default function Categories(props) {
     const [categoryFilter, setCategoryFilter] = useState([]);
@@ -37,89 +37,264 @@ export default function Categories(props) {
 
     return (
         <>
-            <Grid sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                gap: "1rem",
-            }}>
-                <Typography
-                component="h3"
-                fontWeight="700"
-                fontSize="1.2rem"
-                color="#2D3748"
-                >Categorias</Typography>
-                <FormGroup sx={{
-                    display: "flex",
-                    flexDirection: "row",
-                    justifyContent: "end",
-                    alignItems: "center",
-                    gap: "1rem",
-                }}>
-                    <FormControlLabel sx={{
-                        margin: "0",
-                    }} control={<Switch size="medium" onChange={ (e) => { e.target.checked ? setCategoryFilter([...categoryFilter, "receita"]) : setCategoryFilter(categoryFilter.filter( filter => filter !== "receita" )) } } />} label="Entrada" />
-                    <FormControlLabel sx={{
-                        margin: "0",
-                    }} control={<Switch size="medium" onChange={ (e) => { e.target.checked ? setCategoryFilter([...categoryFilter, "despesa"]) : setCategoryFilter(categoryFilter.filter( filter => filter !== "despesa" )) } } />} label="Saída" />
-                </FormGroup>
-            </Grid>
+            <Grid
+                padding={{
+                    md: "1.2rem 1.5rem",
+                    xs: "1.5rem 1.2rem",
+                }}
+            >
+                <Grid
+                    sx={{
+                        display: "flex",
+                        flexDirection: {
+                            sm: "row",
+                            xs: "column",
+                        },
+                        alignItems: "center",
+                        justifyContent: {
+                            sm: "space-between",
+                            xs: "center",
+                        },
+                        gap: {
+                            sm: "1rem",
+                            xs: "0.5rem",
+                        },
+                    }}
+                >
+                    <Typography
+                        component="h3"
+                        fontWeight="700"
+                        fontSize={{
+                            xs: "1.2rem",
+                        }}
+                        textAlign={{
+                            sm: "left",
+                            xs: "center",
+                        }}
+                        color="#2D3748"
+                    >
+                        Categorias
+                    </Typography>
+                    <FormGroup
+                        sx={{
+                            display: "flex",
+                            flexDirection: "row",
+                            justifyContent: {
+                                sm: "end",
+                                xs: "center",
+                            },
+                            alignItems: "center",
+                            gap: {
+                                md: "1rem",
+                                xs: "0.5rem",
+                            },
+                        }}
+                    >
+                        <FormControlLabel
+                            sx={{
+                                margin: "0",
+                            }}
+                            control={
+                                <Switch
+                                    size="medium"
+                                    sx={{
+                                        "& .MuiSwitch-switchBase": {
+                                            color: "#FFFFFF",
 
-            <List sx={{
-                width: "100%",
-                height: "15rem",
-                overflowY: "scroll",
-                paddingTop: "0",
-                paddingBottom: "0",
-                marginTop: "0.8rem",
-                marginBottom: "0.8rem",
-            }}>
-            {
-                filteredCategories.map( category => (
-                    <ListItem key={category.id} sx={{
-                        paddingTop: "0.2rem",
-                        paddingBottom: "0.2rem",
-                        paddingLeft: "0",
-                        paddingRight: "0",
-                    }}>
-                        <ListItemIcon sx={{
-                            minWidth: "0",
-                            marginRight: "0.5rem",
-                        }}>
-                            {
-                                category.tipo === "despesa" ?
-                                    <ArrowCircleDownOutlinedIcon fontSize="medium" sx={{ color: "#E53E3E" }}/>
-                                :
-                                    <ArrowCircleUpOutlinedIcon fontSize="medium" sx={{ color: "#48BB78" }}/>
+                                            "&.Mui-checked": {
+                                                color: "#FFFFFF",
+                                            },
+
+                                            "&.Mui-checked + .MuiSwitch-track": {
+                                                opacity: "1",
+                                                backgroundColor: "#2D3748",
+                                            },
+                                        },
+                                        '& .MuiSwitch-track': {
+                                            opacity: "1",
+                                            backgroundColor: "#E2E8F0",
+                                        },
+                                    }}
+                                    onChange={
+                                        (e) => { e.target.checked ? setCategoryFilter([...categoryFilter, "receita"]) : setCategoryFilter(categoryFilter.filter(filter => filter !== "receita")) }
+                                    }
+                                />
                             }
-                        </ListItemIcon>
-                        <ListItemText primary={category.nome} />
-                        <IconButton aria-label="edit" onClick={ () => editCategory( category.id ) }>
-                            <EditOutlinedIcon fontSize="medium" sx={{
-                                color: "#000000",
-                            }}/>
-                        </IconButton>
-                        <IconButton aria-label="delete" onClick={ () => deleteCategory( category.id ) }>
-                            <DeleteForeverOutlinedIcon fontSize="medium" sx={{
-                                color: "#000000",
-                            }}/>
-                        </IconButton>
-                    </ListItem>     
-                ))
-            }
-            </List>
-            <Button variant="contained"
-            fontSize="0.9rem"
-            fontWeight="700"
-            sx={{
-                backgroundColor: "none",
-                backgroundImage: "linear-gradient(to bottom right, #658DD1 , #2D3748)",
-                padding: "0.4rem 2rem",
-                textTransform: "none",
-                borderRadius: "0.5rem"
-            }} onClick={ () => addCategory() }>
-                Adicionar
-            </Button>
+                            label={
+                                <Typography
+                                    component="span"
+                                    fontSize={{
+                                        xs: "0.8rem",
+                                    }}
+                                    fontWeight="500"
+                                    color="#A0AEC0"
+                                >
+                                    Entrada
+                                </Typography>
+                            }
+                        />
+                        <FormControlLabel
+                            sx={{
+                                margin: "0",
+                            }}
+                            control={
+                                <Switch
+                                    size="medium"
+                                   sx={{
+                                        "& .MuiSwitch-switchBase": {
+                                            color: "#FFFFFF",
+
+                                            "&.Mui-checked": {
+                                                color: "#FFFFFF",
+                                            },
+
+                                            "&.Mui-checked + .MuiSwitch-track": {
+                                                opacity: "1",
+                                                backgroundColor: "#2D3748",
+                                            },
+                                        },
+                                        '& .MuiSwitch-track': {
+                                            opacity: "1",
+                                            backgroundColor: "#E2E8F0",
+                                        },
+                                    }}
+                                    onChange={
+                                        (e) => { e.target.checked ? setCategoryFilter([...categoryFilter, "despesa"]) : setCategoryFilter(categoryFilter.filter(filter => filter !== "despesa")) }
+                                    }
+                                />
+                            }
+                            label={
+                                <Typography
+                                    component="span"
+                                    fontSize={{
+                                        xs: "0.8rem",
+                                    }}
+                                    fontWeight="500"
+                                    color="#A0AEC0"
+                                >
+                                    Saída
+                                </Typography>
+                            }
+                        />
+                    </FormGroup>
+                </Grid>
+
+                <List
+                    sx={{
+                        width: "100%",
+                        height: "15rem",
+                        overflowY: "scroll",
+                        paddingTop: "0",
+                        paddingBottom: "0",
+                        marginTop: "1rem",
+                        marginBottom: "1rem",
+                        "&::-webkit-scrollbar": {
+                            width: 5,
+                        },
+                        "&::-webkit-scrollbar-track": {
+                            backgroundColor: "#F8F9Fa",
+                            borderRadius: "1.2rem",
+                        },
+                        "&::-webkit-scrollbar-thumb": {
+                            backgroundColor: "transparent",
+                            backgroundImage: "linear-gradient(136.64deg, #658DD1 0%, #2D3748 100%)",
+                            borderRadius: "1.2rem",
+                        }
+                    }}
+                >
+                {
+                    filteredCategories.map( category => (
+                        <ListItem
+                            key={category.id}
+                            sx={{
+                                paddingTop: "0.2rem",
+                                paddingBottom: "0.2rem",
+                                paddingLeft: "0",
+                                paddingRight: "0",
+                            }}
+                        >
+                            <ListItemIcon
+                                sx={{
+                                    minWidth: "0",
+                                    marginRight: "0.5rem",
+                                }}
+                            >
+                                {
+                                    category.tipo === "despesa" ?
+                                        <ArrowCircleDownOutlinedIcon
+                                            fontSize="small"
+                                            sx={{
+                                                color: "#E53E3E"
+                                            }}
+                                        />
+                                    :
+                                        <ArrowCircleUpOutlinedIcon
+                                            fontSize="small"
+                                            sx={{
+                                                color: "#48BB78"
+                                            }}
+                                        />
+                                }
+                            </ListItemIcon>
+                            <ListItemText 
+                                primary={category.nome}
+                                primaryTypographyProps={{
+                                    fontSize: {
+                                        md: "0.9rem",
+                                        xs: "0.8rem",
+                                    }
+                                }}
+                            />
+                            <IconButton
+                                aria-label="edit"
+                                onClick={
+                                    () => editCategory(category.id)
+                                }
+                            >
+                                <EditOutlinedIcon
+                                    fontSize="small"
+                                    sx={{
+                                        color: "#000000",
+                                    }}
+                                />
+                            </IconButton>
+                            <IconButton
+                                aria-label="delete"
+                                onClick={
+                                    () => deleteCategory(category.id)
+                                }
+                            >
+                                <DeleteForeverOutlinedIcon
+                                    fontSize="small"
+                                    sx={{
+                                        color: "#000000",
+                                    }}
+                                />
+                            </IconButton>
+                        </ListItem>     
+                    ))
+                }
+                </List>
+                <Button
+                    variant="contained"
+                    sx={{
+                        fontSize: {
+                            xs: "0.8rem",
+                        },
+                        fontWeight: "500",
+                        backgroundColor: "transparent",
+                        backgroundImage: "linear-gradient(136.64deg, #658DD1 1.59%, #2D3748 98.89%)",
+                        padding: "0.4rem 2rem",
+                        textTransform: "none",
+                        borderRadius: "0.5rem"
+                    }}
+                    onClick={
+                        () => addCategory()
+                    }
+                >
+                    Adicionar
+                </Button>
+            </Grid>
         </>
     );
 }
