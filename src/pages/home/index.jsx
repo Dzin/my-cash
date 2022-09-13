@@ -23,6 +23,18 @@ export default function Home() {
 
   const handleDeleteTransaction = function (id, e) {
     console.log("Delete transaction");
+
+    api
+      .delete(`/transacao/${id}`)
+      .then(() => {
+        alert(`Transação ${id} deletada com sucesso`);
+        setTransactionList(
+          transactionList.filter((transaction) => transaction.id !== id)
+        );
+      })
+      .catch((err) => {
+        console.error(`Can not delete Transaction ${id}!`, `Error: ${err}`);
+      });
   };
 
   const handleAddNewTransaction = function (transaction, e) {
