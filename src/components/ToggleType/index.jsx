@@ -15,10 +15,10 @@ export const ToggleType = ({ handleToggleType }) => {
       }}
       aria-label="Platform"
     >
-      <ToggleButton value="entrada" onClick={handleToggleType}>
+      <ToggleButton value="receita" onClick={handleToggleType}>
         Entrada
       </ToggleButton>
-      <ToggleButton value="saida" onClick={handleToggleType}>
+      <ToggleButton value="despesa" onClick={handleToggleType}>
         Saída
       </ToggleButton>
     </ToggleButtonGroup>
