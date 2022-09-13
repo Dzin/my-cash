@@ -1,5 +1,10 @@
 import React from "react";
 import { useState, useEffect } from "react";
+
+import { Grid } from "@mui/material";
+
+import { ToggleType } from "../ToggleType";
+
 import api from "../../services/api";
 
 export const Transactions = () => {
@@ -31,12 +36,20 @@ export const Transactions = () => {
   };
 
   const filterTransactionsByType = (transactionType) => {
-    //tratar entrada e converter pros tipos válidos
+    return transactionList.filter(
+      (transaction) => transaction.tipo === transactionType
+    );
+  };
 
+  const handleSelectMonth = function (e) {
+    console.log("Month");
+    console.log(e);
+  };
+
+  const handleToggleType = function (e) {
+    const selected = e.target.classList.contains("Mui-selected");
     setFilteredTransactionList(
-      transactionList.filter(
-        (transaction) => transaction.tipo === transactionType
-      )
+      selected ? [...transactionList] : filterTransactionsByType(e.target.value)
     );
   };
 
@@ -60,9 +73,13 @@ export const Transactions = () => {
   };
 
   return (
-    <>
-      <div></div>
-      <div></div>
-    </>
+    <Grid>
+      <ToggleType handleToggleType={handleToggleType} />
+      <ul>
+        {filteredTransactionList.map((item) => (
+          <li key={item.id}>{item.id}</li>
+        ))}
+      </ul>
+    </Grid>
   );
 };
