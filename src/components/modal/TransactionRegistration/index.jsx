@@ -16,6 +16,7 @@ import {
   Autocomplete,
   CircularProgress,
   FormHelperText,
+  alpha,
 } from "@mui/material";
 //DATE
 import dayjs from "dayjs";
@@ -132,29 +133,28 @@ export default function TransactionRegistration({ open, setOpen, categories }) {
   }, [categoriesWatch]);
 
   const onSubmit = async (data) => {
-    console.log("SUBTMIT");
-    // await api
-    //   .post("/transacao", {
-    //     tipo: data.type,
-    //     valor: data.valueTransaction.toFixed(2),
-    //     categoria: data.categorie,
-    //     descricao: data.description,
-    //     data: dayjs(data.date).format("YYYY-MM-DD"),
-    //   })
-    //   .then((res) => {
-    //     toast.success("Transação cadastrada");
-    //     handleClose();
-    //   })
-    //   .catch((error) => {
-    //     console.error(error.message);
-    //     toast.error("Não foi possível cadastrar a transação");
-    //   });
-    reset();
+    await api
+      .post("/transacao", {
+        tipo: data.type,
+        valor: Number(data.valueTransaction.toFixed(2)),
+        categoria: data.categorie,
+        descricao: data.description,
+        data: dayjs(data.date).format("YYYY-MM-DD"),
+      })
+      .then((res) => {
+        toast.success("Transação cadastrada");
+        handleClose();
+        reset();
+      })
+      .catch((error) => {
+        console.error(error.message);
+        toast.error("Não foi possível cadastrar a transação");
+      });
   };
 
   return (
     <Dialog
-      open={true}
+      open={open}
       onClose={() => {
         handleClose();
         reset();
@@ -380,7 +380,6 @@ export default function TransactionRegistration({ open, setOpen, categories }) {
             <Grid item xs={12} sm={6} md={2}>
               <Button
                 type="submit"
-                onClick={handleClose}
                 variant="contained"
                 fullWidth
                 sx={{
@@ -389,6 +388,12 @@ export default function TransactionRegistration({ open, setOpen, categories }) {
                       "linear-gradient(136.64deg, #658DD1 1.59%, #2D3748 98.89%)",
                     borderRadius: "1rem",
                     textTransform: "capitalize",
+                    "&:hover": {
+                      background: `linear-gradient(136.64deg, ${alpha(
+                        "#658DD1",
+                        0.9
+                      )} 1.59%, ${alpha("#2D3748", 0.9)} 98.89%)`,
+                    },
                   },
                 }}
               >

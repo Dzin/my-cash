@@ -16,17 +16,19 @@ import {
 } from "./style";
 // SERVICES
 import api from "../../services/api";
+//COMPONENTS
+import TransactionRegistration from "../../components/modal/TransactionRegistration";
 
 function CardTop(props) {
   let data;
 
   const receita = props.transations
     .filter((transation) => transation.tipo.toLowerCase() === "receita")
-    .reduce((acc, obj) => acc + obj.valor, 0);
+    .reduce((acc, obj) => acc + Number(obj.valor), 0);
 
   const despesa = props.transations
     .filter((transation) => transation.tipo.toLowerCase() === "despesa")
-    .reduce((acc, obj) => acc + obj.valor, 0);
+    .reduce((acc, obj) => acc + Number(obj.valor), 0);
 
   switch (props.type) {
     case "Receitas":
@@ -86,7 +88,7 @@ function CardTop(props) {
                   : "#ff6a6a"
               }`}
               fontWeight="700"
-            >{`R$ ${data}`}</Typography>
+            >{`R$ ${data.toFixed(2)}`}</Typography>
           </Box>
           <Box
             sx={{
@@ -158,12 +160,13 @@ function Copyrights() {
 
 export default function Home() {
   const [transations, setTransations] = useState([]);
-
+  const [openRegister, setOpenRegister] = useState(false);
   useEffect(() => {
-    api.get("/transacao").then((res) => {
-      setTransations(res.data);
-    });
-  }, []);
+    !openRegister &&
+      api.get("/transacao").then((res) => {
+        setTransations(res.data);
+      });
+  }, [openRegister]);
 
   return (
     <Container
@@ -230,6 +233,7 @@ export default function Home() {
         </Grid>
       </GridFullContent>
       <Copyrights />
+      <TransactionRegistration open={openRegister} setOpen={setOpenRegister} />
     </Container>
   );
 }
