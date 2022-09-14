@@ -61,7 +61,19 @@ export default function TransactionModal() {
                     flexDirection: 'column',
                     justifyContent: 'space-between'
                 }}>
-                    <Typography variant="h6">Adicionar Transação</Typography>
+                    <Typography
+                        component="h3"
+                        fontWeight="700"
+                        fontSize={{
+                            xs: "1.2rem",
+                        }}
+                        textAlign={{
+                            sm: "left",
+                            xs: "center",
+                        }}
+                        color="#2D3748"
+                    >
+                        Adicionar Transação</Typography>
 
                     <Grid
                         container
@@ -128,7 +140,24 @@ export default function TransactionModal() {
                             sx={{ width: '117px' }}
                         />
 
-                        <Button variant="contained" onClick={() => formatarData()} >Adicionar</Button>
+                        <Button
+                            onClick={() => formatarData()}
+                            variant="contained"
+                            sx={{
+                                fontSize: {
+                                    xs: "0.8rem",
+                                },
+                                fontWeight: "700",
+                                backgroundColor: "transparent",
+                                backgroundImage: "linear-gradient(136.64deg, #658DD1 1.59%, #2D3748 98.89%)",
+                                padding: "0.4rem 2rem",
+                                textTransform: "none",
+                                borderRadius: "0.5rem",
+                                width: '111px'
+                            }}
+
+                        >
+                            Adicionar</Button>
                     </Grid>
                 </Box>
             </Modal>

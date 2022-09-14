@@ -1,5 +1,9 @@
 import React, { useState } from 'react'
 import { Box, Button, Typography, Modal, Grid, InputLabel, MenuItem, FormControl, Select, TextField } from '@mui/material';
+import api from '../../services/api'
+
+//UTILS
+import { pegarItem } from "../../utils/localStorage";
 
 const styleSelect = {
     background: '#FFFFFF',
@@ -7,28 +11,72 @@ const styleSelect = {
     color: '#A0AEC0'
 }
 
-export default function CategoriesModal() {
+export default function CategoriesModal({
+    abrirModal,
+    setAbrirModal,
+    typeCategories,
+    dadosTrans,
+    setDadosTrans
+}) {
+
     //Modal
-    const [open, setOpen] = useState(false);
-    const handleOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
+    function handleClose() {
+        setAbrirModal(false)
+        setDadosTrans({
+            Tipos: "",
+            Nome: ""
+        })
+    }
 
     //Change Form Categorias
-    const [dadosTrans, setDadosTrans] = useState({
-        Tipos: "",
-        Nome: ""
-    })
-
     const handleChangeTrans = (prop) => (event) => {
         setDadosTrans({ ...dadosTrans, [prop]: event.target.value });
     };
 
+    async function registerCategory() {
+        if (dadosTrans.Tipos === "" || dadosTrans.Nome === "") {
+            return console.log('Preencha todos os dados')
+        }
+
+        try {
+            await api.post("/categoria", dadosTrans);
+
+            setDadosTrans({
+                Tipos: "",
+                Nome: ""
+            })
+
+            setAbrirModal(false)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    async function updateCategory() {
+        const idCategoria = pegarItem("categoriaId")
+
+        if (dadosTrans.Tipos === "" || dadosTrans.Nome === "") {
+            return console.log('Preencha todos os dados')
+        }
+
+        try {
+            await api.put(`/categoria/${idCategoria}`, dadosTrans);
+
+            setDadosTrans({
+                Tipos: "",
+                Nome: ""
+            })
+
+            setAbrirModal(false)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     return (
         <div>
-            <Button onClick={handleOpen}>Open modal</Button>
-
             <Modal
-                open={open}
+                open={abrirModal}
                 onClose={handleClose}
             >
                 <Box sx={{
@@ -46,7 +94,19 @@ export default function CategoriesModal() {
                     flexDirection: 'column',
                     justifyContent: 'space-between'
                 }}>
-                    <Typography variant="h6">Adicionar Categoria</Typography>
+                    <Typography
+                        component="h3"
+                        fontWeight="700"
+                        fontSize={{
+                            xs: "1.2rem",
+                        }}
+                        textAlign={{
+                            sm: "left",
+                            xs: "center",
+                        }}
+                        color="#2D3748"
+                    >
+                        {typeCategories === 'Adicionar' ? 'Adicionar Categoria' : 'Editar Categoria'}</Typography>
 
                     <Grid
                         container
@@ -72,9 +132,26 @@ export default function CategoriesModal() {
                             label="Nome"
                             onChange={handleChangeTrans('Nome')}
                             sx={{ width: '194px' }}
+                            value={dadosTrans.Nome}
                         />
 
-                        <Button variant="contained" onClick={() => formatarData()} >Adicionar</Button>
+                        <Button
+                            onClick={typeCategories === 'Adicionar' ? () => registerCategory() : () => updateCategory()}
+                            variant="contained"
+                            sx={{
+                                fontSize: {
+                                    xs: "0.8rem",
+                                },
+                                fontWeight: "500",
+                                backgroundColor: "transparent",
+                                backgroundImage: "linear-gradient(136.64deg, #658DD1 1.59%, #2D3748 98.89%)",
+                                padding: "0.4rem 2rem",
+                                textTransform: "none",
+                                borderRadius: "0.5rem",
+                                width: '111px'
+                            }}
+                        >
+                            {typeCategories === 'Adicionar' ? 'Adicionar' : 'Atualizar'}</Button>
                     </Grid>
                 </Box>
             </Modal>
