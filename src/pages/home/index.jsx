@@ -47,13 +47,12 @@ function CardTop(props) {
         height: "6rem",
         display: { md: "flex" },
         justifyContent: {
-          md: `${
-            props.type === "Receitas"
-              ? "flex-end"
-              : props.type === "Despesas"
+          md: `${props.type === "Receitas"
+            ? "flex-end"
+            : props.type === "Despesas"
               ? "center"
               : "flex-start"
-          }`,
+            }`,
         },
       }}
       {...props}
@@ -74,17 +73,16 @@ function CardTop(props) {
               {props.type}
             </Typography>
             <Typography
-              color={`${
-                props.type === "Balanço"
-                  ? data >= 1
-                    ? "#5CAB7D"
-                    : data < 0
+              color={`${props.type === "Balanço"
+                ? data >= 1
+                  ? "#5CAB7D"
+                  : data < 0
                     ? "#ff6a6a"
                     : "#2D3748"
-                  : props.type === "Receitas"
+                : props.type === "Receitas"
                   ? "#5CAB7D"
                   : "#ff6a6a"
-              }`}
+                }`}
               fontWeight="700"
             >{`R$ ${data}`}</Typography>
           </Box>

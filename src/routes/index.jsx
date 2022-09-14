@@ -4,12 +4,14 @@ import ProtectedRoute from "./protectRoute";
 
 // elementos
 import Home from "../pages/home";
+import Teste from "../pages/Teste";
 
 export default function SwitchRoutes() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/teste" element={<Teste />} />
       </Routes>
     </BrowserRouter>
   );
