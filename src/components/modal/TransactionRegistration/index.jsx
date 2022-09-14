@@ -17,6 +17,7 @@ import {
   CircularProgress,
   FormHelperText,
   alpha,
+  InputAdornment,
 } from "@mui/material";
 //DATE
 import dayjs from "dayjs";
@@ -34,7 +35,6 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 //HELPERS
 import { toast } from "react-toastify";
-import { CollectionsOutlined } from "@mui/icons-material";
 
 let patternTwoDigisAfterComma = /^\d+(\.\d{0,2})?$/;
 const schema = yup
@@ -371,6 +371,11 @@ export default function TransactionRegistration({ open, setOpen, categories }) {
                               : "none"
                           }`,
                         },
+                      }}
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">R$</InputAdornment>
+                        ),
                       }}
                     />
                   );
