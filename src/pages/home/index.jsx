@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
-//MUI
+// MUI
 import { Container, Typography, Grid, Paper, Box } from "@mui/material";
-//IMGS
+// IMGS
 import Logo from "../../assets/imgs/logo.png";
-//ICONS
+// ICONS
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
-//STYLES
+// STYLES
 import {
   BackgroundHeaderImage,
   BackgroundHeaderFilter,
@@ -18,6 +18,7 @@ import {
 import api from "../../services/api";
 //COMPONENTS
 import TransactionRegistration from "../../components/modal/TransactionRegistration";
+import Categories from "../../components/Categories";
 
 function CardTop(props) {
   let data;
@@ -130,7 +131,7 @@ function CardTop(props) {
 }
 function CardBotton(props) {
   return (
-    <Grid item sx={{ height: "21rem" }} {...props}>
+    <Grid item sx={{ height: "100%" }} {...props}>
       <Paper sx={{ height: "100%", borderRadius: "1.2rem" }}>
         {props.children}
       </Paper>
@@ -161,6 +162,8 @@ function Copyrights() {
 export default function Home() {
   const [transations, setTransations] = useState([]);
   const [openRegister, setOpenRegister] = useState(false);
+    const [categories, setCategories] = useState([]);
+  const [loadingCategories, setLoadingCategories] = useState(false);
   useEffect(() => {
     !openRegister &&
       api.get("/transacao").then((res) => {
@@ -168,6 +171,18 @@ export default function Home() {
       });
   }, [openRegister]);
 
+
+  useEffect(() => {
+    setLoadingCategories(true);
+    api.get("/categoria").then( res => {
+      setCategories(res.data);
+      setLoadingCategories(false);
+    });
+
+    api.get("/transacao").then((res) => {
+      setTransations(res.data);
+    });
+  }, []);
   return (
     <Container
       sx={{
@@ -227,7 +242,7 @@ export default function Home() {
               Componente Transações
             </CardBotton>
             <CardBotton xs={12} md={6}>
-              Componente Categorias
+              <Categories categories={categories} loading={loadingCategories} />
             </CardBotton>
           </Grid>
         </Grid>
