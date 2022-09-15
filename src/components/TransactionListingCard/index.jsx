@@ -10,8 +10,8 @@ export const TransactionListingCard = ({ transactionList }) => {
   const [filteredTransactionList, setFilteredTransactionList] = useState([]);
 
   useEffect(() => {
-    setFilteredTransactionList([...transactionList]);
-  }, []);
+    setFilteredTransactionList(transactionList);
+  }, [transactionList]);
 
   const filterTransactionsByMonth = (date) => {
     return transactionList.filter((transaction) => {
