@@ -1,6 +1,6 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import { Transactions } from "../../components/TransactionListingCard";
+import { TransactionListingCard } from "../../components/TransactionListingCard";
 import api from "../../services/api";
 
 export default function Home() {
@@ -22,8 +22,6 @@ export default function Home() {
   };
 
   const handleDeleteTransaction = function (id, e) {
-    console.log("Delete transaction");
-
     api
       .delete(`/transacao/${id}`)
       .then(() => {
@@ -41,5 +39,5 @@ export default function Home() {
     console.log("Add new transaction");
   };
 
-  return <Transactions transactionList={transactionList} />;
+  return <TransactionListingCard transactionList={transactionList} />;
 }
