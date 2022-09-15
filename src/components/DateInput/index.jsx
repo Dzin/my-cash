@@ -7,7 +7,7 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { TextField } from "@mui/material";
 import "dayjs/locale/pt-br";
 
-export const DateInput = ({ handleSelectMonth }) => {
+export const DateInput = ({ handleSelectDate }) => {
   const [date, setDate] = useState(null);
 
   return (
@@ -18,7 +18,7 @@ export const DateInput = ({ handleSelectMonth }) => {
         value={date}
         onChange={(newDate) => {
           setDate(newDate);
-          handleSelectMonth(newDate);
+          handleSelectDate(newDate);
         }}
         renderInput={(params) => <TextField {...params} />}
       />
