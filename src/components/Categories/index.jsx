@@ -30,8 +30,8 @@ export default function Categories(props) {
     const [abrirModal, setAbrirModal] = useState(false);
     const [typeCategories, setTypeCategories] = useState('')
     const [dadosTrans, setDadosTrans] = useState({
-        Tipos: "",
-        Nome: ""
+        tipo: "",
+        nome: ""
     })
 
     const [categoryFilter, setCategoryFilter] = useState([]);
@@ -42,26 +42,19 @@ export default function Categories(props) {
         setTypeCategories('Adicionar')
     }
 
-    const editCategory = (id, nome, tipo) => {
+    const editCategory = (idSelect, nomeSelect, tipoSelect) => {
         setAbrirModal(true)
         setTypeCategories('Editar')
 
-        adicionarItem("categoriaId", id)
-        adicionarItem("categoriaNome", nome)
-        adicionarItem("categoriaTipo", tipo)
-
+        adicionarItem("categoriaId", idSelect)
+        adicionarItem("categoriaNome", nomeSelect)
+        adicionarItem("categoriaTipo", tipoSelect)
         const nomeCategoria = pegarItem("categoriaNome")
-        let tipoCategoria = pegarItem("categoriaTipo")
-
-        if (tipoCategoria === 'despesa') {
-            tipoCategoria = 'Saída'
-        } else {
-            tipoCategoria = 'Entrada'
-        }
+        const tipoCategoria = pegarItem("categoriaTipo")
 
         setDadosTrans({
-            Tipos: tipoCategoria,
-            Nome: nomeCategoria
+            tipo: tipoCategoria,
+            nome: nomeCategoria
         })
     }
 
@@ -339,6 +332,7 @@ export default function Categories(props) {
                 typeCategories={typeCategories}
                 dadosTrans={dadosTrans}
                 setDadosTrans={setDadosTrans}
+                setCategories={props.setCategories}
             />
         </>
     );

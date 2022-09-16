@@ -1,6 +1,10 @@
 import React, { useState } from 'react'
 import { Box, Button, Typography, Modal, Grid, InputLabel, MenuItem, FormControl, Select, TextField } from '@mui/material';
 import api from '../../services/api'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import IconeFalha from "../../assets/icons/toastIconeFalha.svg";
+import IconeSucesso from "../../assets/icons/toastIconeSucesso.svg";
 
 //UTILS
 import { pegarItem } from "../../utils/localStorage";
@@ -16,15 +20,16 @@ export default function CategoriesModal({
     setAbrirModal,
     typeCategories,
     dadosTrans,
-    setDadosTrans
+    setDadosTrans,
+    setCategories
 }) {
 
     //Modal
     function handleClose() {
         setAbrirModal(false)
         setDadosTrans({
-            Tipos: "",
-            Nome: ""
+            tipo: "",
+            nome: ""
         })
     }
 
@@ -33,8 +38,36 @@ export default function CategoriesModal({
         setDadosTrans({ ...dadosTrans, [prop]: event.target.value });
     };
 
+    function feedbackCobrancaSucesso(mensagem) {
+        toast.success(mensagem, {
+            icon: () => <img src={IconeSucesso} alt="sucesso" />,
+            position: "bottom-right",
+            autoClose: 3000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: false,
+            progress: undefined,
+            className: "corDeFundoSucesso",
+        });
+    }
+
+    function feedbackCobrancaFalha(mensagem) {
+        toast.success(mensagem, {
+            icon: () => <img src={IconeFalha} alt="falha" />,
+            position: "bottom-right",
+            autoClose: 4000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: false,
+            progress: undefined,
+            className: "corDeFundoFalha",
+        });
+    }
+
     async function registerCategory() {
-        if (dadosTrans.Tipos === "" || dadosTrans.Nome === "") {
+        if (dadosTrans.tipo === "" || dadosTrans.nome === "") {
             return console.log('Preencha todos os dados')
         }
 
@@ -42,20 +75,26 @@ export default function CategoriesModal({
             await api.post("/categoria", dadosTrans);
 
             setDadosTrans({
-                Tipos: "",
-                Nome: ""
+                tipo: "",
+                nome: ""
             })
 
+            api.get("/categoria").then(res => {
+                setCategories(res.data);
+            });
+
             setAbrirModal(false)
+            feedbackCobrancaSucesso("Categoria cadastrada com sucesso!");
+
         } catch (error) {
-            console.log(error)
+            feedbackCobrancaFalha("Oops... Tente mais tarde")
         }
     }
 
     async function updateCategory() {
         const idCategoria = pegarItem("categoriaId")
 
-        if (dadosTrans.Tipos === "" || dadosTrans.Nome === "") {
+        if (dadosTrans.tipo === "" || dadosTrans.nome === "") {
             return console.log('Preencha todos os dados')
         }
 
@@ -63,13 +102,18 @@ export default function CategoriesModal({
             await api.put(`/categoria/${idCategoria}`, dadosTrans);
 
             setDadosTrans({
-                Tipos: "",
-                Nome: ""
+                tipo: "",
+                nome: ""
             })
 
+            api.get("/categoria").then(res => {
+                setCategories(res.data);
+            });
+
             setAbrirModal(false)
+            feedbackCobrancaSucesso("Categoria atualizada com sucesso!");
         } catch (error) {
-            console.log(error)
+            feedbackCobrancaFalha("Oops... Tente mais tarde")
         }
     }
 
@@ -118,21 +162,21 @@ export default function CategoriesModal({
                             <InputLabel>Tipos</InputLabel>
                             <Select
                                 label="Tipos"
-                                value={dadosTrans.Tipos}
-                                onChange={handleChangeTrans('Tipos')}
+                                value={dadosTrans.tipo}
+                                onChange={handleChangeTrans('tipo')}
                                 sx={{ ...styleSelect, width: '113px', color: 'rgba(0, 0, 0, 0.87)' }}
                             >
-                                <MenuItem value='Entrada'>Entrada</MenuItem>
-                                <MenuItem value='Saída'>Saída</MenuItem>
+                                <MenuItem value='receita'>Receita</MenuItem>
+                                <MenuItem value='despesa'>Despesa</MenuItem>
                             </Select>
                         </FormControl>
 
                         <TextField
                             variant="outlined"
                             label="Nome"
-                            onChange={handleChangeTrans('Nome')}
+                            onChange={handleChangeTrans('nome')}
                             sx={{ width: '194px' }}
-                            value={dadosTrans.Nome}
+                            value={dadosTrans.nome}
                         />
 
                         <Button
