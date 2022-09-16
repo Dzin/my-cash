@@ -1,5 +1,5 @@
 import React from "react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 import { Grid, Typography, Button } from "@mui/material";
 
@@ -7,51 +7,43 @@ import { DateInput } from "../DateInput";
 import { ToggleType } from "../ToggleType";
 
 export const TransactionListingCard = ({ transactionList }) => {
-  const [filteredTransactionList, setFilteredTransactionList] = useState([]);
+  const [date, setDate] = useState(null);
+  const [type, setType] = useState("");
 
-  useEffect(() => {
-    setFilteredTransactionList(transactionList);
-  }, [transactionList]);
+  const filterTransactionsByDate = (transaction) => {
+    const currentTransactionDate = new Date(transaction.data);
+    const selectedTransactionDate = new Date(date);
 
-  const filterTransactionsByMonth = (date) => {
-    return transactionList.filter((transaction) => {
-      const transactionDate = new Date(transaction.data);
-      return (
-        transactionDate.getMonth() === date.getMonth() &&
-        transactionDate.getFullYear() === date.getFullYear()
-      );
-    });
-  };
-
-  const filterTransactionsByType = (transactionType) => {
-    return transactionList.filter(
-      (transaction) => transaction.tipo === transactionType
+    return (
+      currentTransactionDate.getMonth() ===
+        selectedTransactionDate.getMonth() &&
+      currentTransactionDate.getFullYear() ===
+        selectedTransactionDate.getFullYear()
     );
   };
 
-  const handleSelectMonth = function (date) {
-    const selectedDate = new Date(date);
+  const filterTransactionsByType = (transaction) => {
+    return transaction.tipo === type;
+  };
 
-    setFilteredTransactionList(filterTransactionsByMonth(selectedDate));
+  const listFilteredTransactions = () => {
+    let filteredList = [...transactionList];
+
+    if (date) filteredList = filteredList.filter(filterTransactionsByDate);
+    if (type) filteredList = filteredList.filter(filterTransactionsByType);
+
+    return filteredList;
+  };
+
+  const handleSelectDate = function (selectedDate) {
+    setDate(selectedDate);
   };
 
   const handleToggleType = function (e) {
-    const selected = e.target.classList.contains("Mui-selected");
-    setFilteredTransactionList(
-      selected ? [...transactionList] : filterTransactionsByType(e.target.value)
-    );
-  };
+    //type === e.target.value ? "" : e.target.value;
+    const isSelected = e.target.classList.contains("Mui-selected");
 
-  const handleEditTransaction = function (e) {
-    console.log("Edit transaction");
-  };
-
-  const handleDeleteTransaction = function (e) {
-    console.log("Delete transaction");
-  };
-
-  const handleAddNewTransaction = function (e) {
-    console.log("Add new transaction");
+    setType(isSelected ? "" : e.target.value);
   };
 
   return (
@@ -70,10 +62,10 @@ export const TransactionListingCard = ({ transactionList }) => {
       >
         Transações
       </Typography>
-      <DateInput handleSelectMonth={handleSelectMonth} />
+      <DateInput handleSelectDate={handleSelectDate} />
       <ToggleType handleToggleType={handleToggleType} />
       <ul>
-        {filteredTransactionList.map((item) => (
+        {listFilteredTransactions().map((item) => (
           <li key={item.id}>{item.id}</li>
         ))}
       </ul>
