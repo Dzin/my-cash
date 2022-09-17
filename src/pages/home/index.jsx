@@ -28,7 +28,6 @@ export default function Home() {
   const [loadingRegister, setLoadingRegister] = useState(false);
   useEffect(() => {
     setLoadingCategories(true);
-
     api.get("/categoria").then((res) => {
       setCategories(res.data);
       setLoadingCategories(false);
@@ -104,7 +103,11 @@ export default function Home() {
               Componente Transações
             </CardBotton>
             <CardBotton xs={12} md={6}>
-              <Categories categories={categories} loading={loadingCategories} />
+              <Categories
+                categories={categories}
+                loading={loadingCategories}
+                setCategories={setCategories}
+              />
             </CardBotton>
           </Grid>
         </Grid>

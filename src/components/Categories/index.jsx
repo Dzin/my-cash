@@ -19,20 +19,46 @@ import DeleteForeverOutlinedIcon from '@mui/icons-material/DeleteForeverOutlined
 import Loading from '../Loading';
 //STYLES
 
-export default function Categories(props) {
-    const [categoryFilter, setCategoryFilter] = useState([]);
+//COMPONENTS
+import CategoriesModal from '../CategoriesModal'
 
+//UTILS
+import { adicionarItem, pegarItem } from "../../utils/localStorage";
+
+
+export default function Categories(props) {
+    const [abrirModal, setAbrirModal] = useState(false);
+    const [typeCategories, setTypeCategories] = useState('')
+    const [dadosTrans, setDadosTrans] = useState({
+        tipo: "",
+        nome: ""
+    })
+
+    const [categoryFilter, setCategoryFilter] = useState([]);
     const filteredCategories = categoryFilter.length > 0 ? props.categories.filter(category => categoryFilter.includes(category.tipo)) : props.categories;
 
-    const addCategory = () => {
-        console.log("Adicionar categoria!");
+    async function addCategory() {
+        setAbrirModal(true)
+        setTypeCategories('Adicionar')
     }
 
-    const editCategory = ( id ) => {
-        console.log("Editar categoria!");
+    const editCategory = (idSelect, nomeSelect, tipoSelect) => {
+        setAbrirModal(true)
+        setTypeCategories('Editar')
+
+        adicionarItem("categoriaId", idSelect)
+        adicionarItem("categoriaNome", nomeSelect)
+        adicionarItem("categoriaTipo", tipoSelect)
+        const nomeCategoria = pegarItem("categoriaNome")
+        const tipoCategoria = pegarItem("categoriaTipo")
+
+        setDadosTrans({
+            tipo: tipoCategoria,
+            nome: nomeCategoria
+        })
     }
 
-    const deleteCategory = ( id ) => {
+    const deleteCategory = (id) => {
         console.log("Deletar categoria!");
     }
 
@@ -141,7 +167,7 @@ export default function Categories(props) {
                             control={
                                 <Switch
                                     size="medium"
-                                   sx={{
+                                    sx={{
                                         "& .MuiSwitch-switchBase": {
                                             color: "#FFFFFF",
 
@@ -203,81 +229,81 @@ export default function Categories(props) {
                         }
                     }}
                 >
-                {
-                    props.loading ?
-                        <Loading />
-                    :
-                        filteredCategories.map( category => (
-                            <ListItem
-                                key={category.id}
-                                sx={{
-                                    paddingTop: "0.2rem",
-                                    paddingBottom: "0.2rem",
-                                    paddingLeft: "0",
-                                    paddingRight: "0",
-                                }}
-                            >
-                                <ListItemIcon
+                    {
+                        props.loading ?
+                            <Loading />
+                            :
+                            filteredCategories.map(category => (
+                                <ListItem
+                                    key={category.id}
                                     sx={{
-                                        minWidth: "0",
-                                        marginRight: "0.5rem",
+                                        paddingTop: "0.2rem",
+                                        paddingBottom: "0.2rem",
+                                        paddingLeft: "0",
+                                        paddingRight: "0",
                                     }}
                                 >
-                                    {
-                                        category.tipo === "despesa" ?
-                                            <ArrowCircleDownOutlinedIcon
-                                                fontSize="small"
-                                                sx={{
-                                                    color: "#E53E3E"
-                                                }}
-                                            />
-                                        :
-                                            <ArrowCircleUpOutlinedIcon
-                                                fontSize="small"
-                                                sx={{
-                                                    color: "#48BB78"
-                                                }}
-                                            />
-                                    }
-                                </ListItemIcon>
-                                <ListItemText 
-                                    primary={category.nome}
-                                    primaryTypographyProps={{
-                                        fontSize: {
-                                            md: "0.9rem",
-                                            xs: "0.8rem",
+                                    <ListItemIcon
+                                        sx={{
+                                            minWidth: "0",
+                                            marginRight: "0.5rem",
+                                        }}
+                                    >
+                                        {
+                                            category.tipo === "despesa" ?
+                                                <ArrowCircleDownOutlinedIcon
+                                                    fontSize="small"
+                                                    sx={{
+                                                        color: "#E53E3E"
+                                                    }}
+                                                />
+                                                :
+                                                <ArrowCircleUpOutlinedIcon
+                                                    fontSize="small"
+                                                    sx={{
+                                                        color: "#48BB78"
+                                                    }}
+                                                />
                                         }
-                                    }}
-                                />
-                                <IconButton
-                                    aria-label="edit"
-                                    onClick={
-                                        () => editCategory(category.id)
-                                    }
-                                >
-                                    <EditOutlinedIcon
-                                        fontSize="small"
-                                        sx={{
-                                            color: "#000000",
+                                    </ListItemIcon>
+                                    <ListItemText
+                                        primary={category.nome}
+                                        primaryTypographyProps={{
+                                            fontSize: {
+                                                md: "0.9rem",
+                                                xs: "0.8rem",
+                                            }
                                         }}
                                     />
-                                </IconButton>
-                                <IconButton
-                                    aria-label="delete"
-                                    onClick={
-                                        () => deleteCategory(category.id)
-                                    }
-                                >
-                                    <DeleteForeverOutlinedIcon
-                                        fontSize="small"
-                                        sx={{
-                                            color: "#000000",
-                                        }}
-                                    />
-                                </IconButton>
-                            </ListItem>     
-                        ))
-                }
+                                    <IconButton
+                                        aria-label="edit"
+                                        onClick={
+                                            () => editCategory(category.id, category.nome, category.tipo)
+                                        }
+                                    >
+                                        <EditOutlinedIcon
+                                            fontSize="small"
+                                            sx={{
+                                                color: "#000000",
+                                            }}
+                                        />
+                                    </IconButton>
+                                    <IconButton
+                                        aria-label="delete"
+                                        onClick={
+                                            () => deleteCategory(category.id)
+                                        }
+                                    >
+                                        <DeleteForeverOutlinedIcon
+                                            fontSize="small"
+                                            sx={{
+                                                color: "#000000",
+                                            }}
+                                        />
+                                    </IconButton>
+                                </ListItem>
+                            ))
+                    }
                 </List>
                 <Button
                     variant="contained"
@@ -299,6 +325,15 @@ export default function Categories(props) {
                     Adicionar
                 </Button>
             </Grid>
+
+            <CategoriesModal
+                abrirModal={abrirModal}
+                setAbrirModal={setAbrirModal}
+                typeCategories={typeCategories}
+                dadosTrans={dadosTrans}
+                setDadosTrans={setDadosTrans}
+                setCategories={props.setCategories}
+            />
         </>
     );
 }
