@@ -39,11 +39,8 @@ export const TransactionListingCard = ({ transactionList }) => {
     setDate(selectedDate);
   };
 
-  const handleToggleType = function (e) {
-    //type === e.target.value ? "" : e.target.value;
-    const isSelected = e.target.classList.contains("Mui-selected");
-
-    setType(isSelected ? "" : e.target.value);
+  const handleToggleType = function (currentType, selectedValue) {
+    setType(currentType === selectedValue ? "" : selectedValue);
   };
 
   return (
