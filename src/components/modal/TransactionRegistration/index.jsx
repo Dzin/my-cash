@@ -154,7 +154,7 @@ export default function TransactionRegistration({ open, setOpen, categories }) {
 
   return (
     <Dialog
-      open={true}
+      open={open}
       onClose={() => {
         handleClose();
         reset();
