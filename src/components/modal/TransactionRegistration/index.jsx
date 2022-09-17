@@ -154,7 +154,7 @@ export default function TransactionRegistration({ open, setOpen, categories }) {
 
   return (
     <Dialog
-      open={open}
+      open={true}
       onClose={() => {
         handleClose();
         reset();
@@ -372,6 +372,7 @@ export default function TransactionRegistration({ open, setOpen, categories }) {
                           }`,
                         },
                       }}
+                      inputProps={{ min: 0, step: 0.1 }}
                       InputProps={{
                         startAdornment: (
                           <InputAdornment position="start">R$</InputAdornment>
