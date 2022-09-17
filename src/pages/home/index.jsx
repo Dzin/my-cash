@@ -17,7 +17,7 @@ import {
 // SERVICES
 import api from "../../services/api";
 // COMPONENTS
-import Categories from "../../components/Categories";
+import CategoriesListCard from "../../components/CategoriesListCard";
 
 function CardTop(props) {
   let data;
@@ -235,7 +235,7 @@ export default function Home() {
               Componente Transações
             </CardBotton>
             <CardBotton xs={12} md={6}>
-              <Categories categories={categories} loading={loadingCategories} />
+              <CategoriesListCard categories={categories} loading={loadingCategories} />
             </CardBotton>
           </Grid>
         </Grid>

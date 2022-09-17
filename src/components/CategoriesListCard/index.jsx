@@ -7,32 +7,35 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Typography from "@mui/material/Typography";
 import IconButton from '@mui/material/IconButton';
-import FormGroup from '@mui/material/FormGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Switch from '@mui/material/Switch';
 import Button from '@mui/material/Button';
 //ICONS
 import ArrowCircleUpOutlinedIcon from '@mui/icons-material/ArrowCircleUpOutlined';
 import ArrowCircleDownOutlinedIcon from '@mui/icons-material/ArrowCircleDownOutlined';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import DeleteForeverOutlinedIcon from '@mui/icons-material/DeleteForeverOutlined';
+//COMPONENTS
 import Loading from '../Loading';
+import { ToggleType } from '../ToggleType';
 //STYLES
 
-export default function Categories(props) {
-    const [categoryFilter, setCategoryFilter] = useState([]);
+export default function CategoriesListCard(props) {
+    const [categoryFilter, setCategoryFilter] = useState("");
 
-    const filteredCategories = categoryFilter.length > 0 ? props.categories.filter(category => categoryFilter.includes(category.tipo)) : props.categories;
+    const filteredCategories = categoryFilter === "" ?  props.categories : props.categories.filter(category => categoryFilter === category.tipo);
 
-    const addCategory = () => {
+    const handleToggleType = function (category) {
+        setCategoryFilter(category || "");
+    }
+
+    const addCategory = function() {
         console.log("Adicionar categoria!");
     }
 
-    const editCategory = ( id ) => {
+    const editCategory = function( id ) {
         console.log("Editar categoria!");
     }
 
-    const deleteCategory = ( id ) => {
+    const deleteCategory = function( id ) {
         console.log("Deletar categoria!");
     }
 
@@ -76,108 +79,7 @@ export default function Categories(props) {
                     >
                         Categorias
                     </Typography>
-                    <FormGroup
-                        sx={{
-                            display: "flex",
-                            flexDirection: "row",
-                            justifyContent: {
-                                sm: "end",
-                                xs: "center",
-                            },
-                            alignItems: "center",
-                            gap: {
-                                md: "1rem",
-                                xs: "0.5rem",
-                            },
-                        }}
-                    >
-                        <FormControlLabel
-                            sx={{
-                                margin: "0",
-                            }}
-                            control={
-                                <Switch
-                                    size="medium"
-                                    sx={{
-                                        "& .MuiSwitch-switchBase": {
-                                            color: "#FFFFFF",
-
-                                            "&.Mui-checked": {
-                                                color: "#FFFFFF",
-                                            },
-
-                                            "&.Mui-checked + .MuiSwitch-track": {
-                                                opacity: "1",
-                                                backgroundColor: "#2D3748",
-                                            },
-                                        },
-                                        '& .MuiSwitch-track': {
-                                            opacity: "1",
-                                            backgroundColor: "#E2E8F0",
-                                        },
-                                    }}
-                                    onChange={
-                                        (e) => { e.target.checked ? setCategoryFilter([...categoryFilter, "receita"]) : setCategoryFilter(categoryFilter.filter(filter => filter !== "receita")) }
-                                    }
-                                />
-                            }
-                            label={
-                                <Typography
-                                    component="span"
-                                    fontSize={{
-                                        xs: "0.8rem",
-                                    }}
-                                    fontWeight="500"
-                                    color="#A0AEC0"
-                                >
-                                    Entrada
-                                </Typography>
-                            }
-                        />
-                        <FormControlLabel
-                            sx={{
-                                margin: "0",
-                            }}
-                            control={
-                                <Switch
-                                    size="medium"
-                                   sx={{
-                                        "& .MuiSwitch-switchBase": {
-                                            color: "#FFFFFF",
-
-                                            "&.Mui-checked": {
-                                                color: "#FFFFFF",
-                                            },
-
-                                            "&.Mui-checked + .MuiSwitch-track": {
-                                                opacity: "1",
-                                                backgroundColor: "#2D3748",
-                                            },
-                                        },
-                                        '& .MuiSwitch-track': {
-                                            opacity: "1",
-                                            backgroundColor: "#E2E8F0",
-                                        },
-                                    }}
-                                    onChange={
-                                        (e) => { e.target.checked ? setCategoryFilter([...categoryFilter, "despesa"]) : setCategoryFilter(categoryFilter.filter(filter => filter !== "despesa")) }
-                                    }
-                                />
-                            }
-                            label={
-                                <Typography
-                                    component="span"
-                                    fontSize={{
-                                        xs: "0.8rem",
-                                    }}
-                                    fontWeight="500"
-                                    color="#A0AEC0"
-                                >
-                                    Saída
-                                </Typography>
-                            }
-                        />
-                    </FormGroup>
+                    <ToggleType handleToggleType={handleToggleType} />
                 </Grid>
 
                 <List
