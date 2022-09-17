@@ -53,8 +53,9 @@ export const TransactionListingCard = ({ transactionList }) => {
     setDate(selectedDate);
   };
 
-  const handleToggleType = function (currentType, selectedValue) {
-    setType(currentType === selectedValue ? "" : selectedValue);
+  const handleToggleType = function (selectedValue) {
+    console.log(selectedValue);
+    setType(selectedValue || "");
   };
 
   return (

@@ -12,21 +12,12 @@ export const ToggleType = ({ handleToggleType }) => {
       exclusive
       onChange={(e, newValue) => {
         setType(newValue);
+        handleToggleType(newValue);
       }}
       aria-label="Platform"
     >
-      <ToggleButton
-        value="receita"
-        onClick={(e, value) => handleToggleType(type, value)}
-      >
-        Entrada
-      </ToggleButton>
-      <ToggleButton
-        value="despesa"
-        onClick={(e, value) => handleToggleType(type, value)}
-      >
-        Saída
-      </ToggleButton>
+      <ToggleButton value="receita">Entrada</ToggleButton>
+      <ToggleButton value="despesa">Saída</ToggleButton>
     </ToggleButtonGroup>
   );
 };
