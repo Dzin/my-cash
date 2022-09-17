@@ -20,7 +20,7 @@ import ArrowCircleDownOutlinedIcon from "@mui/icons-material/ArrowCircleDownOutl
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteForeverOutlinedIcon from "@mui/icons-material/DeleteForeverOutlined";
 
-export const TransactionListingCard = ({ transactionList }) => {
+export const TransactionListingCard = ({ transactions }) => {
   const [date, setDate] = useState(null);
   const [type, setType] = useState("");
 
@@ -41,7 +41,7 @@ export const TransactionListingCard = ({ transactionList }) => {
   };
 
   const listFilteredTransactions = () => {
-    let filteredList = [...transactionList];
+    let filteredList = [...transactions];
 
     if (date) filteredList = filteredList.filter(filterTransactionsByDate);
     if (type) filteredList = filteredList.filter(filterTransactionsByType);
@@ -54,7 +54,6 @@ export const TransactionListingCard = ({ transactionList }) => {
   };
 
   const handleToggleType = function (selectedValue) {
-    console.log(selectedValue);
     setType(selectedValue || "");
   };
 
