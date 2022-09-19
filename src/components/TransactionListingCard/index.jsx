@@ -37,7 +37,7 @@ export const TransactionListingCard = ({ transactions }) => {
   };
 
   const filterTransactionsByType = (transaction) => {
-    return transaction.tipo === type;
+    return transaction.categoria.tipo === type;
   };
 
   const listFilteredTransactions = () => {
@@ -115,7 +115,7 @@ export const TransactionListingCard = ({ transactions }) => {
                 marginRight: "0.5rem",
               }}
             >
-              {transaction.tipo === "despesa" ? (
+              {transaction.categoria.tipo === "despesa" ? (
                 <ArrowCircleDownOutlinedIcon
                   fontSize="small"
                   sx={{
@@ -163,11 +163,6 @@ export const TransactionListingCard = ({ transactions }) => {
         ))}
       </List>
       <Button variant="contained">Adicionar</Button>
-      <ul>
-        {listFilteredTransactions().map((item) => (
-          <li key={item.id}>{item.id}</li>
-        ))}
-      </ul>
     </Grid>
   );
 };

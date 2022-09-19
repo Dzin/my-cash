@@ -7,15 +7,20 @@ import RemoveIcon from "@mui/icons-material/Remove";
 import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 //COMPONENTS
 import Loading from "../../../../components/Loading";
+
 export default function CardTop(props) {
   let data;
 
-  const receita = props.transations
-    .filter((transation) => transation.tipo.toLowerCase() === "receita")
+  const receita = props.transactions
+    .filter(
+      (transaction) => transaction.categoria.tipo.toLowerCase() === "receita"
+    )
     .reduce((acc, obj) => acc + Number(obj.valor), 0);
 
-  const despesa = props.transations
-    .filter((transation) => transation.tipo.toLowerCase() === "despesa")
+  const despesa = props.transactions
+    .filter(
+      (transaction) => transaction.categoria.tipo.toLowerCase() === "despesa"
+    )
     .reduce((acc, obj) => acc + Number(obj.valor), 0);
 
   switch (props.type) {

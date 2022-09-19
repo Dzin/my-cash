@@ -23,10 +23,10 @@ import Copyrights from "./components/Copyrights";
 
 export default function Home() {
   const [transactions, setTransactions] = useState([]);
-  const [openRegister, setOpenRegister] = useState(false);
+  const [loadingRegister, setLoadingRegister] = useState(false);
   const [categories, setCategories] = useState([]);
   const [loadingCategories, setLoadingCategories] = useState(false);
-  const [loadingRegister, setLoadingRegister] = useState(false);
+  const [openRegister, setOpenRegister] = useState(false);
 
   useEffect(() => {
     setLoadingCategories(true);
@@ -92,7 +92,7 @@ export default function Home() {
           >
             <CardTop
               type="Receitas"
-              transations={transations}
+              transactions={transactions}
               loading={loadingRegister}
               sm={6}
               xs={12}
@@ -101,7 +101,7 @@ export default function Home() {
 
             <CardTop
               type="Despesas"
-              transations={transations}
+              transactions={transactions}
               loading={loadingRegister}
               sm={6}
               xs={12}
@@ -110,7 +110,7 @@ export default function Home() {
 
             <CardTop
               type="Balanço"
-              transations={transations}
+              transactions={transactions}
               loading={loadingRegister}
               sm={12}
               xs={12}
@@ -126,8 +126,8 @@ export default function Home() {
             <CardBotton xs={12} md={6}>
               <Categories
                 categories={categories}
-                loading={loadingCategories}
                 setCategories={setCategories}
+                loading={loadingCategories}
               />
             </CardBotton>
           </Grid>
