@@ -33,6 +33,8 @@ export default function Categories(props) {
         tipo: "",
         nome: ""
     })
+    const [tipoErro, setTipoErro] = useState("");
+    const [nomeErro, setNomeErro] = useState("");
 
     const [categoryFilter, setCategoryFilter] = useState([]);
     const filteredCategories = categoryFilter.length > 0 ? props.categories.filter(category => categoryFilter.includes(category.tipo)) : props.categories;
@@ -40,9 +42,13 @@ export default function Categories(props) {
     async function addCategory() {
         setAbrirModal(true)
         setTypeCategories('Adicionar')
+        setNomeErro("")
+        setTipoErro("")
     }
 
     const editCategory = (idSelect, nomeSelect, tipoSelect) => {
+        setNomeErro("")
+        setTipoErro("")
         setAbrirModal(true)
         setTypeCategories('Editar')
 
@@ -333,6 +339,10 @@ export default function Categories(props) {
                 dadosTrans={dadosTrans}
                 setDadosTrans={setDadosTrans}
                 setCategories={props.setCategories}
+                nomeErro={nomeErro}
+                setNomeErro={setNomeErro}
+                tipoErro={tipoErro}
+                setTipoErro={setTipoErro}
             />
         </>
     );

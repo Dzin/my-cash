@@ -1,19 +1,35 @@
-import React, { useState } from 'react'
-import { Box, Button, Typography, Modal, Grid, InputLabel, MenuItem, FormControl, Select, TextField } from '@mui/material';
+import React from 'react'
+//MUI
+import {
+    Box,
+    Button,
+    Grid,
+    InputLabel,
+    MenuItem,
+    FormControl,
+    Select,
+    TextField,
+    IconButton,
+    Dialog,
+    DialogContent,
+    DialogTitle,
+    alpha,
+    FormHelperText
+} from '@mui/material';
+import CloseIcon from "@mui/icons-material/Close";
+import CheckIcon from '@mui/icons-material/Check';
+
+//API
 import api from '../../services/api'
-import { ToastContainer, toast } from 'react-toastify';
+
+//TOAST
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import IconeFalha from "../../assets/icons/toastIconeFalha.svg";
-import IconeSucesso from "../../assets/icons/toastIconeSucesso.svg";
+import './style.css'
 
 //UTILS
 import { pegarItem } from "../../utils/localStorage";
 
-const styleSelect = {
-    background: '#FFFFFF',
-    boxShadow: '0.5px solid #E2E8F0',
-    color: '#A0AEC0'
-}
 
 export default function CategoriesModal({
     abrirModal,
@@ -21,10 +37,13 @@ export default function CategoriesModal({
     typeCategories,
     dadosTrans,
     setDadosTrans,
-    setCategories
+    setCategories,
+    tipoErro,
+    setTipoErro,
+    nomeErro,
+    setNomeErro
 }) {
 
-    //Modal
     function handleClose() {
         setAbrirModal(false)
         setDadosTrans({
@@ -33,42 +52,50 @@ export default function CategoriesModal({
         })
     }
 
-    //Change Form Categorias
     const handleChangeTrans = (prop) => (event) => {
         setDadosTrans({ ...dadosTrans, [prop]: event.target.value });
     };
 
     function feedbackCobrancaSucesso(mensagem) {
         toast.success(mensagem, {
-            icon: () => <img src={IconeSucesso} alt="sucesso" />,
+            icon: () => <CheckIcon color='primary'/>,
             position: "bottom-right",
-            autoClose: 3000,
-            hideProgressBar: true,
+            autoClose: 2000,
+            hideProgressBar: false,
             closeOnClick: true,
             pauseOnHover: true,
             draggable: false,
             progress: undefined,
-            className: "corDeFundoSucesso",
         });
-    }
+    } 
 
-    function feedbackCobrancaFalha(mensagem) {
-        toast.success(mensagem, {
-            icon: () => <img src={IconeFalha} alt="falha" />,
+        function feedbackCobrancaFalha(mensagem) {
+        toast.error(mensagem, {
+            icon: () => <CloseIcon color='primary'/>,
             position: "bottom-right",
-            autoClose: 4000,
-            hideProgressBar: true,
+            autoClose: 2000,
+            hideProgressBar: false,
             closeOnClick: true,
             pauseOnHover: true,
             draggable: false,
             progress: undefined,
-            className: "corDeFundoFalha",
         });
     }
 
-    async function registerCategory() {
-        if (dadosTrans.tipo === "" || dadosTrans.nome === "") {
-            return console.log('Preencha todos os dados')
+    async function registerCategory(e) {
+        e.preventDefault();
+
+        setNomeErro("")
+        setTipoErro("")
+
+        if (!dadosTrans.tipo) {
+            setTipoErro("Campo obrigatório");
+            return;
+        }
+
+        if (!dadosTrans.nome) {
+            setNomeErro("Campo obrigatório");
+            return;
         }
 
         try {
@@ -85,17 +112,20 @@ export default function CategoriesModal({
 
             setAbrirModal(false)
             feedbackCobrancaSucesso("Categoria cadastrada com sucesso!");
-
         } catch (error) {
             feedbackCobrancaFalha("Oops... Tente mais tarde")
         }
     }
 
-    async function updateCategory() {
+    async function updateCategory(e) {
+        e.preventDefault();
         const idCategoria = pegarItem("categoriaId")
 
-        if (dadosTrans.tipo === "" || dadosTrans.nome === "") {
-            return console.log('Preencha todos os dados')
+        setNomeErro("")
+
+        if (!dadosTrans.nome) {
+            setNomeErro("Campo obrigatório");
+            return;
         }
 
         try {
@@ -118,87 +148,123 @@ export default function CategoriesModal({
     }
 
     return (
-        <div>
-            <Modal
-                open={abrirModal}
-                onClose={handleClose}
-            >
-                <Box sx={{
-                    position: 'absolute',
-                    top: '50%',
-                    left: '50%',
-                    transform: 'translate(-50%, -50%)',
-                    width: 481,
-                    height: 160,
-                    bgcolor: '#FFFFFF',
-                    boxShadow: '0px 3.5px 5.5px rgba(0, 0, 0, 0.02)',
-                    borderRadius: 2,
-                    p: 3,
+        <Dialog
+            open={abrirModal}
+            onClose={handleClose}
+            sx={{
+                " .MuiPaper-root": {
+                    borderRadius: "1rem",
                     display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'space-between'
-                }}>
-                    <Typography
-                        component="h3"
-                        fontWeight="700"
-                        fontSize={{
-                            xs: "1.2rem",
-                        }}
-                        textAlign={{
-                            sm: "left",
-                            xs: "center",
-                        }}
-                        color="#2D3748"
-                    >
-                        {typeCategories === 'Adicionar' ? 'Adicionar Categoria' : 'Editar Categoria'}</Typography>
+                    justifyContent: 'center',
+                    width: '29rem'
+                },
+            }}
+        >
+            <Box
+                sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    position: "relative",
+                    padding: "1.5rem 1rem 0 1rem",
+                }}
+            >
+                <DialogTitle sx={{ padding: "0" }} fontWeight="bold">
+                    {typeCategories === 'Adicionar' ? 'Adicionar Categoria' : 'Editar Categoria'}
+                </DialogTitle>
 
-                    <Grid
-                        container
-                        direction="row"
-                        justifyContent="space-between"
-                        alignItems="center"
-                    >
-                        <FormControl>
-                            <InputLabel>Tipos</InputLabel>
+                <IconButton
+                    onClick={() => handleClose()}
+                    sx={{
+                        width: "2rem",
+                        height: "2rem",
+                        position: "absolute",
+                        right: 7,
+                        top: 10,
+                    }}
+                >
+                    <CloseIcon />
+                </IconButton>
+            </Box>
+
+            <DialogContent sx={{ padding: { xs: "1rem" } }}>
+                <Grid
+                    container
+                    sx={{
+                        "& .MuiInputBase-root.MuiOutlinedInput-root": {
+                            borderRadius: "1rem",
+                        },
+                    }}
+                    spacing={1.5}
+                >
+                    <Grid item xs={12} sm={4}>
+                        <FormControl
+                            size="small"
+                            fullWidth
+                        >
+                            <InputLabel>Tipo</InputLabel>
                             <Select
-                                label="Tipos"
+                                label="Tipo"
                                 value={dadosTrans.tipo}
                                 onChange={handleChangeTrans('tipo')}
-                                sx={{ ...styleSelect, width: '113px', color: 'rgba(0, 0, 0, 0.87)' }}
                             >
                                 <MenuItem value='receita'>Receita</MenuItem>
                                 <MenuItem value='despesa'>Despesa</MenuItem>
                             </Select>
+                            <FormHelperText sx={{
+                                margin: 0,
+                                padding: ' .2rem .5rem 0',
+                                color: 'red'
+                            }}>
+                                {tipoErro}
+                            </FormHelperText>
                         </FormControl>
+                    </Grid>
 
+                    <Grid item xs={12} sm={5} >
                         <TextField
-                            variant="outlined"
+                            id="nome"
                             label="Nome"
+                            name="description"
+                            size="small"
+                            variant="outlined"
                             onChange={handleChangeTrans('nome')}
-                            sx={{ width: '194px' }}
                             value={dadosTrans.nome}
+                            fullWidth
                         />
+                        <FormHelperText sx={{
+                            margin: 0,
+                            padding: ' .2rem .5rem 0',
+                            color: 'red'
+                        }}>
+                            {nomeErro}
+                        </FormHelperText>
+                    </Grid>
 
+                    <Grid item xs={12} sm={3} >
                         <Button
-                            onClick={typeCategories === 'Adicionar' ? () => registerCategory() : () => updateCategory()}
+                            onClick={typeCategories === 'Adicionar' ? (e) => registerCategory(e) : (e) => updateCategory(e)}
                             variant="contained"
+                            fullWidth
                             sx={{
-                                fontSize: {
-                                    xs: "0.8rem",
+                                "&.MuiButtonBase-root": {
+                                    background:
+                                        "linear-gradient(136.64deg, #658DD1 1.59%, #2D3748 98.89%)",
+                                    borderRadius: "1rem",
+                                    textTransform: "capitalize",
+                                    "&:hover": {
+                                        background: `linear-gradient(136.64deg, ${alpha(
+                                            "#658DD1",
+                                            0.9
+                                        )} 1.59%, ${alpha("#2D3748", 0.9)} 98.89%)`,
+                                    },
                                 },
-                                fontWeight: "500",
-                                backgroundColor: "transparent",
-                                backgroundImage: "linear-gradient(136.64deg, #658DD1 1.59%, #2D3748 98.89%)",
-                                padding: "0.4rem 2rem",
-                                textTransform: "none",
-                                borderRadius: "0.5rem",
-                                width: '111px'
                             }}
                         >
-                            {typeCategories === 'Adicionar' ? 'Adicionar' : 'Atualizar'}</Button>
+                            {typeCategories === 'Adicionar' ? 'Adicionar' : 'Atualizar'}
+                        </Button>
                     </Grid>
-                </Box>
-            </Modal>
-        </div >
+                </Grid>
+            </DialogContent>
+        </Dialog>
     );
 }
