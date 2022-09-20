@@ -101,6 +101,7 @@ export default function Home() {
           <Grid container spacing={2} justifyContent="center">
             <CardBotton xs={12} md={6}>
               Componente Transações
+              <button onClick={() => setOpenRegister(true)}>ADICIONAR</button>
             </CardBotton>
             <CardBotton xs={12} md={6}>
               <Categories

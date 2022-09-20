@@ -7,15 +7,17 @@ import RemoveIcon from "@mui/icons-material/Remove";
 import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 //COMPONENTS
 import Loading from "../../../../components/Loading";
+//HELPER
+import { moneyMask } from "../../../../utils/formatter";
 export default function CardTop(props) {
   let data;
 
   const receita = props.transations
-    .filter((transation) => transation.tipo.toLowerCase() === "receita")
+    .filter((transation) => transation.categoria.tipo.toLowerCase() === "receita")
     .reduce((acc, obj) => acc + Number(obj.valor), 0);
 
   const despesa = props.transations
-    .filter((transation) => transation.tipo.toLowerCase() === "despesa")
+    .filter((transation) => transation.categoria.tipo.toLowerCase() === "despesa")
     .reduce((acc, obj) => acc + Number(obj.valor), 0);
 
   switch (props.type) {
@@ -29,7 +31,7 @@ export default function CardTop(props) {
       data = receita - despesa;
       break;
   }
-
+  let teste = 856859856.54;
   return (
     <Grid
       item
@@ -83,7 +85,9 @@ export default function CardTop(props) {
                     : "#ff6a6a"
                 }`}
                 fontWeight="700"
-              >{`R$ ${data.toFixed(2)}`}</Typography>
+              >{`R$ ${data < 0 ? "-" : ""}${moneyMask(
+                String(data.toFixed(2))
+              )}`}</Typography>
             </Box>
             <Box
               sx={{

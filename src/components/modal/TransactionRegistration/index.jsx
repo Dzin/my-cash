@@ -35,7 +35,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 //HELPERS
 import { toast } from "react-toastify";
-
+import { moneyMask } from "../../../utils/formatter";
 let patternTwoDigisAfterComma = /^\d+(\.\d{0,2})?$/;
 const schema = yup
   .object({
@@ -44,18 +44,33 @@ const schema = yup
       .date()
       .default(() => new Date())
       .required("Selecione uma data"),
-    categorie: yup.string().required("Selecione uma categoria"),
+    categorie: yup
+      .object({
+        id: yup.string().required("Selecione uma categoria"),
+      })
+      .typeError("Selecione uma categoria")
+      .required("Selecione uma categoria"),
     description: yup.string(),
     valueTransaction: yup
-      .number()
-      .typeError("Valor deve ser um número")
-      .min(0.01, "Valor não pode ser menor que 0.01")
+      .string()
       .required("Adicione um valor")
-      .test("is-decimal", "Máximo dois dígitos após a vírgula", (val) => {
-        if (val != undefined) {
-          return patternTwoDigisAfterComma.test(val);
+      .notOneOf(["0,0"], "Adicione um valor")
+      .test("differentFromZero", "Adicione um valor", (val) => {
+        let differentFromZero = false;
+        for (let i = 0; i < val.length; i++) {
+          switch (val[i]) {
+            case "0":
+              break;
+            case ".":
+              break;
+            case ",":
+              break;
+            default:
+              differentFromZero = true;
+          }
         }
-        return true;
+
+        return differentFromZero;
       }),
   })
   .required();
@@ -103,6 +118,7 @@ export default function TransactionRegistration({ open, setOpen, categories }) {
     getValues,
     formState: { errors },
     resetField,
+    setValue,
     trigger,
     watch,
     reset,
@@ -111,18 +127,20 @@ export default function TransactionRegistration({ open, setOpen, categories }) {
     defaultValues: {
       type: undefined,
       date: new Date(),
-      categorie: undefined,
+      categorie: { id: "", nome: "", tipo: "" },
       description: "",
-      valueTransaction: 0,
+      valueTransaction: "",
     },
   });
+
   let typeWatch = watch("type");
   let categoriesWatch = watch("categorie");
-
+  console.log(errors);
   useEffect(() => {
     if (typeWatch && categoriesWatch) {
       (async () => {
-        resetField("categorie");
+        setValue("categorie", null);
+
         await trigger("categorie");
       })();
     }
@@ -133,11 +151,14 @@ export default function TransactionRegistration({ open, setOpen, categories }) {
   }, [categoriesWatch]);
 
   const onSubmit = async (data) => {
+    console.log("clicokokok");
     await api
       .post("/transacao", {
         tipo: data.type,
-        valor: Number(data.valueTransaction.toFixed(2)),
-        categoria: data.categorie,
+        valor: Number(
+          moneyMask(data.valueTransaction).replace(".", "").replace(",", ".")
+        ),
+        categoria: data.categorie.id,
         descricao: data.description,
         data: dayjs(data.date).format("YYYY-MM-DD"),
       })
@@ -151,7 +172,6 @@ export default function TransactionRegistration({ open, setOpen, categories }) {
         toast.error("Não foi possível cadastrar a transação");
       });
   };
-
   return (
     <Dialog
       open={open}
@@ -273,7 +293,7 @@ export default function TransactionRegistration({ open, setOpen, categories }) {
                 render={({ field: { onChange, value }, fieldState }) => (
                   <Autocomplete
                     onChange={(event, item) => {
-                      onChange(item.id);
+                      onChange(item);
                     }}
                     value={value}
                     size="small"
@@ -291,7 +311,7 @@ export default function TransactionRegistration({ open, setOpen, categories }) {
                     noOptionsText="Não existe opções"
                     loadingText={"Carregando..."}
                     isOptionEqualToValue={(option, value) =>
-                      option.nome === value
+                      option.nome === value.nome
                     }
                     disabled={!getValues().type}
                     renderInput={(params) => (
@@ -351,8 +371,11 @@ export default function TransactionRegistration({ open, setOpen, categories }) {
                   return (
                     <TextField
                       {...field}
-                      value={getValues().valueTransaction}
-                      type={"number"}
+                      value={
+                        getValues().valueTransaction !== ""
+                          ? moneyMask(String(getValues().valueTransaction))
+                          : "0,00"
+                      }
                       label="Valor"
                       id="valueTransaction"
                       variant="outlined"
@@ -372,7 +395,6 @@ export default function TransactionRegistration({ open, setOpen, categories }) {
                           }`,
                         },
                       }}
-                      inputProps={{ min: 0, step: 0.1 }}
                       InputProps={{
                         startAdornment: (
                           <InputAdornment position="start">R$</InputAdornment>
