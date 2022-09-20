@@ -152,6 +152,27 @@ export default function TransactionRegistration({ open, setOpen, categories }) {
       });
   };
 
+  async function updateTransactions(e) {
+    e.preventDefault();
+    const idTransacao = pegarItem("transacaoId")
+
+    try {
+      await api.put(`/transacao/${idTransacao}`, {
+        tipo: data.type,
+        valor: Number(data.valueTransaction.toFixed(2)),
+        categoria: data.categorie,
+        descricao: data.description,
+        data: dayjs(data.date).format("YYYY-MM-DD"),
+      });
+
+      handleClose()
+      toast.success("Transação atualizada");
+      reset()
+    } catch (error) {
+      toast.error("Não foi possível cadastrar a transação");
+    }
+  }
+
   return (
     <Dialog
       open={open}

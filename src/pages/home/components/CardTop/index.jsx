@@ -11,11 +11,11 @@ export default function CardTop(props) {
   let data;
 
   const receita = props.transations
-    .filter((transation) => transation.tipo.toLowerCase() === "receita")
+    .filter((transation) => transation.tipo === "receita")
     .reduce((acc, obj) => acc + Number(obj.valor), 0);
 
   const despesa = props.transations
-    .filter((transation) => transation.tipo.toLowerCase() === "despesa")
+    .filter((transation) => transation.tipo === "despesa")
     .reduce((acc, obj) => acc + Number(obj.valor), 0);
 
   switch (props.type) {
