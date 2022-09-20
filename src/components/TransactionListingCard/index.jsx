@@ -77,8 +77,9 @@ export const TransactionListingCard = ({
     setOpenCreateTransactionModal(true);
     setTypeTransactions('Editar')
 
-    adicionarItem("transacaoId", transaction.id)  
-    adicionarItem("transacaoTipo", transaction.tipo)
+    console.log(transaction)
+    adicionarItem("transacaoId", transaction._id)  
+    adicionarItem("transacaoTipo", transaction.categoria.tipo)
     adicionarItem("transacaoValor", transaction.valor)
     adicionarItem("transacaoDescricao", transaction.descricao)
     adicionarItem("transacaoData", transaction.data)

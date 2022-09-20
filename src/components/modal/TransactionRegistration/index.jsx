@@ -193,7 +193,7 @@ export default function TransactionRegistration({ open, setOpen, categories, typ
         reset();
       })
       .catch((error) => {
-        console.error(error.message);
+        console.log(error)
         toast.error("Não foi possível cadastrar a transação");
       });
   };
