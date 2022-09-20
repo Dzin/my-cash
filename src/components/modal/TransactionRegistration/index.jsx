@@ -37,6 +37,7 @@ import * as yup from "yup";
 import { toast } from "react-toastify";
 import { moneyMask } from "../../../utils/formatter";
 let patternTwoDigisAfterComma = /^\d+(\.\d{0,2})?$/;
+import { pegarItem } from "../../../utils/localStorage";
 const schema = yup
   .object({
     type: yup.string().required("Selecione um tipo"),
@@ -75,7 +76,7 @@ const schema = yup
   })
   .required();
 
-export default function TransactionRegistration({ open, setOpen, categories }) {
+export default function TransactionRegistration({ open, setOpen, categories, typeTransactions }) {
   const [openCategories, setOpenCategories] = useState(false);
   const [optionsCategories, setOptionsCategories] = useState([]);
   const loadingCategories = openCategories && optionsCategories.length === 0;
@@ -100,6 +101,7 @@ export default function TransactionRegistration({ open, setOpen, categories }) {
       active = false;
     };
   }, [loadingCategories]);
+
   useEffect(() => {
     if (!openCategories) {
       setOptionsCategories([]);
@@ -150,7 +152,7 @@ export default function TransactionRegistration({ open, setOpen, categories }) {
     categoriesWatch && trigger("categorie");
   }, [categoriesWatch]);
 
-  const onSubmit = async (data) => {
+  const addTransactions = async (data) => {
     await api
       .post("/transacao", {
         tipo: data.type,
@@ -171,7 +173,32 @@ export default function TransactionRegistration({ open, setOpen, categories }) {
         toast.error("Não foi possível cadastrar a transação");
       });
   };
-  return (
+
+  const updateTransactions = async (data) => {
+    const idTransacao = pegarItem("transacaoId")
+
+    await api
+      .put(`/transacao/${idTransacao}`, {
+        tipo: data.type,
+        valor: Number(
+          moneyMask(data.valueTransaction).replace(".", "").replace(",", ".")
+        ),
+        categoria: data.categorie._id,
+        descricao: data.description,
+        data: dayjs(data.date).format("YYYY-MM-DD"),
+      })
+      .then((res) => {
+        toast.success("Transação atualizada");
+        handleClose();
+        reset();
+      })
+      .catch((error) => {
+        console.error(error.message);
+        toast.error("Não foi possível cadastrar a transação");
+      });
+  };
+
+   return (
     <Dialog
       open={open}
       onClose={() => {
@@ -196,7 +223,7 @@ export default function TransactionRegistration({ open, setOpen, categories }) {
         }}
       >
         <DialogTitle sx={{ padding: "0" }} fontWeight="bold">
-          Adicionar Transação
+          {typeTransactions === 'Editar' ? 'Atualizar transação' : 'Adicionar transação'}
         </DialogTitle>
         <IconButton
           onClick={() => {
@@ -216,7 +243,7 @@ export default function TransactionRegistration({ open, setOpen, categories }) {
       </Box>
 
       <DialogContent sx={{ padding: { xs: "0 1rem 1rem" } }}>
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={typeTransactions === 'Editar' ? handleSubmit(updateTransactions) : handleSubmit(addTransactions)}>
           <Grid
             container
             sx={{
@@ -424,7 +451,7 @@ export default function TransactionRegistration({ open, setOpen, categories }) {
                   },
                 }}
               >
-                Adicionar
+                {typeTransactions === 'Editar' ? 'Atualizar' : 'Adicionar'}
               </Button>
             </Grid>
           </Grid>

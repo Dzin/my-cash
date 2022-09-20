@@ -25,6 +25,8 @@ import { ToggleType } from "../ToggleType";
 import api from "../../services/api";
 
 import { toast } from "react-toastify";
+import { adicionarItem, pegarItem } from "../../utils/localStorage";
+
 
 export const TransactionListingCard = ({
   transactions,
@@ -34,8 +36,7 @@ export const TransactionListingCard = ({
 }) => {
   const [date, setDate] = useState(null);
   const [type, setType] = useState("");
-  const [openCreateTransactionModal, setOpenCreateTransactionModal] =
-    useState(false);
+  const [openCreateTransactionModal, setOpenCreateTransactionModal] = useState(false);
 
   const filterTransactionsByDate = (transaction) => {
     const currentTransactionDate = new Date(transaction.data);
@@ -70,9 +71,22 @@ export const TransactionListingCard = ({
     setType(selectedValue || "");
   };
 
-  const handleEditTransaction = (id) => {
-    console.log(id);
-    // Abre modal de editar
+  const [typeTransactions, setTypeTransactions] = useState('')
+  
+  const handleEditTransaction = (transaction) => {
+    setOpenCreateTransactionModal(true);
+    setTypeTransactions('Editar')
+
+    adicionarItem("transacaoId", transaction.id)  
+    adicionarItem("transacaoTipo", transaction.tipo)
+    adicionarItem("transacaoValor", transaction.valor)
+    adicionarItem("transacaoDescricao", transaction.descricao)
+    adicionarItem("transacaoData", transaction.data)
+
+    /* const tipoTransacao = pegarItem("transacaoTipo")
+    const valorTransacao = pegarItem("transacaoValor")
+    const descricaoTransacao = pegarItem("transacaoDescricao")
+    const dataTransacao = pegarItem("transacaoData") */
   };
 
   const handleDeleteTransaction = (id) => {
@@ -95,6 +109,8 @@ export const TransactionListingCard = ({
 
   const handleAddNewTransaction = () => {
     setOpenCreateTransactionModal(true);
+    setTypeTransactions('Adicionar')
+
   };
 
   return (
@@ -211,7 +227,7 @@ export const TransactionListingCard = ({
                 />
                 <IconButton
                   aria-label="edit"
-                  onClick={() => handleEditTransaction(transaction.id)}
+                  onClick={() => handleEditTransaction(transaction)}
                 >
                   <EditOutlinedIcon
                     fontSize="small"
@@ -259,6 +275,7 @@ export const TransactionListingCard = ({
       <TransactionRegistration
         open={openCreateTransactionModal}
         setOpen={setOpenCreateTransactionModal}
+        typeTransactions={typeTransactions}
       />
     </>
   );
