@@ -256,10 +256,10 @@ export const TransactionListingCard = ({
         </Button>
       </Grid>
 
-      {/* <TransactionRegistration
+      <TransactionRegistration
         open={openCreateTransactionModal}
         setOpen={setOpenCreateTransactionModal}
-      /> */}
+      />
     </>
   );
 };
