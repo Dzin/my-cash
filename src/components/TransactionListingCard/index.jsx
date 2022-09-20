@@ -25,6 +25,7 @@ import { ToggleType } from "../ToggleType";
 import api from "../../services/api";
 
 import { toast } from "react-toastify";
+import dayjs from "dayjs";
 
 export const TransactionListingCard = ({
   transactions,
@@ -68,6 +69,10 @@ export const TransactionListingCard = ({
 
   const handleToggleType = function (selectedValue) {
     setType(selectedValue || "");
+  };
+
+  const formatDate = (date) => {
+    return dayjs(date).format("DD/MM/YYYY");
   };
 
   const handleEditTransaction = (id) => {
@@ -186,14 +191,14 @@ export const TransactionListingCard = ({
                 >
                   {transaction.tipo === "despesa" ? (
                     <ArrowCircleDownOutlinedIcon
-                      fontSize="small"
+                      fontSize="medium"
                       sx={{
                         color: "#E53E3E",
                       }}
                     />
                   ) : (
                     <ArrowCircleUpOutlinedIcon
-                      fontSize="small"
+                      fontSize="medium"
                       sx={{
                         color: "#48BB78",
                       }}
@@ -201,14 +206,75 @@ export const TransactionListingCard = ({
                   )}
                 </ListItemIcon>
                 <ListItemText
-                  primary={transaction.descricao}
-                  primaryTypographyProps={{
+                  primary={
+                    <>
+                      <Typography
+                        component="p"
+                        fontWeight="400"
+                        fontSize={{
+                          md: "0.7rem",
+                          xs: "1rem",
+                        }}
+                        color="#2D3748"
+                      >
+                        {transaction.categoria}
+                      </Typography>
+                      <Typography
+                        component="p"
+                        fontWeight="600"
+                        fontSize={{
+                          md: "0.9rem",
+                          xs: "1.2rem",
+                        }}
+                        color="#2D3748"
+                        gutterBottom
+                      >
+                        {transaction.descricao}
+                      </Typography>
+                    </>
+                  }
+                  secondary={formatDate(transaction.data)}
+                  secondaryTypographyProps={{
                     fontSize: {
-                      md: "0.9rem",
-                      xs: "0.8rem",
+                      md: "0.8rem",
+                      xs: "0.6rem",
                     },
+                    color: "#2D3748",
                   }}
                 />
+                {transaction.tipo === "despesa" ? (
+                  <ListItemText
+                    sx={{
+                      marginRight: "1.2rem",
+                    }}
+                    primary={`-R$${transaction.valor.toFixed(2)}`}
+                    primaryTypographyProps={{
+                      fontSize: {
+                        md: "0.9rem",
+                        xs: "0.8rem",
+                      },
+                      fontWeight: "600",
+                      color: "#E53E3E",
+                      align: "right",
+                    }}
+                  />
+                ) : (
+                  <ListItemText
+                    sx={{
+                      marginRight: "1.2rem",
+                    }}
+                    primary={`+R$${transaction.valor.toFixed(2)}`}
+                    primaryTypographyProps={{
+                      fontSize: {
+                        md: "0.9rem",
+                        xs: "0.8rem",
+                      },
+                      fontWeight: "600",
+                      color: "#48BB78",
+                      align: "right",
+                    }}
+                  />
+                )}
                 <IconButton
                   aria-label="edit"
                   onClick={() => handleEditTransaction(transaction.id)}
