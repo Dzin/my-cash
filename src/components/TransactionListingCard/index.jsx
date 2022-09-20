@@ -25,6 +25,8 @@ import { ToggleType } from "../ToggleType";
 import api from "../../services/api";
 
 import { toast } from "react-toastify";
+import { adicionarItem, pegarItem } from "../../utils/localStorage";
+
 import dayjs from "dayjs";
 
 export const TransactionListingCard = ({
@@ -51,7 +53,7 @@ export const TransactionListingCard = ({
   };
 
   const filterTransactionsByType = (transaction) => {
-    return transaction.tipo === type;
+    return transaction.categoria.tipo === type;
   };
 
   const listFilteredTransactions = () => {
@@ -75,9 +77,23 @@ export const TransactionListingCard = ({
     return dayjs(date).format("DD/MM/YYYY");
   };
 
-  const handleEditTransaction = (id) => {
-    console.log(id);
-    // Abre modal de editar
+  const [typeTransactions, setTypeTransactions] = useState("");
+
+  const handleEditTransaction = (transaction) => {
+    setOpenCreateTransactionModal(true);
+    setTypeTransactions("Editar");
+
+    console.log(transaction);
+    adicionarItem("transacaoId", transaction._id);
+    adicionarItem("transacaoTipo", transaction.categoria.tipo);
+    adicionarItem("transacaoValor", transaction.valor);
+    adicionarItem("transacaoDescricao", transaction.descricao);
+    adicionarItem("transacaoData", transaction.data);
+
+    /* const tipoTransacao = pegarItem("transacaoTipo")
+    const valorTransacao = pegarItem("transacaoValor")
+    const descricaoTransacao = pegarItem("transacaoDescricao")
+    const dataTransacao = pegarItem("transacaoData") */
   };
 
   const handleDeleteTransaction = (id) => {
@@ -88,7 +104,7 @@ export const TransactionListingCard = ({
       .then(() => {
         toast.success("Transação deletada com sucesso");
         setTransactions(
-          transactions.filter((transaction) => transaction.id !== id)
+          transactions.filter((transaction) => transaction._id !== id)
         );
         setLoading(false);
       })
@@ -100,6 +116,7 @@ export const TransactionListingCard = ({
 
   const handleAddNewTransaction = () => {
     setOpenCreateTransactionModal(true);
+    setTypeTransactions("Adicionar");
   };
 
   return (
@@ -175,7 +192,7 @@ export const TransactionListingCard = ({
           ) : (
             listFilteredTransactions().map((transaction) => (
               <ListItem
-                key={transaction.id}
+                key={transaction._id}
                 sx={{
                   paddingTop: "0.2rem",
                   paddingBottom: "0.2rem",
@@ -189,7 +206,7 @@ export const TransactionListingCard = ({
                     marginRight: "0.5rem",
                   }}
                 >
-                  {transaction.tipo === "despesa" ? (
+                  {transaction.categoria.tipo === "despesa" ? (
                     <ArrowCircleDownOutlinedIcon
                       fontSize="medium"
                       sx={{
@@ -217,7 +234,7 @@ export const TransactionListingCard = ({
                         }}
                         color="#2D3748"
                       >
-                        {transaction.categoria}
+                        {transaction.categoria.nome}
                       </Typography>
                       <Typography
                         component="p"
@@ -242,7 +259,7 @@ export const TransactionListingCard = ({
                     color: "#2D3748",
                   }}
                 />
-                {transaction.tipo === "despesa" ? (
+                {transaction.categoria.tipo === "despesa" ? (
                   <ListItemText
                     sx={{
                       marginRight: "1.2rem",
@@ -277,7 +294,7 @@ export const TransactionListingCard = ({
                 )}
                 <IconButton
                   aria-label="edit"
-                  onClick={() => handleEditTransaction(transaction.id)}
+                  onClick={() => handleEditTransaction(transaction)}
                 >
                   <EditOutlinedIcon
                     fontSize="small"
@@ -288,7 +305,7 @@ export const TransactionListingCard = ({
                 </IconButton>
                 <IconButton
                   aria-label="delete"
-                  onClick={() => handleDeleteTransaction(transaction.id)}
+                  onClick={() => handleDeleteTransaction(transaction._id)}
                 >
                   <DeleteForeverOutlinedIcon
                     fontSize="small"
@@ -322,10 +339,11 @@ export const TransactionListingCard = ({
         </Button>
       </Grid>
 
-      {/* <TransactionRegistration
+      <TransactionRegistration
         open={openCreateTransactionModal}
         setOpen={setOpenCreateTransactionModal}
-      /> */}
+        typeTransactions={typeTransactions}
+      />
     </>
   );
 };

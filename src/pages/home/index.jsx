@@ -26,40 +26,6 @@ export default function Home() {
   const [categories, setCategories] = useState([]);
   const [loadingCategories, setLoadingCategories] = useState(false);
 
-  /* useEffect(() => {
-    setLoadingRegister(true);
-
-    api
-      .get("/transacao")
-      .then((res) => {
-        setTransactions(res.data);
-        setLoadingRegister(false);
-      })
-      .catch((error) => {
-        console.error(error.message);
-        toast.error("Não foi possível carregar a lista de transações");
-      });
-  }, []); */
-
-  /* useEffect(() => {
-    setLoadingCategories(true);
-
-    api
-      .get("/categoria")
-      .then((res) => {
-        setCategories(res.data);
-        setLoadingCategories(false);
-      })
-      .catch((error) => {
-        console.error(error.message);
-        toast.error("Não foi possível carregar a lista de categorias");
-      });
-  }, []); */
-
-  /* useEffect(() => {
-    if (!openRegister) {}
-  }, [openRegister]); */
-
   useEffect(() => {
     setLoadingRegister(true);
     setLoadingCategories(true);
