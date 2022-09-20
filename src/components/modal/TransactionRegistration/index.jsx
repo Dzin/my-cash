@@ -76,7 +76,12 @@ const schema = yup
   })
   .required();
 
-export default function TransactionRegistration({ open, setOpen, categories, typeTransactions }) {
+export default function TransactionRegistration({
+  open,
+  setOpen,
+  categories,
+  typeTransactions,
+}) {
   const [openCategories, setOpenCategories] = useState(false);
   const [optionsCategories, setOptionsCategories] = useState([]);
   const loadingCategories = openCategories && optionsCategories.length === 0;
@@ -175,7 +180,7 @@ export default function TransactionRegistration({ open, setOpen, categories, typ
   };
 
   const updateTransactions = async (data) => {
-    const idTransacao = pegarItem("transacaoId")
+    const idTransacao = pegarItem("transacaoId");
 
     await api
       .put(`/transacao/${idTransacao}`, {
@@ -193,12 +198,12 @@ export default function TransactionRegistration({ open, setOpen, categories, typ
         reset();
       })
       .catch((error) => {
-        console.log(error)
+        console.log(error);
         toast.error("Não foi possível cadastrar a transação");
       });
   };
 
-   return (
+  return (
     <Dialog
       open={open}
       onClose={() => {
@@ -223,7 +228,9 @@ export default function TransactionRegistration({ open, setOpen, categories, typ
         }}
       >
         <DialogTitle sx={{ padding: "0" }} fontWeight="bold">
-          {typeTransactions === 'Editar' ? 'Atualizar transação' : 'Adicionar transação'}
+          {typeTransactions === "Editar"
+            ? "Atualizar transação"
+            : "Adicionar transação"}
         </DialogTitle>
         <IconButton
           onClick={() => {
@@ -243,7 +250,13 @@ export default function TransactionRegistration({ open, setOpen, categories, typ
       </Box>
 
       <DialogContent sx={{ padding: { xs: "0 1rem 1rem" } }}>
-        <form onSubmit={typeTransactions === 'Editar' ? handleSubmit(updateTransactions) : handleSubmit(addTransactions)}>
+        <form
+          onSubmit={
+            typeTransactions === "Editar"
+              ? handleSubmit(updateTransactions)
+              : handleSubmit(addTransactions)
+          }
+        >
           <Grid
             container
             sx={{
@@ -451,7 +464,7 @@ export default function TransactionRegistration({ open, setOpen, categories, typ
                   },
                 }}
               >
-                {typeTransactions === 'Editar' ? 'Atualizar' : 'Adicionar'}
+                {typeTransactions === "Editar" ? "Atualizar" : "Adicionar"}
               </Button>
             </Grid>
           </Grid>

@@ -27,6 +27,7 @@ import api from "../../services/api";
 import { toast } from "react-toastify";
 import { adicionarItem, pegarItem } from "../../utils/localStorage";
 
+import dayjs from "dayjs";
 
 export const TransactionListingCard = ({
   transactions,
@@ -36,7 +37,8 @@ export const TransactionListingCard = ({
 }) => {
   const [date, setDate] = useState(null);
   const [type, setType] = useState("");
-  const [openCreateTransactionModal, setOpenCreateTransactionModal] = useState(false);
+  const [openCreateTransactionModal, setOpenCreateTransactionModal] =
+    useState(false);
 
   const filterTransactionsByDate = (transaction) => {
     const currentTransactionDate = new Date(transaction.data);
@@ -51,7 +53,7 @@ export const TransactionListingCard = ({
   };
 
   const filterTransactionsByType = (transaction) => {
-    return transaction.tipo === type;
+    return transaction.categoria.tipo === type;
   };
 
   const listFilteredTransactions = () => {
@@ -71,18 +73,22 @@ export const TransactionListingCard = ({
     setType(selectedValue || "");
   };
 
-  const [typeTransactions, setTypeTransactions] = useState('')
-  
+  const formatDate = (date) => {
+    return dayjs(date).format("DD/MM/YYYY");
+  };
+
+  const [typeTransactions, setTypeTransactions] = useState("");
+
   const handleEditTransaction = (transaction) => {
     setOpenCreateTransactionModal(true);
-    setTypeTransactions('Editar')
+    setTypeTransactions("Editar");
 
-    console.log(transaction)
-    adicionarItem("transacaoId", transaction._id)  
-    adicionarItem("transacaoTipo", transaction.categoria.tipo)
-    adicionarItem("transacaoValor", transaction.valor)
-    adicionarItem("transacaoDescricao", transaction.descricao)
-    adicionarItem("transacaoData", transaction.data)
+    console.log(transaction);
+    adicionarItem("transacaoId", transaction._id);
+    adicionarItem("transacaoTipo", transaction.categoria.tipo);
+    adicionarItem("transacaoValor", transaction.valor);
+    adicionarItem("transacaoDescricao", transaction.descricao);
+    adicionarItem("transacaoData", transaction.data);
 
     /* const tipoTransacao = pegarItem("transacaoTipo")
     const valorTransacao = pegarItem("transacaoValor")
@@ -98,7 +104,7 @@ export const TransactionListingCard = ({
       .then(() => {
         toast.success("Transação deletada com sucesso");
         setTransactions(
-          transactions.filter((transaction) => transaction.id !== id)
+          transactions.filter((transaction) => transaction._id !== id)
         );
         setLoading(false);
       })
@@ -110,8 +116,7 @@ export const TransactionListingCard = ({
 
   const handleAddNewTransaction = () => {
     setOpenCreateTransactionModal(true);
-    setTypeTransactions('Adicionar')
-
+    setTypeTransactions("Adicionar");
   };
 
   return (
@@ -187,7 +192,7 @@ export const TransactionListingCard = ({
           ) : (
             listFilteredTransactions().map((transaction) => (
               <ListItem
-                key={transaction.id}
+                key={transaction._id}
                 sx={{
                   paddingTop: "0.2rem",
                   paddingBottom: "0.2rem",
@@ -201,16 +206,16 @@ export const TransactionListingCard = ({
                     marginRight: "0.5rem",
                   }}
                 >
-                  {transaction.tipo === "despesa" ? (
+                  {transaction.categoria.tipo === "despesa" ? (
                     <ArrowCircleDownOutlinedIcon
-                      fontSize="small"
+                      fontSize="medium"
                       sx={{
                         color: "#E53E3E",
                       }}
                     />
                   ) : (
                     <ArrowCircleUpOutlinedIcon
-                      fontSize="small"
+                      fontSize="medium"
                       sx={{
                         color: "#48BB78",
                       }}
@@ -218,14 +223,75 @@ export const TransactionListingCard = ({
                   )}
                 </ListItemIcon>
                 <ListItemText
-                  primary={transaction.descricao}
-                  primaryTypographyProps={{
+                  primary={
+                    <>
+                      <Typography
+                        component="p"
+                        fontWeight="400"
+                        fontSize={{
+                          md: "0.7rem",
+                          xs: "1rem",
+                        }}
+                        color="#2D3748"
+                      >
+                        {transaction.categoria.nome}
+                      </Typography>
+                      <Typography
+                        component="p"
+                        fontWeight="600"
+                        fontSize={{
+                          md: "0.9rem",
+                          xs: "1.2rem",
+                        }}
+                        color="#2D3748"
+                        gutterBottom
+                      >
+                        {transaction.descricao}
+                      </Typography>
+                    </>
+                  }
+                  secondary={formatDate(transaction.data)}
+                  secondaryTypographyProps={{
                     fontSize: {
-                      md: "0.9rem",
-                      xs: "0.8rem",
+                      md: "0.8rem",
+                      xs: "0.6rem",
                     },
+                    color: "#2D3748",
                   }}
                 />
+                {transaction.categoria.tipo === "despesa" ? (
+                  <ListItemText
+                    sx={{
+                      marginRight: "1.2rem",
+                    }}
+                    primary={`-R$${transaction.valor.toFixed(2)}`}
+                    primaryTypographyProps={{
+                      fontSize: {
+                        md: "0.9rem",
+                        xs: "0.8rem",
+                      },
+                      fontWeight: "600",
+                      color: "#E53E3E",
+                      align: "right",
+                    }}
+                  />
+                ) : (
+                  <ListItemText
+                    sx={{
+                      marginRight: "1.2rem",
+                    }}
+                    primary={`+R$${transaction.valor.toFixed(2)}`}
+                    primaryTypographyProps={{
+                      fontSize: {
+                        md: "0.9rem",
+                        xs: "0.8rem",
+                      },
+                      fontWeight: "600",
+                      color: "#48BB78",
+                      align: "right",
+                    }}
+                  />
+                )}
                 <IconButton
                   aria-label="edit"
                   onClick={() => handleEditTransaction(transaction)}
@@ -239,7 +305,7 @@ export const TransactionListingCard = ({
                 </IconButton>
                 <IconButton
                   aria-label="delete"
-                  onClick={() => handleDeleteTransaction(transaction.id)}
+                  onClick={() => handleDeleteTransaction(transaction._id)}
                 >
                   <DeleteForeverOutlinedIcon
                     fontSize="small"
