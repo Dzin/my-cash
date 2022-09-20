@@ -35,6 +35,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 //HELPERS
 import { toast } from "react-toastify";
+import { pegarItem } from "../../../utils/localStorage";
+
 
 let patternTwoDigisAfterComma = /^\d+(\.\d{0,2})?$/;
 const schema = yup
@@ -60,7 +62,7 @@ const schema = yup
   })
   .required();
 
-export default function TransactionRegistration({ open, setOpen, categories }) {
+export default function TransactionRegistration({ open, setOpen, categories, typeTransactions }) {
   const [openCategories, setOpenCategories] = useState(false);
   const [optionsCategories, setOptionsCategories] = useState([]);
   const loadingCategories = openCategories && optionsCategories.length === 0;
@@ -85,6 +87,7 @@ export default function TransactionRegistration({ open, setOpen, categories }) {
       active = false;
     };
   }, [loadingCategories]);
+
   useEffect(() => {
     if (!openCategories) {
       setOptionsCategories([]);
@@ -116,6 +119,7 @@ export default function TransactionRegistration({ open, setOpen, categories }) {
       valueTransaction: 0,
     },
   });
+
   let typeWatch = watch("type");
   let categoriesWatch = watch("categorie");
 
@@ -132,7 +136,7 @@ export default function TransactionRegistration({ open, setOpen, categories }) {
     categoriesWatch && trigger("categorie");
   }, [categoriesWatch]);
 
-  const onSubmit = async (data) => {
+  const addTransactions = async (data) => {
     await api
       .post("/transacao", {
         tipo: data.type,
@@ -152,28 +156,29 @@ export default function TransactionRegistration({ open, setOpen, categories }) {
       });
   };
 
-  async function updateTransactions(e) {
-    e.preventDefault();
+  const updateTransactions = async (data) => {
     const idTransacao = pegarItem("transacaoId")
 
-    try {
-      await api.put(`/transacao/${idTransacao}`, {
+    await api
+      .put(`/transacao/${idTransacao}`, {
         tipo: data.type,
         valor: Number(data.valueTransaction.toFixed(2)),
         categoria: data.categorie,
         descricao: data.description,
         data: dayjs(data.date).format("YYYY-MM-DD"),
+      })
+      .then((res) => {
+        toast.success("Transação atualizada");
+        handleClose();
+        reset();
+      })
+      .catch((error) => {
+        console.error(error.message);
+        toast.error("Não foi possível cadastrar a transação");
       });
+  };
 
-      handleClose()
-      toast.success("Transação atualizada");
-      reset()
-    } catch (error) {
-      toast.error("Não foi possível cadastrar a transação");
-    }
-  }
-
-  return (
+   return (
     <Dialog
       open={open}
       onClose={() => {
@@ -198,7 +203,7 @@ export default function TransactionRegistration({ open, setOpen, categories }) {
         }}
       >
         <DialogTitle sx={{ padding: "0" }} fontWeight="bold">
-          Adicionar Transação
+          {typeTransactions === 'Editar' ? 'Atualizar transação' : 'Adicionar transação'}
         </DialogTitle>
         <IconButton
           onClick={() => {
@@ -218,7 +223,7 @@ export default function TransactionRegistration({ open, setOpen, categories }) {
       </Box>
 
       <DialogContent sx={{ padding: { xs: "0 1rem 1rem" } }}>
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={typeTransactions === 'Editar' ? handleSubmit(updateTransactions) : handleSubmit(addTransactions)}>
           <Grid
             container
             sx={{
@@ -424,7 +429,7 @@ export default function TransactionRegistration({ open, setOpen, categories }) {
                   },
                 }}
               >
-                Adicionar
+                {typeTransactions === 'Editar' ? 'Atualizar' : 'Adicionar'}
               </Button>
             </Grid>
           </Grid>
