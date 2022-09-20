@@ -12,17 +12,17 @@ import { moneyMask } from "../../../../utils/formatter";
 export default function CardTop(props) {
   let data;
 
-  const receita = props.transations
-    .filter(
-      (transation) => transation.categoria.tipo.toLowerCase() === "receita"
+  const receita = props?.transactions
+    ?.filter(
+      (transaction) => transaction?.categoria?.tipo?.toLowerCase() === "receita"
     )
-    .reduce((acc, obj) => acc + Number(obj.valor), 0);
+    .reduce((acc, obj) => Number(acc) + Number(obj.valor), 0);
 
-  const despesa = props.transations
-    .filter(
-      (transation) => transation.categoria.tipo.toLowerCase() === "despesa"
+  const despesa = props?.transactions
+    ?.filter(
+      (transaction) => transaction?.categoria?.tipo?.toLowerCase() === "despesa"
     )
-    .reduce((acc, obj) => acc + Number(obj.valor), 0);
+    .reduce((acc, obj) => Number(acc) + Number(obj.valor), 0);
 
   switch (props.type) {
     case "Receitas":
@@ -35,6 +35,7 @@ export default function CardTop(props) {
       data = receita - despesa;
       break;
   }
+
   let teste = 856859856.54;
   return (
     <Grid
@@ -90,7 +91,7 @@ export default function CardTop(props) {
                 }`}
                 fontWeight="700"
               >{`R$ ${data < 0 ? "-" : ""}${moneyMask(
-                String(data.toFixed(2))
+                String(data?.toFixed(2))
               )}`}</Typography>
             </Box>
             <Box

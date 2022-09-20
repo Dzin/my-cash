@@ -46,7 +46,7 @@ const schema = yup
       .required("Selecione uma data"),
     categorie: yup
       .object({
-        id: yup.string().required("Selecione uma categoria"),
+        _id: yup.string().required("Selecione uma categoria"),
       })
       .typeError("Selecione uma categoria")
       .required("Selecione uma categoria"),
@@ -127,7 +127,7 @@ export default function TransactionRegistration({ open, setOpen, categories }) {
     defaultValues: {
       type: undefined,
       date: new Date(),
-      categorie: { id: "", nome: "", tipo: "" },
+      categorie: { _id: "", nome: "", tipo: "" },
       description: "",
       valueTransaction: "",
     },
@@ -135,7 +135,7 @@ export default function TransactionRegistration({ open, setOpen, categories }) {
 
   let typeWatch = watch("type");
   let categoriesWatch = watch("categorie");
-  console.log(errors);
+
   useEffect(() => {
     if (typeWatch && categoriesWatch) {
       (async () => {
@@ -151,14 +151,13 @@ export default function TransactionRegistration({ open, setOpen, categories }) {
   }, [categoriesWatch]);
 
   const onSubmit = async (data) => {
-    console.log("clicokokok");
     await api
       .post("/transacao", {
         tipo: data.type,
         valor: Number(
           moneyMask(data.valueTransaction).replace(".", "").replace(",", ".")
         ),
-        categoria: data.categorie.id,
+        categoria: data.categorie._id,
         descricao: data.description,
         data: dayjs(data.date).format("YYYY-MM-DD"),
       })

@@ -102,32 +102,32 @@ export default function Home() {
             alignItems={"center"}
             spacing={2}
           >
-            {/* <CardTop
+            <CardTop
               type="Receitas"
               transactions={transactions}
               loading={loadingRegister}
               sm={6}
               xs={12}
               md={4}
-            /> */}
+            />
 
-            {/* <CardTop
+            <CardTop
               type="Despesas"
               transactions={transactions}
               loading={loadingRegister}
               sm={6}
               xs={12}
               md={4}
-            /> */}
+            />
 
-            {/* <CardTop
+            <CardTop
               type="Balanço"
               transactions={transactions}
               loading={loadingRegister}
               sm={12}
               xs={12}
               md={4}
-            /> */}
+            />
           </Grid>
         </Grid>
         <Grid item width={"100%"}>
