@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { toast } from "react-toastify";
 // MUI
 import Grid from "@mui/material/Grid";
 import List from "@mui/material/List";
@@ -22,8 +23,14 @@ import CategoriesModal from "../CategoriesModal";
 
 //UTILS
 import { adicionarItem, pegarItem } from "../../utils/localStorage";
+import api from "../../services/api";
 
-export default function Categories(props) {
+export default function Categories({
+  categories,
+  setCategories,
+  loading,
+  setLoading
+}) {
   const [abrirModal, setAbrirModal] = useState(false);
   const [typeCategories, setTypeCategories] = useState("");
   const [dadosTrans, setDadosTrans] = useState({
@@ -36,10 +43,10 @@ export default function Categories(props) {
   const [categoryFilter, setCategoryFilter] = useState("");
   const filteredCategories =
     categoryFilter.length > 0
-      ? props.categories.filter((category) =>
+      ? categories.filter((category) =>
           categoryFilter.includes(category.tipo)
         )
-      : props.categories;
+      : categories;
 
   const handleToggleType = function (category) {
     setCategoryFilter(category || "");
@@ -71,7 +78,18 @@ export default function Categories(props) {
   };
 
   const deleteCategory = (id) => {
-    console.log("Deletar categoria!");
+    api.delete(`/categoria/${id}`)
+      .then(() => {
+        toast.success("Categoria deletada com sucesso");
+        setCategories(
+          categories.filter((category) => category._id !== id)
+        );
+        setLoading(false);
+      })
+      .catch((error) => {
+        toast.error("Não foi possível deletar a categoria");
+        setLoading(false);
+      });
   };
 
   return (
@@ -140,7 +158,7 @@ export default function Categories(props) {
             },
           }}
         >
-          {props.loading ? (
+          {loading ? (
             <Loading />
           ) : (
             filteredCategories.map((category) => (
@@ -187,7 +205,7 @@ export default function Categories(props) {
                 <IconButton
                   aria-label="edit"
                   onClick={() =>
-                    editCategory(category.id, category.nome, category.tipo)
+                    editCategory(category._id, category.nome, category.tipo)
                   }
                 >
                   <EditOutlinedIcon
@@ -199,7 +217,7 @@ export default function Categories(props) {
                 </IconButton>
                 <IconButton
                   aria-label="delete"
-                  onClick={() => deleteCategory(category.id)}
+                  onClick={() => deleteCategory(category._id)}
                 >
                   <DeleteForeverOutlinedIcon
                     fontSize="small"
@@ -237,7 +255,7 @@ export default function Categories(props) {
         typeCategories={typeCategories}
         dadosTrans={dadosTrans}
         setDadosTrans={setDadosTrans}
-        setCategories={props.setCategories}
+        setCategories={setCategories}
         nomeErro={nomeErro}
         setNomeErro={setNomeErro}
         tipoErro={tipoErro}
