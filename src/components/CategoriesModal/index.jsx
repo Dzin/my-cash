@@ -154,18 +154,17 @@ export default function CategoriesModal({
           borderRadius: "1rem",
           display: "flex",
           justifyContent: "center",
-          alignItems: "center",
           width: "29rem",
-          padding: "1rem 0 0",
+          height: '9.5rem'
         },
       }}
     >
       <Box
         sx={{
           display: "flex",
-          alignItems: "center",
+          justifyContent: "center",
           position: "relative",
-          //   padding: "1.5rem 1rem 0 1rem",
+          padding: "1.5rem 1rem 0 1rem",
         }}
       >
         <DialogTitle sx={{ padding: "0" }} fontWeight="bold">
@@ -180,8 +179,8 @@ export default function CategoriesModal({
             width: "2rem",
             height: "2rem",
             position: "absolute",
-            right: -151,
-            top: -8,
+            right: 7,
+            top: 10,
           }}
         >
           <CloseIcon />

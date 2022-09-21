@@ -52,15 +52,15 @@ export default function Categories(props) {
     setTipoErro("");
   }
 
-  const editCategory = (idSelect, nomeSelect, tipoSelect) => {
+  const editCategory = (category) => {
     setNomeErro("");
     setTipoErro("");
     setAbrirModal(true);
     setTypeCategories("Editar");
 
-    adicionarItem("categoriaId", idSelect);
-    adicionarItem("categoriaNome", nomeSelect);
-    adicionarItem("categoriaTipo", tipoSelect);
+    adicionarItem("categoriaId", category._id);
+    adicionarItem("categoriaNome", category.nome);
+    adicionarItem("categoriaTipo", category.tipo);
     const nomeCategoria = pegarItem("categoriaNome");
     const tipoCategoria = pegarItem("categoriaTipo");
 
@@ -187,7 +187,7 @@ export default function Categories(props) {
                 <IconButton
                   aria-label="edit"
                   onClick={() =>
-                    editCategory(category.id, category.nome, category.tipo)
+                    editCategory(category)
                   }
                 >
                   <EditOutlinedIcon

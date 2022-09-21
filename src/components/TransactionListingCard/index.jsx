@@ -11,6 +11,8 @@ import {
   IconButton,
   Button,
 } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+import CheckIcon from "@mui/icons-material/Check";
 
 import ArrowCircleUpOutlinedIcon from "@mui/icons-material/ArrowCircleUpOutlined";
 import ArrowCircleDownOutlinedIcon from "@mui/icons-material/ArrowCircleDownOutlined";
@@ -83,7 +85,6 @@ export const TransactionListingCard = ({
     setOpenCreateTransactionModal(true);
     setTypeTransactions("Editar");
 
-    console.log(transaction);
     adicionarItem("transacaoId", transaction._id);
     adicionarItem("transacaoTipo", transaction.categoria.tipo);
     adicionarItem("transacaoValor", transaction.valor);
@@ -102,14 +103,32 @@ export const TransactionListingCard = ({
     api
       .delete(`/transacao/${id}`)
       .then(() => {
-        toast.success("Transação deletada com sucesso");
+        toast.success("Transação deletada com sucesso", {
+          icon: () => <CheckIcon color="primary" />,
+          position: "bottom-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: false,
+          progress: undefined,
+        })
         setTransactions(
           transactions.filter((transaction) => transaction._id !== id)
         );
         setLoading(false);
       })
       .catch((error) => {
-        toast.error("Não foi possível deletar a transação");
+        toast.error('Não foi possível deletar a transação', {
+          icon: () => <CloseIcon color="primary" />,
+          position: "bottom-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: false,
+          progress: undefined,
+        })
         setLoading(false);
       });
   };
@@ -343,6 +362,7 @@ export const TransactionListingCard = ({
         open={openCreateTransactionModal}
         setOpen={setOpenCreateTransactionModal}
         typeTransactions={typeTransactions}
+        setTransactions={setTransactions}
       />
     </>
   );

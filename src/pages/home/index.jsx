@@ -111,6 +111,7 @@ export default function Home() {
               <CategoriesListCard
                 categories={categories}
                 loading={loadingCategories}
+                setCategories={setCategories}
               />
             </CardBotton>
           </Grid>
