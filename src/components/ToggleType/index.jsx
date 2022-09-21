@@ -8,7 +8,19 @@ export const ToggleType = ({ handleToggleType }) => {
   return (
     <ToggleButtonGroup
       size="small"
-      sx={{ height: "40px" }}
+      sx={{
+        height: "40px",
+        "& .MuiToggleButton-root": {
+          textTransform: 'none',
+          borderColor: "#2D3748",
+          color: "#2D3748",
+          "&.Mui-selected": {
+            color: '#FFFFFF',
+            backgroundColor: "transparent",
+            backgroundImage: "linear-gradient(136.64deg, #658DD1 0%, #2D3748 100%)",
+          }
+        },
+      }}
       color="primary"
       value={type}
       exclusive
