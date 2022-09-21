@@ -21,7 +21,7 @@ import { ToggleType } from "../ToggleType";
 import CategoriesModal from "../CategoriesModal";
 
 //UTILS
-import { adicionarItem, pegarItem } from "../../utils/localStorage";
+import { adicionarItem } from "../../utils/localStorage";
 
 export default function Categories(props) {
   const [abrirModal, setAbrirModal] = useState(false);
@@ -37,8 +37,8 @@ export default function Categories(props) {
   const filteredCategories =
     categoryFilter.length > 0
       ? props.categories.filter((category) =>
-          categoryFilter.includes(category.tipo)
-        )
+        categoryFilter.includes(category.tipo)
+      )
       : props.categories;
 
   const handleToggleType = function (category) {
@@ -59,14 +59,10 @@ export default function Categories(props) {
     setTypeCategories("Editar");
 
     adicionarItem("categoriaId", category._id);
-    adicionarItem("categoriaNome", category.nome);
-    adicionarItem("categoriaTipo", category.tipo);
-    const nomeCategoria = pegarItem("categoriaNome");
-    const tipoCategoria = pegarItem("categoriaTipo");
 
     setDadosTrans({
-      tipo: tipoCategoria,
-      nome: nomeCategoria,
+      tipo: category.tipo,
+      nome: category.nome,
     });
   };
 

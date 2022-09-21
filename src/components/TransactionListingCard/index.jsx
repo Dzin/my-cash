@@ -48,9 +48,9 @@ export const TransactionListingCard = ({
 
     return (
       currentTransactionDate.getMonth() ===
-        selectedTransactionDate.getMonth() &&
+      selectedTransactionDate.getMonth() &&
       currentTransactionDate.getFullYear() ===
-        selectedTransactionDate.getFullYear()
+      selectedTransactionDate.getFullYear()
     );
   };
 
@@ -86,15 +86,6 @@ export const TransactionListingCard = ({
     setTypeTransactions("Editar");
 
     adicionarItem("transacaoId", transaction._id);
-    adicionarItem("transacaoTipo", transaction.categoria.tipo);
-    adicionarItem("transacaoValor", transaction.valor);
-    adicionarItem("transacaoDescricao", transaction.descricao);
-    adicionarItem("transacaoData", transaction.data);
-
-    /* const tipoTransacao = pegarItem("transacaoTipo")
-    const valorTransacao = pegarItem("transacaoValor")
-    const descricaoTransacao = pegarItem("transacaoDescricao")
-    const dataTransacao = pegarItem("transacaoData") */
   };
 
   const handleDeleteTransaction = (id) => {
