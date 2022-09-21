@@ -1,3 +1,5 @@
+<a name="topo"></a>
+
 # MyCash - Gestão Financeira
 
 > Linha adicional de texto informativo sobre o que o projeto faz. Sua introdução deve ter cerca de 2 ou 3 linhas. Não exagere, as pessoas não vão ler.
@@ -32,6 +34,6 @@ Vinicius Barros Ferreira: [GitHub](https://github.com/vinibf) | [LinkedIn](https
 
 ## 📝 Licença
 
-Esse projeto está sob licença. Veja o arquivo [LICENÇA](LICENSE.md) para mais detalhes.
+Esse projeto está sob licença. Acesse [Licença Pública Geral GNU Versão 2](https://www.gnu.org/licenses/gpl-2.0.html) para mais detalhes.
 
-[⬆ Voltar ao topo](#nome-do-projeto)<br>
+[⬆ Voltar ao topo](#topo)
