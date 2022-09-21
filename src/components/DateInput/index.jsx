@@ -20,7 +20,7 @@ export const DateInput = ({ handleSelectDate }) => {
           setDate(newDate);
           handleSelectDate(newDate);
         }}
-        renderInput={(params) => <TextField {...params} />}
+        renderInput={(params) => <TextField {...params} size="small" />}
       />
     </LocalizationProvider>
   );

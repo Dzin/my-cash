@@ -108,12 +108,15 @@ export default function Home() {
               />
             </CardBotton>
             <CardBotton xs={12} md={6}>
-              <CategoriesListCard categories={categories} loading={loadingCategories} />
+              <CategoriesListCard
+                categories={categories}
+                loading={loadingCategories}
+              />
             </CardBotton>
           </Grid>
         </Grid>
+        <Copyrights />
       </GridFullContent>
-      <Copyrights />
     </Container>
   );
 }

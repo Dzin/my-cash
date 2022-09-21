@@ -6,18 +6,18 @@ export default function Copyrights() {
   return (
     <Typography
       sx={{
-        position: "fixed",
-        bottom: 0,
+        // position: "absolute",
+        // bottom: 0,
         textAlign: "center",
         width: "100%",
         color: "#A0AEC0",
-        zIndex: 4,
+        // zIndex: 3,
       }}
       variant="caption"
     >
-      {`MyCash @ ${new Date().getFullYear()} - Todos os direitos reservados - Feito com ❤️ por `}
+      {`MyCash @ ${new Date().getFullYear()} - Todos os direitos reservados - Feito com ❤️ para `}
       <Typography variant="caption" sx={{ color: "#344767" }} fontWeight="bold">
-        Gama Academy
+        DevForTech - Gama Academy
       </Typography>
     </Typography>
   );
