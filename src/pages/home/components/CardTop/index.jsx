@@ -1,6 +1,6 @@
 import React from "react";
 //MUI
-import { Container, Typography, Grid, Paper, Box } from "@mui/material";
+import { Typography, Grid, Paper, Box } from "@mui/material";
 //ICONS
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
@@ -9,6 +9,7 @@ import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import Loading from "../../../../components/Loading";
 //HELPER
 import { moneyMask } from "../../../../utils/formatter";
+
 export default function CardTop(props) {
   let data;
 
@@ -35,6 +36,14 @@ export default function CardTop(props) {
       data = receita - despesa;
       break;
   }
+
+  // Sugestão ao switch
+  // const dataMap = {
+  //   Receitas: receita,
+  //   Despesas: despesa,
+  //   Balanço: receita - despesa,
+  // };
+  // data = dataMap[props.type];
 
   let teste = 856859856.54;
   return (

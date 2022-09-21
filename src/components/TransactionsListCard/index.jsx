@@ -1,6 +1,10 @@
 import React from "react";
 import { useState } from "react";
 
+import { toast } from "react-toastify";
+
+import dayjs from "dayjs";
+
 import {
   Grid,
   Typography,
@@ -17,28 +21,25 @@ import ArrowCircleDownOutlinedIcon from "@mui/icons-material/ArrowCircleDownOutl
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteForeverOutlinedIcon from "@mui/icons-material/DeleteForeverOutlined";
 
-import TransactionRegistration from "../modal/TransactionRegistration";
+import TransactionModal from "../TransactionModal";
 import Loading from "../Loading";
 import { DateInput } from "../DateInput";
 import { ToggleType } from "../ToggleType";
 
 import api from "../../services/api";
 
-import { toast } from "react-toastify";
 import { adicionarItem, pegarItem } from "../../utils/localStorage";
 
-import dayjs from "dayjs";
-
-export const TransactionListingCard = ({
+export default function TransactionsListCard({
   transactions,
   setTransactions,
   loading,
   setLoading,
-}) => {
+}) {
   const [date, setDate] = useState(null);
   const [type, setType] = useState("");
-  const [openCreateTransactionModal, setOpenCreateTransactionModal] =
-    useState(false);
+  const [openTransactionModal, setOpenTransactionModal] = useState(false);
+  const [typeTransactions, setTypeTransactions] = useState("");
 
   const filterTransactionsByDate = (transaction) => {
     const currentTransactionDate = new Date(transaction.data);
@@ -77,10 +78,8 @@ export const TransactionListingCard = ({
     return dayjs(date).format("DD/MM/YYYY");
   };
 
-  const [typeTransactions, setTypeTransactions] = useState("");
-
   const handleEditTransaction = (transaction) => {
-    setOpenCreateTransactionModal(true);
+    setOpenTransactionModal(true);
     setTypeTransactions("Editar");
 
     console.log(transaction);
@@ -89,11 +88,6 @@ export const TransactionListingCard = ({
     adicionarItem("transacaoValor", transaction.valor);
     adicionarItem("transacaoDescricao", transaction.descricao);
     adicionarItem("transacaoData", transaction.data);
-
-    /* const tipoTransacao = pegarItem("transacaoTipo")
-    const valorTransacao = pegarItem("transacaoValor")
-    const descricaoTransacao = pegarItem("transacaoDescricao")
-    const dataTransacao = pegarItem("transacaoData") */
   };
 
   const handleDeleteTransaction = (id) => {
@@ -115,7 +109,7 @@ export const TransactionListingCard = ({
   };
 
   const handleAddNewTransaction = () => {
-    setOpenCreateTransactionModal(true);
+    setOpenTransactionModal(true);
     setTypeTransactions("Adicionar");
   };
 
@@ -339,11 +333,11 @@ export const TransactionListingCard = ({
         </Button>
       </Grid>
 
-      <TransactionRegistration
-        open={openCreateTransactionModal}
-        setOpen={setOpenCreateTransactionModal}
+      <TransactionModal
+        open={openTransactionModal}
+        setOpen={setOpenTransactionModal}
         typeTransactions={typeTransactions}
       />
     </>
   );
-};
+}
