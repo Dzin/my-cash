@@ -109,7 +109,9 @@ export default function Home() {
             <CardBotton xs={12} md={6}>
               <CategoriesListCard
                 categories={categories}
+                setCategories={setCategories}
                 loading={loadingCategories}
+                setLoading={setLoadingCategories}
               />
             </CardBotton>
           </Grid>
