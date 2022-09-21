@@ -187,7 +187,7 @@ export default function Categories(props) {
                 <IconButton
                   aria-label="edit"
                   onClick={() =>
-                    editCategory(category.id, category.nome, category.tipo)
+                    editCategory(category._id, category.nome, category.tipo)
                   }
                 >
                   <EditOutlinedIcon
@@ -199,7 +199,7 @@ export default function Categories(props) {
                 </IconButton>
                 <IconButton
                   aria-label="delete"
-                  onClick={() => deleteCategory(category.id)}
+                  onClick={() => deleteCategory(category._id)}
                 >
                   <DeleteForeverOutlinedIcon
                     fontSize="small"
