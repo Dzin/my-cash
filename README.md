@@ -22,6 +22,14 @@ Para usar <nome_do_projeto>, siga estas etapas:
 
 Agradecemos às seguintes pessoas que contribuíram para este projeto:
 
+Ayrlon Vilarim: [GitHub](https://github.com/AyrlonDouglas) | [LinkedIn](https://www.linkedin.com/in/ayrlon/)
+
+Lucas Dzin Pedroso: [GitHub](https://github.com/Dzin) | [LinkedIn](https://www.linkedin.com/in/lucas-dzin-pedroso/)
+
+Michael Franklyn: [GitHub](https://github.com/MichaelFranklyn) | [LinkedIn](https://www.linkedin.com/in/michaelfranklyn-/)
+
+Vinicius Barros Ferreira: [GitHub](https://github.com/vinibf) | [LinkedIn](https://www.linkedin.com/in/vini-bf/)
+
 ## 📝 Licença
 
 Esse projeto está sob licença. Veja o arquivo [LICENÇA](LICENSE.md) para mais detalhes.
