@@ -7,6 +7,8 @@ export const ToggleType = ({ handleToggleType }) => {
 
   return (
     <ToggleButtonGroup
+      size="small"
+      sx={{ height: "40px" }}
       color="primary"
       value={type}
       exclusive

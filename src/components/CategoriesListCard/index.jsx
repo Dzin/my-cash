@@ -37,13 +37,13 @@ export default function Categories(props) {
   const filteredCategories =
     categoryFilter.length > 0
       ? props.categories.filter((category) =>
-        categoryFilter.includes(category.tipo)
-      )
+          categoryFilter.includes(category.tipo)
+        )
       : props.categories;
-  
+
   const handleToggleType = function (category) {
     setCategoryFilter(category || "");
-  }
+  };
 
   async function addCategory() {
     setAbrirModal(true);
@@ -224,7 +224,7 @@ export default function Categories(props) {
               "linear-gradient(136.64deg, #658DD1 1.59%, #2D3748 98.89%)",
             padding: "0.4rem 2rem",
             textTransform: "none",
-            borderRadius: "0.5rem",
+            // borderRadius: "0.5rem",
           }}
           onClick={() => addCategory()}
         >
