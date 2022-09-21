@@ -7,9 +7,6 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
-import FormGroup from "@mui/material/FormGroup";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Switch from "@mui/material/Switch";
 import Button from "@mui/material/Button";
 //ICONS
 import ArrowCircleUpOutlinedIcon from "@mui/icons-material/ArrowCircleUpOutlined";
@@ -20,6 +17,7 @@ import Loading from "../Loading";
 //STYLES
 
 //COMPONENTS
+import { ToggleType } from "../ToggleType";
 import CategoriesModal from "../CategoriesModal";
 
 //UTILS
@@ -35,13 +33,17 @@ export default function Categories(props) {
   const [tipoErro, setTipoErro] = useState("");
   const [nomeErro, setNomeErro] = useState("");
 
-  const [categoryFilter, setCategoryFilter] = useState([]);
+  const [categoryFilter, setCategoryFilter] = useState("");
   const filteredCategories =
     categoryFilter.length > 0
       ? props.categories.filter((category) =>
-          categoryFilter.includes(category.tipo)
-        )
+        categoryFilter.includes(category.tipo)
+      )
       : props.categories;
+  
+  const handleToggleType = function (category) {
+    setCategoryFilter(category || "");
+  }
 
   async function addCategory() {
     setAbrirModal(true);
@@ -112,122 +114,8 @@ export default function Categories(props) {
           >
             Categorias
           </Typography>
-          <FormGroup
-            sx={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: {
-                sm: "end",
-                xs: "center",
-              },
-              alignItems: "center",
-              gap: {
-                md: "1rem",
-                xs: "0.5rem",
-              },
-            }}
-          >
-            <FormControlLabel
-              sx={{
-                margin: "0",
-              }}
-              control={
-                <Switch
-                  size="medium"
-                  sx={{
-                    "& .MuiSwitch-switchBase": {
-                      color: "#FFFFFF",
-
-                      "&.Mui-checked": {
-                        color: "#FFFFFF",
-                      },
-
-                      "&.Mui-checked + .MuiSwitch-track": {
-                        opacity: "1",
-                        backgroundColor: "#2D3748",
-                      },
-                    },
-                    "& .MuiSwitch-track": {
-                      opacity: "1",
-                      backgroundColor: "#E2E8F0",
-                    },
-                  }}
-                  onChange={(e) => {
-                    e.target.checked
-                      ? setCategoryFilter([...categoryFilter, "receita"])
-                      : setCategoryFilter(
-                          categoryFilter.filter(
-                            (filter) => filter !== "receita"
-                          )
-                        );
-                  }}
-                />
-              }
-              label={
-                <Typography
-                  component="span"
-                  fontSize={{
-                    xs: "0.8rem",
-                  }}
-                  fontWeight="500"
-                  color="#A0AEC0"
-                >
-                  Entrada
-                </Typography>
-              }
-            />
-            <FormControlLabel
-              sx={{
-                margin: "0",
-              }}
-              control={
-                <Switch
-                  size="medium"
-                  sx={{
-                    "& .MuiSwitch-switchBase": {
-                      color: "#FFFFFF",
-
-                      "&.Mui-checked": {
-                        color: "#FFFFFF",
-                      },
-
-                      "&.Mui-checked + .MuiSwitch-track": {
-                        opacity: "1",
-                        backgroundColor: "#2D3748",
-                      },
-                    },
-                    "& .MuiSwitch-track": {
-                      opacity: "1",
-                      backgroundColor: "#E2E8F0",
-                    },
-                  }}
-                  onChange={(e) => {
-                    e.target.checked
-                      ? setCategoryFilter([...categoryFilter, "despesa"])
-                      : setCategoryFilter(
-                          categoryFilter.filter(
-                            (filter) => filter !== "despesa"
-                          )
-                        );
-                  }}
-                />
-              }
-              label={
-                <Typography
-                  component="span"
-                  fontSize={{
-                    xs: "0.8rem",
-                  }}
-                  fontWeight="500"
-                  color="#A0AEC0"
-                >
-                  Saída
-                </Typography>
-              }
-            />
-          </FormGroup>
+          <ToggleType handleToggleType={handleToggleType} />
         </Grid>
-
         <List
           sx={{
             width: "100%",
@@ -241,7 +129,7 @@ export default function Categories(props) {
               width: 5,
             },
             "&::-webkit-scrollbar-track": {
-              backgroundColor: "#F8F9Fa",
+              backgroundColor: "#F8F9FA",
               borderRadius: "1.2rem",
             },
             "&::-webkit-scrollbar-thumb": {
@@ -343,7 +231,6 @@ export default function Categories(props) {
           Adicionar
         </Button>
       </Grid>
-
       <CategoriesModal
         abrirModal={abrirModal}
         setAbrirModal={setAbrirModal}

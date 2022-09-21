@@ -11,11 +11,12 @@ import {
 } from "./style";
 // SERVICES
 import api from "../../services/api";
+// COMPONENTS
+import CategoriesListCard from "../../components/CategoriesListCard";
 // HELPERS
 import { toast } from "react-toastify";
 //COMPONENTS
 import { TransactionListingCard } from "../../components/TransactionListingCard";
-import Categories from "../../components/Categories";
 import CardTop from "./components/CardTop";
 import CardBotton from "./components/CardBotton";
 import Copyrights from "./components/Copyrights";
@@ -107,11 +108,7 @@ export default function Home() {
               />
             </CardBotton>
             <CardBotton xs={12} md={6}>
-              <Categories
-                categories={categories}
-                setCategories={setCategories}
-                loading={loadingCategories}
-              />
+              <CategoriesListCard categories={categories} loading={loadingCategories} />
             </CardBotton>
           </Grid>
         </Grid>
