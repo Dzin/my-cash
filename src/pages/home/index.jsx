@@ -57,7 +57,7 @@ export default function Home() {
       <BackgroundHeaderFilter />
       <BackgroundHeaderImage />
 
-      <GridFullContent container spacing={2}>
+      <GridFullContent sx={{ margin: "2rem 1rem 0 0" }} container spacing={2}>
         <Grid item>
           <img src={Logo} />
         </Grid>

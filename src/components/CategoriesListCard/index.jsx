@@ -13,12 +13,14 @@ import ArrowCircleUpOutlinedIcon from "@mui/icons-material/ArrowCircleUpOutlined
 import ArrowCircleDownOutlinedIcon from "@mui/icons-material/ArrowCircleDownOutlined";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteForeverOutlinedIcon from "@mui/icons-material/DeleteForeverOutlined";
-import Loading from "../Loading";
+
 //STYLES
 
 //COMPONENTS
-import { ToggleType } from "../ToggleType";
 import CategoriesModal from "../CategoriesModal";
+import Loading from "../Loading";
+import { NoResultText } from "../NoResultText";
+import { ToggleType } from "../ToggleType";
 
 //UTILS
 import { adicionarItem, pegarItem } from "../../utils/localStorage";
@@ -119,7 +121,7 @@ export default function Categories(props) {
         <List
           sx={{
             width: "100%",
-            height: "15rem",
+            height: "20rem",
             overflowY: "scroll",
             paddingTop: "0",
             paddingBottom: "0",

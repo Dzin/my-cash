@@ -184,7 +184,7 @@ export default function TransactionsListCard({
         <List
           sx={{
             width: "100%",
-            height: "15rem",
+            height: "20rem",
             overflowY: "scroll",
             paddingTop: "0",
             paddingBottom: "0",
@@ -214,10 +214,7 @@ export default function TransactionsListCard({
               <ListItem
                 key={transaction._id}
                 sx={{
-                  paddingTop: "0.2rem",
-                  paddingBottom: "0.2rem",
-                  paddingLeft: "0",
-                  paddingRight: "0",
+                  padding: "0.3rem 0 0.3rem 0",
                 }}
               >
                 <ListItemIcon
@@ -243,63 +240,77 @@ export default function TransactionsListCard({
                   )}
                 </ListItemIcon>
                 <ListItemText
-                  primary={
-                    <>
-                      <Typography
-                        component="p"
-                        fontWeight="400"
-                        fontSize={{
-                          md: "0.7rem",
-                          xs: "1rem",
-                        }}
-                        color="#2D3748"
-                      >
-                        {transaction.categoria.nome
-                          ? transaction.categoria.nome
-                          : ""}
-                      </Typography>
-                      <Typography
-                        component="p"
-                        fontWeight="600"
-                        fontSize={{
-                          md: "0.9rem",
-                          xs: "1.2rem",
-                        }}
-                        color="#2D3748"
-                        gutterBottom
-                      >
-                        {transaction.descricao ? transaction.descricao : ""}
-                      </Typography>
-                    </>
-                  }
-                  secondary={formatDate(transaction.data)}
-                  secondaryTypographyProps={{
+                  sx={{
+                    margin: "0",
+                    display: "inline-flex",
+                  }}
+                  align="left"
+                  primary={formatDate(transaction.data)}
+                  primaryTypographyProps={{
                     fontSize: {
+                      xs: "0.8rem",
+                      sm: "0.8rem",
                       md: "0.8rem",
-                      xs: "0.6rem",
                     },
                     color: "#2D3748",
                   }}
                 />
                 <ListItemText
                   sx={{
-                    marginRight: "1.2rem",
+                    margin: "0",
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "flex-start",
                   }}
+                  align="left"
+                  primary={
+                    transaction.categoria.nome ? transaction.categoria.nome : ""
+                  }
+                  primaryTypographyProps={{
+                    component: "p",
+                    fontWeight: "400",
+                    fontSize: {
+                      xs: "0.7rem",
+                      sm: "0.7rem",
+                      md: "0.7rem",
+                    },
+                    color: "#2D3748",
+                  }}
+                  secondary={transaction.descricao ? transaction.descricao : ""}
+                  secondaryTypographyProps={{
+                    component: "p",
+                    fontWeight: "600",
+                    fontSize: {
+                      xs: "0.8rem",
+                      sm: "0.8rem",
+                      md: "0.8rem",
+                    },
+                    color: "#2D3748",
+                  }}
+                />
+                <ListItemText
+                  sx={{
+                    margin: "0 1.2rem 0 0",
+                    display: "inline-flex",
+                    justifyContent: "flex-end",
+                  }}
+                  align="right"
                   primary={formatValue(
                     transaction.categoria.tipo,
                     transaction.valor
                   )}
                   primaryTypographyProps={{
-                    fontSize: {
-                      md: "0.9rem",
-                      xs: "0.8rem",
-                    },
+                    component: "p",
                     fontWeight: "600",
+                    fontSize: {
+                      xs: "0.8rem",
+                      sm: "0.8rem",
+                      md: "0.8rem",
+                    },
                     color:
                       transaction.categoria.tipo === "despesa"
                         ? "#E53E3E"
                         : "#48BB78",
-                    align: "right",
                   }}
                 />
                 <IconButton
