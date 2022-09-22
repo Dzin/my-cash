@@ -41,24 +41,42 @@ export default function TransactionsListCard({
   const [openTransactionModal, setOpenTransactionModal] = useState(false);
   const [typeTransactions, setTypeTransactions] = useState("");
 
-  const filterTransactionsByDate = (transaction) => {
-    const currentTransactionDate = dayjs(transaction.data);
+  const filterTransactionsByDate = (transactionList) => {
+    return transactionList.filter((transaction) => {
+      const currentTransactionDate = dayjs(transaction.data);
 
-    return (
-      currentTransactionDate.month() === date.month() &&
-      currentTransactionDate.year() === date.year()
+      return (
+        currentTransactionDate.month() === date.month() &&
+        currentTransactionDate.year() === date.year()
+      );
+    });
+  };
+
+  const filterTransactionsByType = (transactionList) => {
+    return transactionList.filter(
+      (transaction) => transaction.categoria.tipo === type
     );
   };
 
-  const filterTransactionsByType = (transaction) => {
-    return transaction.categoria.tipo === type;
+  const orderTransactionsByDescDate = (transactionList) => {
+    transactionList.sort((firstTransaction, secondTransaction) => {
+      const aDate = dayjs(firstTransaction.data);
+      const bDate = dayjs(secondTransaction.data);
+
+      if (aDate > bDate) return -1;
+      if (aDate < bDate) return 1;
+
+      return 0;
+    });
   };
 
   const listFilteredTransactions = () => {
     let filteredList = [...transactions];
 
-    if (date) filteredList = filteredList.filter(filterTransactionsByDate);
-    if (type) filteredList = filteredList.filter(filterTransactionsByType);
+    if (date) filteredList = filterTransactionsByDate(filteredList);
+    if (type) filteredList = filterTransactionsByType(filteredList);
+
+    orderTransactionsByDescDate(filteredList);
 
     return filteredList;
   };
