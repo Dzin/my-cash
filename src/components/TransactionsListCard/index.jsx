@@ -75,7 +75,16 @@ export default function TransactionsListCard({
   };
 
   const formatDate = (date) => {
-    return dayjs(date).format("DD/MM/YYYY");
+    return date ? dayjs(date).format("DD/MM/YYYY") : "Nenhuma data definida";
+  };
+
+  const formatValue = (type, value) => {
+    const mapType = {
+      despesa: `- R$ ${value.toFixed(2)}`,
+      receita: `+ R$ ${value.toFixed(2)}`,
+    };
+
+    return type && value > 0 ? mapType[type] : "Valor inválido";
   };
 
   const handleEditTransaction = (transaction) => {
@@ -253,39 +262,27 @@ export default function TransactionsListCard({
                     color: "#2D3748",
                   }}
                 />
-                {transaction.categoria.tipo === "despesa" ? (
-                  <ListItemText
-                    sx={{
-                      marginRight: "1.2rem",
-                    }}
-                    primary={`-R$${transaction.valor.toFixed(2)}`}
-                    primaryTypographyProps={{
-                      fontSize: {
-                        md: "0.9rem",
-                        xs: "0.8rem",
-                      },
-                      fontWeight: "600",
-                      color: "#E53E3E",
-                      align: "right",
-                    }}
-                  />
-                ) : (
-                  <ListItemText
-                    sx={{
-                      marginRight: "1.2rem",
-                    }}
-                    primary={`+R$${transaction.valor.toFixed(2)}`}
-                    primaryTypographyProps={{
-                      fontSize: {
-                        md: "0.9rem",
-                        xs: "0.8rem",
-                      },
-                      fontWeight: "600",
-                      color: "#48BB78",
-                      align: "right",
-                    }}
-                  />
-                )}
+                <ListItemText
+                  sx={{
+                    marginRight: "1.2rem",
+                  }}
+                  primary={formatValue(
+                    transaction.categoria.tipo,
+                    transaction.valor
+                  )}
+                  primaryTypographyProps={{
+                    fontSize: {
+                      md: "0.9rem",
+                      xs: "0.8rem",
+                    },
+                    fontWeight: "600",
+                    color:
+                      transaction.categoria.tipo === "despesa"
+                        ? "#E53E3E"
+                        : "#48BB78",
+                    align: "right",
+                  }}
+                />
                 <IconButton
                   aria-label="edit"
                   onClick={() => handleEditTransaction(transaction)}
