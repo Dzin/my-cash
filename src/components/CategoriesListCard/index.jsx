@@ -161,7 +161,23 @@ export default function Categories({
           {loading ? (
             <Loading />
           ) : (
-            filteredCategories.map((category) => (
+            filteredCategories
+            .sort(
+              (a, b) => {
+                const name1 = a.nome, name2 = b.nome;
+                
+                if (name1 < name2) {
+                    return -1;
+                }
+                
+                if (name1 > name2) {
+                    return 1;
+                }
+
+                return 0;
+              }
+            )
+            .map((category) => (
               <ListItem
                 key={category._id}
                 sx={{

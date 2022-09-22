@@ -14,6 +14,7 @@ import {
   ListItemText,
   IconButton,
   Button,
+  TextField,
 } from "@mui/material";
 
 import ArrowCircleUpOutlinedIcon from "@mui/icons-material/ArrowCircleUpOutlined";
@@ -25,6 +26,7 @@ import TransactionModal from "../TransactionModal";
 import Loading from "../Loading";
 import { DateInput } from "../DateInput";
 import { ToggleType } from "../ToggleType";
+import SearchInput from "../SearchInput";
 
 import api from "../../services/api";
 
@@ -35,10 +37,13 @@ export default function TransactionsListCard({
   setTransactions,
   loading,
   setLoading,
+  openTransactionModal,
+  setOpenTransactionModal,
 }) {
   const [date, setDate] = useState(null);
   const [type, setType] = useState("");
-  const [openTransactionModal, setOpenTransactionModal] = useState(false);
+  const [search, setSearch] = useState("");
+  // const [openTransactionModal, setOpenTransactionModal] = useState(false);
   const [typeTransactions, setTypeTransactions] = useState("");
   const [selectTransaction, setSelectTransaction] = useState({
     id: "",
@@ -64,11 +69,16 @@ export default function TransactionsListCard({
     return transaction.categoria.tipo === type;
   };
 
+  const filterTransactionsByName = (transaction) => {
+    return transaction.descricao.includes(search);
+  };
+
   const listFilteredTransactions = () => {
     let filteredList = [...transactions];
 
     if (date) filteredList = filteredList.filter(filterTransactionsByDate);
     if (type) filteredList = filteredList.filter(filterTransactionsByType);
+    if (search) filteredList = filteredList.filter(filterTransactionsByName);
 
     return filteredList;
   };
@@ -80,6 +90,10 @@ export default function TransactionsListCard({
   const handleToggleType = function (selectedValue) {
     setType(selectedValue || "");
   };
+
+  const handleSearchTransaction = function (searchValue) {
+    setSearch(searchValue);
+  }
 
   const formatDate = (date) => {
     return dayjs(date).format("DD/MM/YYYY");
@@ -155,6 +169,7 @@ export default function TransactionsListCard({
             Transações
           </Typography>
           <DateInput handleSelectDate={handleSelectDate} />
+          <SearchInput handleInput={handleSearchTransaction} value={search} />
           <ToggleType handleToggleType={handleToggleType} />
         </Grid>
 
