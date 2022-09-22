@@ -181,24 +181,6 @@ export default function TransactionsListCard({
           xs: "1.5rem 1.2rem",
         }}
       >
-        {/* <Grid
-          sx={{
-            display: "flex",
-            flexDirection: {
-              sm: "row",
-              xs: "column",
-            },
-            alignItems: "center",
-            justifyContent: {
-              sm: "space-between",
-              xs: "center",
-            },
-            gap: {
-              sm: "1rem",
-              xs: "0.5rem",
-            },
-          }}
-        > */}
         <Grid container spacing={1} alignItems="center">
           <Grid item xs={12} sm={6} md={6} lg={2}>
             <Typography
@@ -227,8 +209,6 @@ export default function TransactionsListCard({
             <ToggleType handleToggleType={handleToggleType} />
           </Grid>
         </Grid>
-
-        {/* </Grid> */}
 
         <List
           sx={{
@@ -332,11 +312,11 @@ export default function TransactionsListCard({
                     }
                     primaryTypographyProps={{
                       component: "p",
-                      fontWeight: "600",
+                      fontWeight: "400",
                       fontSize: {
-                        xs: "0.8rem",
-                        sm: "0.8rem",
-                        md: "0.8rem",
+                        xs: "0.7rem",
+                        sm: "0.7rem",
+                        md: "0.7rem",
                       },
                       color: "#2D3748",
                     }}
@@ -345,11 +325,11 @@ export default function TransactionsListCard({
                     }
                     secondaryTypographyProps={{
                       component: "p",
-                      fontWeight: "400",
+                      fontWeight: "600",
                       fontSize: {
-                        xs: "0.7rem",
-                        sm: "0.7rem",
-                        md: "0.7rem",
+                        xs: "0.8rem",
+                        sm: "0.8rem",
+                        md: "0.8rem",
                       },
                       color: "#2D3748",
                     }}
