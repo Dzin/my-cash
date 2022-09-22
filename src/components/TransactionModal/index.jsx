@@ -28,16 +28,16 @@ import "dayjs/locale/pt-br";
 //ICONS
 import CloseIcon from "@mui/icons-material/Close";
 //API
-import api from "../../../services/api";
+import api from "../../services/api";
 // VALIDATION
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 //HELPERS
 import { toast } from "react-toastify";
-import { moneyMask } from "../../../utils/formatter";
+import { moneyMask } from "../../utils/formatter";
 let patternTwoDigisAfterComma = /^\d+(\.\d{0,2})?$/;
-import { pegarItem } from "../../../utils/localStorage";
+import { pegarItem } from "../../utils/localStorage";
 const schema = yup
   .object({
     type: yup.string().required("Selecione um tipo"),
@@ -76,11 +76,12 @@ const schema = yup
   })
   .required();
 
-export default function TransactionRegistration({
+export default function TransactionModal({
   open,
   setOpen,
   categories,
   typeTransactions,
+  selectTransaction,
 }) {
   const [openCategories, setOpenCategories] = useState(false);
   const [optionsCategories, setOptionsCategories] = useState([]);
@@ -140,6 +141,22 @@ export default function TransactionRegistration({
     },
   });
 
+  useEffect(() => {
+    selectTransaction?.categoria?.tipo &&
+      setValue("type", selectTransaction?.categoria?.tipo);
+    selectTransaction?.data && setValue("date", dayjs(selectTransaction?.data));
+    selectTransaction?.categoria?._id &&
+      setValue("categorie._id", selectTransaction?.categoria?._id);
+    selectTransaction?.categoria?.nome &&
+      setValue("categorie.nome", selectTransaction?.categoria?.nome);
+    selectTransaction?.categoria?.tipo &&
+      setValue("categorie.tipo", selectTransaction?.categoria?.tipo);
+    selectTransaction?.descricao &&
+      setValue("description", selectTransaction?.descricao);
+    selectTransaction?.valor &&
+      setValue("valueTransaction", selectTransaction?.valor?.toFixed(2));
+  }, [selectTransaction]);
+
   let typeWatch = watch("type");
   let categoriesWatch = watch("categorie");
 
@@ -180,10 +197,8 @@ export default function TransactionRegistration({
   };
 
   const updateTransactions = async (data) => {
-    const idTransacao = pegarItem("transacaoId");
-
     await api
-      .put(`/transacao/${idTransacao}`, {
+      .put(`/transacao/${selectTransaction._id}`, {
         tipo: data.type,
         valor: Number(
           moneyMask(data.valueTransaction).replace(".", "").replace(",", ".")

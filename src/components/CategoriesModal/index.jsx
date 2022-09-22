@@ -104,6 +104,7 @@ export default function CategoriesModal({
         nome: "",
       });
 
+      // Requisição desnecessária
       api.get("/categoria").then((res) => {
         setCategories(res.data);
       });
@@ -134,6 +135,7 @@ export default function CategoriesModal({
         nome: "",
       });
 
+      // Requisição desnecessária
       api.get("/categoria").then((res) => {
         setCategories(res.data);
       });

@@ -1,6 +1,10 @@
 import React from "react";
 import { useState } from "react";
 
+import { toast } from "react-toastify";
+
+import dayjs from "dayjs";
+
 import {
   Grid,
   Typography,
@@ -10,6 +14,7 @@ import {
   ListItemText,
   IconButton,
   Button,
+  TextField,
 } from "@mui/material";
 
 import ArrowCircleUpOutlinedIcon from "@mui/icons-material/ArrowCircleUpOutlined";
@@ -17,29 +22,37 @@ import ArrowCircleDownOutlinedIcon from "@mui/icons-material/ArrowCircleDownOutl
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteForeverOutlinedIcon from "@mui/icons-material/DeleteForeverOutlined";
 
-import TransactionRegistration from "../modal/TransactionRegistration";
+import TransactionModal from "../TransactionModal";
 import Loading from "../Loading";
 import { DateInput } from "../DateInput";
 import { ToggleType } from "../ToggleType";
+import SearchInput from "../SearchInput";
 
 import api from "../../services/api";
 
-import { toast } from "react-toastify";
 import { adicionarItem, pegarItem } from "../../utils/localStorage";
 
-import dayjs from "dayjs";
-
-export const TransactionListingCard = ({
+export default function TransactionsListCard({
   transactions,
   setTransactions,
   loading,
   setLoading,
-}) => {
+  openTransactionModal,
+  setOpenTransactionModal,
+}) {
   const [date, setDate] = useState(null);
   const [type, setType] = useState("");
-  const [openCreateTransactionModal, setOpenCreateTransactionModal] =
-    useState(false);
-
+  const [search, setSearch] = useState("");
+  // const [openTransactionModal, setOpenTransactionModal] = useState(false);
+  const [typeTransactions, setTypeTransactions] = useState("");
+  const [selectTransaction, setSelectTransaction] = useState({
+    id: "",
+    type: undefined,
+    date: new Date(),
+    categorie: { _id: "", nome: "", tipo: "" },
+    description: "",
+    valueTransaction: "",
+  });
   const filterTransactionsByDate = (transaction) => {
     const currentTransactionDate = new Date(transaction.data);
     const selectedTransactionDate = new Date(date);
@@ -56,11 +69,16 @@ export const TransactionListingCard = ({
     return transaction.categoria.tipo === type;
   };
 
+  const filterTransactionsByName = (transaction) => {
+    return transaction.descricao.includes(search);
+  };
+
   const listFilteredTransactions = () => {
     let filteredList = [...transactions];
 
     if (date) filteredList = filteredList.filter(filterTransactionsByDate);
     if (type) filteredList = filteredList.filter(filterTransactionsByType);
+    if (search) filteredList = filteredList.filter(filterTransactionsByName);
 
     return filteredList;
   };
@@ -73,27 +91,18 @@ export const TransactionListingCard = ({
     setType(selectedValue || "");
   };
 
+  const handleSearchTransaction = function (searchValue) {
+    setSearch(searchValue);
+  }
+
   const formatDate = (date) => {
     return dayjs(date).format("DD/MM/YYYY");
   };
 
-  const [typeTransactions, setTypeTransactions] = useState("");
-
   const handleEditTransaction = (transaction) => {
-    setOpenCreateTransactionModal(true);
+    setOpenTransactionModal(true);
     setTypeTransactions("Editar");
-
-    console.log(transaction);
-    adicionarItem("transacaoId", transaction._id);
-    adicionarItem("transacaoTipo", transaction.categoria.tipo);
-    adicionarItem("transacaoValor", transaction.valor);
-    adicionarItem("transacaoDescricao", transaction.descricao);
-    adicionarItem("transacaoData", transaction.data);
-
-    /* const tipoTransacao = pegarItem("transacaoTipo")
-    const valorTransacao = pegarItem("transacaoValor")
-    const descricaoTransacao = pegarItem("transacaoDescricao")
-    const dataTransacao = pegarItem("transacaoData") */
+    setSelectTransaction(transaction);
   };
 
   const handleDeleteTransaction = (id) => {
@@ -115,7 +124,7 @@ export const TransactionListingCard = ({
   };
 
   const handleAddNewTransaction = () => {
-    setOpenCreateTransactionModal(true);
+    setOpenTransactionModal(true);
     setTypeTransactions("Adicionar");
   };
 
@@ -160,6 +169,7 @@ export const TransactionListingCard = ({
             Transações
           </Typography>
           <DateInput handleSelectDate={handleSelectDate} />
+          <SearchInput handleInput={handleSearchTransaction} value={search} />
           <ToggleType handleToggleType={handleToggleType} />
         </Grid>
 
@@ -339,11 +349,12 @@ export const TransactionListingCard = ({
         </Button>
       </Grid>
 
-      <TransactionRegistration
-        open={openCreateTransactionModal}
-        setOpen={setOpenCreateTransactionModal}
+      <TransactionModal
+        open={openTransactionModal}
+        setOpen={setOpenTransactionModal}
         typeTransactions={typeTransactions}
+        selectTransaction={selectTransaction}
       />
     </>
   );
-};
+}
