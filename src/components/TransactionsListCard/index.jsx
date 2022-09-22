@@ -26,6 +26,7 @@ import DeleteForeverOutlinedIcon from "@mui/icons-material/DeleteForeverOutlined
 
 import TransactionModal from "../TransactionModal";
 import Loading from "../Loading";
+import { NoResultText } from "../NoResultText";
 import { DateInput } from "../DateInput";
 import { ToggleType } from "../ToggleType";
 import SearchInput from "../SearchInput";
@@ -40,7 +41,6 @@ export default function TransactionsListCard({
   openTransactionModal,
   setOpenTransactionModal,
 }) {
-
   const [date, setDate] = useState(null);
   const [type, setType] = useState("");
   const [search, setSearch] = useState("");
@@ -54,34 +54,64 @@ export default function TransactionsListCard({
     valueTransaction: "",
   });
 
-  const filterTransactionsByDate = (transaction) => {
-    const currentTransactionDate = new Date(transaction.data);
-    const selectedTransactionDate = new Date(date);
+  const filterTransactionsByDate = (transactionList) => {
+    return transactionList.filter((transaction) => {
+      const currentTransactionDate = dayjs(transaction.data);
 
-    return (
-      currentTransactionDate.getMonth() ===
-      selectedTransactionDate.getMonth() &&
-      currentTransactionDate.getFullYear() ===
-      selectedTransactionDate.getFullYear()
+      return (
+        currentTransactionDate.month() === date.month() &&
+        currentTransactionDate.year() === date.year()
+      );
+    });
+  };
+
+  const filterTransactionsByType = (transactionList) => {
+    return transactionList.filter(
+      (transaction) => transaction.categoria.tipo === type
     );
   };
 
-  const filterTransactionsByType = (transaction) => {
-    return transaction.categoria.tipo === type;
+  const orderTransactionsByDescDate = (transactionList) => {
+    transactionList.sort((firstTransaction, secondTransaction) => {
+      const aDate = dayjs(firstTransaction.data);
+      const bDate = dayjs(secondTransaction.data);
+
+      if (aDate > bDate) return -1;
+      if (aDate < bDate) return 1;
+
+      return 0;
+    });
   };
 
-  const filterTransactionsByName = (transaction) => {
-    return transaction.descricao.includes(search);
+  const filterTransactionsByName = (transactionList) => {
+    return transactionList.filter((transaction) =>
+      transaction.descricao.includes(search)
+    );
   };
 
   const listFilteredTransactions = () => {
     let filteredList = [...transactions];
 
-    if (date) filteredList = filteredList.filter(filterTransactionsByDate);
-    if (type) filteredList = filteredList.filter(filterTransactionsByType);
-    if (search) filteredList = filteredList.filter(filterTransactionsByName);
+    if (date) filteredList = filterTransactionsByDate(filteredList);
+    if (type) filteredList = filterTransactionsByType(filteredList);
+    if (search) filteredList = filterTransactionsByName(filteredList);
+
+    orderTransactionsByDescDate(filteredList);
 
     return filteredList;
+  };
+
+  const formatDate = (date) => {
+    return date ? dayjs(date).format("DD/MM/YYYY") : "Nenhuma data definida";
+  };
+
+  const formatValue = (type, value) => {
+    const mapType = {
+      despesa: `- R$ ${value.toFixed(2)}`,
+      receita: `+ R$ ${value.toFixed(2)}`,
+    };
+
+    return type && value >= 0 ? mapType[type] : "Valor inválido";
   };
 
   const handleSelectDate = function (selectedDate) {
@@ -94,10 +124,6 @@ export default function TransactionsListCard({
 
   const handleSearchTransaction = function (searchValue) {
     setSearch(searchValue);
-  }
-
-  const formatDate = (date) => {
-    return dayjs(date).format("DD/MM/YYYY");
   };
 
   const handleEditTransaction = (transaction) => {
@@ -121,14 +147,14 @@ export default function TransactionsListCard({
           pauseOnHover: true,
           draggable: false,
           progress: undefined,
-        })
+        });
         setTransactions(
           transactions.filter((transaction) => transaction._id !== id)
         );
         setLoading(false);
       })
       .catch((error) => {
-        toast.error('Não foi possível deletar a transação', {
+        toast.error("Não foi possível deletar a transação", {
           icon: () => <CloseIcon color="primary" />,
           position: "bottom-right",
           autoClose: 2000,
@@ -137,7 +163,7 @@ export default function TransactionsListCard({
           pauseOnHover: true,
           draggable: false,
           progress: undefined,
-        })
+        });
         setLoading(false);
       });
   };
@@ -155,47 +181,39 @@ export default function TransactionsListCard({
           xs: "1.5rem 1.2rem",
         }}
       >
-        <Grid
-          sx={{
-            display: "flex",
-            flexDirection: {
-              sm: "row",
-              xs: "column",
-            },
-            alignItems: "center",
-            justifyContent: {
-              sm: "space-between",
-              xs: "center",
-            },
-            gap: {
-              sm: "1rem",
-              xs: "0.5rem",
-            },
-          }}
-        >
-          <Typography
-            component="h3"
-            fontWeight="700"
-            fontSize={{
-              xs: "1.2rem",
-            }}
-            textAlign={{
-              sm: "left",
-              xs: "center",
-            }}
-            color="#2D3748"
-          >
-            Transações
-          </Typography>
-          <DateInput handleSelectDate={handleSelectDate} />
-          <SearchInput handleInput={handleSearchTransaction} value={search} />
-          <ToggleType handleToggleType={handleToggleType} />
+        <Grid container spacing={1} alignItems="center">
+          <Grid item xs={12} sm={6} md={6} lg={2}>
+            <Typography
+              component="h3"
+              fontWeight="700"
+              fontSize={{
+                xs: "1.2rem",
+              }}
+              textAlign={{
+                sm: "center",
+                xs: "center",
+                md: "center",
+              }}
+              color="#2D3748"
+            >
+              Transações
+            </Typography>
+          </Grid>
+          <Grid item xs={12} sm={6} md={6} lg={4}>
+            <DateInput handleSelectDate={handleSelectDate} />
+          </Grid>
+          <Grid item xs={12} sm={6} md={6} lg={3}>
+            <SearchInput handleInput={handleSearchTransaction} value={search} />
+          </Grid>
+          <Grid item xs={12} sm={6} md={6} lg={3}>
+            <ToggleType handleToggleType={handleToggleType} />
+          </Grid>
         </Grid>
 
         <List
           sx={{
             width: "100%",
-            height: "15rem",
+            height: "20rem",
             overflowY: "scroll",
             paddingTop: "0",
             paddingBottom: "0",
@@ -218,131 +236,152 @@ export default function TransactionsListCard({
         >
           {loading ? (
             <Loading />
+          ) : listFilteredTransactions().length === 0 ? (
+            <NoResultText />
           ) : (
             listFilteredTransactions().map((transaction) => (
               <ListItem
+                // alignItems="center"
                 key={transaction._id}
                 sx={{
-                  paddingTop: "0.2rem",
-                  paddingBottom: "0.2rem",
-                  paddingLeft: "0",
-                  paddingRight: "0",
+                  padding: "0.3rem 0 0.3rem 0",
                 }}
               >
-                <ListItemIcon
-                  sx={{
-                    minWidth: "0",
-                    marginRight: "0.5rem",
-                  }}
-                >
-                  {transaction.categoria.tipo === "despesa" ? (
-                    <ArrowCircleDownOutlinedIcon
-                      fontSize="medium"
-                      sx={{
-                        color: "#E53E3E",
-                      }}
-                    />
-                  ) : (
-                    <ArrowCircleUpOutlinedIcon
-                      fontSize="medium"
-                      sx={{
-                        color: "#48BB78",
-                      }}
-                    />
-                  )}
-                </ListItemIcon>
-                <ListItemText
-                  primary={
-                    <>
-                      <Typography
-                        component="p"
-                        fontWeight="400"
-                        fontSize={{
-                          md: "0.7rem",
-                          xs: "1rem",
-                        }}
-                        color="#2D3748"
-                      >
-                        {transaction.categoria.nome}
-                      </Typography>
-                      <Typography
-                        component="p"
-                        fontWeight="600"
-                        fontSize={{
-                          md: "0.9rem",
-                          xs: "1.2rem",
-                        }}
-                        color="#2D3748"
-                        gutterBottom
-                      >
-                        {transaction.descricao}
-                      </Typography>
-                    </>
-                  }
-                  secondary={formatDate(transaction.data)}
-                  secondaryTypographyProps={{
-                    fontSize: {
-                      md: "0.8rem",
-                      xs: "0.6rem",
-                    },
-                    color: "#2D3748",
-                  }}
-                />
-                {transaction.categoria.tipo === "despesa" ? (
+                <Grid container alignItems="center">
+                  <Grid item>
+                    <Grid container>
+                      <Grid item>
+                        <ListItemIcon
+                          sx={{
+                            minWidth: "0",
+                            marginRight: "0.5rem",
+                          }}
+                        >
+                          {transaction.categoria.tipo === "despesa" ? (
+                            <ArrowCircleDownOutlinedIcon
+                              fontSize="medium"
+                              sx={{
+                                color: "#E53E3E",
+                              }}
+                            />
+                          ) : (
+                            <ArrowCircleUpOutlinedIcon
+                              fontSize="medium"
+                              sx={{
+                                color: "#48BB78",
+                              }}
+                            />
+                          )}
+                        </ListItemIcon>
+                      </Grid>
+                      <Grid item>
+                        <ListItemText
+                          sx={
+                            {
+                              // margin: "0",
+                              // display: "inline-flex",
+                            }
+                          }
+                          align="left"
+                          primary={formatDate(transaction.data)}
+                          primaryTypographyProps={{
+                            fontSize: {
+                              xs: "0.8rem",
+                              sm: "0.8rem",
+                              md: "0.8rem",
+                            },
+                            color: "#2D3748",
+                          }}
+                        />
+                      </Grid>
+                    </Grid>
+                  </Grid>
+
                   <ListItemText
                     sx={{
-                      marginRight: "1.2rem",
+                      margin: "0 1rem",
+                      // display: "flex",
+                      // flexDirection: "column",
+                      // alignItems: "flex-start",
                     }}
-                    primary={`-R$${transaction.valor.toFixed(2)}`}
+                    align="left"
+                    primary={
+                      transaction.categoria.nome
+                        ? transaction.categoria.nome
+                        : ""
+                    }
                     primaryTypographyProps={{
+                      component: "p",
+                      fontWeight: "400",
                       fontSize: {
-                        md: "0.9rem",
-                        xs: "0.8rem",
+                        xs: "0.7rem",
+                        sm: "0.7rem",
+                        md: "0.7rem",
                       },
+                      color: "#2D3748",
+                    }}
+                    secondary={
+                      transaction.descricao ? transaction.descricao : ""
+                    }
+                    secondaryTypographyProps={{
+                      component: "p",
                       fontWeight: "600",
-                      color: "#E53E3E",
-                      align: "right",
+                      fontSize: {
+                        xs: "0.8rem",
+                        sm: "0.8rem",
+                        md: "0.8rem",
+                      },
+                      color: "#2D3748",
                     }}
                   />
-                ) : (
                   <ListItemText
                     sx={{
-                      marginRight: "1.2rem",
+                      margin: "0 1.2rem 0 0",
+                      // display: "inline-flex",
+                      // justifyContent: "flex-end",
                     }}
-                    primary={`+R$${transaction.valor.toFixed(2)}`}
+                    align="right"
+                    primary={formatValue(
+                      transaction.categoria.tipo,
+                      transaction.valor
+                    )}
                     primaryTypographyProps={{
-                      fontSize: {
-                        md: "0.9rem",
-                        xs: "0.8rem",
-                      },
+                      component: "p",
                       fontWeight: "600",
-                      color: "#48BB78",
-                      align: "right",
+                      fontSize: {
+                        xs: "0.8rem",
+                        sm: "0.8rem",
+                        md: "0.8rem",
+                      },
+                      color:
+                        transaction.categoria.tipo === "despesa"
+                          ? "#E53E3E"
+                          : "#48BB78",
                     }}
                   />
-                )}
-                <IconButton
-                  aria-label="edit"
-                  onClick={() => handleEditTransaction(transaction)}
-                >
-                  <EditOutlinedIcon
-                    fontSize="small"
-                    sx={{
-                      color: "#000000",
-                    }}
-                  />
-                </IconButton>
-                <IconButton
-                  aria-label="delete"
-                  onClick={() => handleDeleteTransaction(transaction._id)}
-                >
-                  <DeleteForeverOutlinedIcon
-                    fontSize="small"
-                    sx={{
-                      color: "#000000",
-                    }}
-                  />
-                </IconButton>
+                  <IconButton
+                    aria-label="edit"
+                    onClick={() => handleEditTransaction(transaction)}
+                  >
+                    <EditOutlinedIcon
+                      fontSize="small"
+                      sx={{
+                        color: "#000000",
+                      }}
+                    />
+                  </IconButton>
+                  <IconButton
+                    aria-label="delete"
+                    onClick={() => handleDeleteTransaction(transaction._id)}
+                  >
+                    <DeleteForeverOutlinedIcon
+                      fontSize="small"
+                      sx={{
+                        color: "#000000",
+                      }}
+                    />
+                  </IconButton>
+                </Grid>
               </ListItem>
             ))
           )}
@@ -360,7 +399,6 @@ export default function TransactionsListCard({
               "linear-gradient(136.64deg, #658DD1 1.59%, #2D3748 98.89%)",
             padding: "0.4rem 2rem",
             textTransform: "none",
-            // borderRadius: "0.5rem",
           }}
           onClick={() => handleAddNewTransaction()}
         >

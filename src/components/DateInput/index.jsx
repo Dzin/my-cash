@@ -20,7 +20,14 @@ export const DateInput = ({ handleSelectDate }) => {
           setDate(newDate);
           handleSelectDate(newDate);
         }}
-        renderInput={(params) => <TextField {...params} size="small" />}
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            size="small"
+            fullWidth
+            sx={{ ".MuiInputBase-root": { borderRadius: "1rem" } }}
+          />
+        )}
       />
     </LocalizationProvider>
   );

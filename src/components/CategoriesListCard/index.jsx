@@ -14,14 +14,15 @@ import ArrowCircleUpOutlinedIcon from "@mui/icons-material/ArrowCircleUpOutlined
 import ArrowCircleDownOutlinedIcon from "@mui/icons-material/ArrowCircleDownOutlined";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteForeverOutlinedIcon from "@mui/icons-material/DeleteForeverOutlined";
-import Loading from "../Loading";
 import CloseIcon from "@mui/icons-material/Close";
 import CheckIcon from "@mui/icons-material/Check";
 //STYLES
 
 //COMPONENTS
-import { ToggleType } from "../ToggleType";
 import CategoriesModal from "../CategoriesModal";
+import Loading from "../Loading";
+import { NoResultText } from "../NoResultText";
+import { ToggleType } from "../ToggleType";
 
 //UTILS
 import { adicionarItem } from "../../utils/localStorage";
@@ -33,7 +34,7 @@ export default function Categories({
   loading,
   setLoading,
   abrirModal,
-  setAbrirModal
+  setAbrirModal,
 }) {
   const [typeCategories, setTypeCategories] = useState("");
   const [dadosTrans, setDadosTrans] = useState({
@@ -46,9 +47,7 @@ export default function Categories({
   const [categoryFilter, setCategoryFilter] = useState("");
   const filteredCategories =
     categoryFilter.length > 0
-      ? categories.filter((category) =>
-        categoryFilter.includes(category.tipo)
-      )
+      ? categories.filter((category) => categoryFilter.includes(category.tipo))
       : categories;
 
   const handleToggleType = function (category) {
@@ -77,7 +76,8 @@ export default function Categories({
   };
 
   const deleteCategory = (id) => {
-    api.delete(`/categoria/${id}`)
+    api
+      .delete(`/categoria/${id}`)
       .then(() => {
         toast.success("Categoria deletada com sucesso", {
           icon: () => <CheckIcon color="primary" />,
@@ -88,10 +88,8 @@ export default function Categories({
           pauseOnHover: true,
           draggable: false,
           progress: undefined,
-        })
-        setCategories(
-          categories.filter((category) => category._id !== id)
-        );
+        });
+        setCategories(categories.filter((category) => category._id !== id));
         setLoading(false);
       })
       .catch((error) => {
@@ -104,7 +102,7 @@ export default function Categories({
           pauseOnHover: true,
           draggable: false,
           progress: undefined,
-        })
+        });
         setLoading(false);
       });
   };
@@ -154,7 +152,7 @@ export default function Categories({
         <List
           sx={{
             width: "100%",
-            height: "15rem",
+            height: "20rem",
             overflowY: "scroll",
             paddingTop: "0",
             paddingBottom: "0",
@@ -177,23 +175,24 @@ export default function Categories({
         >
           {loading ? (
             <Loading />
+          ) : filteredCategories.length === 0 ? (
+            <NoResultText />
           ) : (
             filteredCategories
-              .sort(
-                (a, b) => {
-                  const name1 = a.nome, name2 = b.nome;
+              .sort((a, b) => {
+                const name1 = a.nome,
+                  name2 = b.nome;
 
-                  if (name1 < name2) {
-                    return -1;
-                  }
-
-                  if (name1 > name2) {
-                    return 1;
-                  }
-
-                  return 0;
+                if (name1 < name2) {
+                  return -1;
                 }
-              )
+
+                if (name1 > name2) {
+                  return 1;
+                }
+
+                return 0;
+              })
               .map((category) => (
                 <ListItem
                   key={category._id}
@@ -237,9 +236,7 @@ export default function Categories({
                   />
                   <IconButton
                     aria-label="edit"
-                    onClick={() =>
-                      editCategory(category)
-                    }
+                    onClick={() => editCategory(category)}
                   >
                     <EditOutlinedIcon
                       fontSize="small"

@@ -1,24 +1,27 @@
 import React from "react";
 import { useState } from "react";
 import { ToggleButtonGroup, ToggleButton } from "@mui/material";
-
+import { ToggleButtonGroupStyled } from "./style";
 export const ToggleType = ({ handleToggleType }) => {
   const [type, setType] = useState("");
 
   return (
-    <ToggleButtonGroup
+    <ToggleButtonGroupStyled
       size="small"
-      sx={{
-        height: "40px",
-        "& .MuiToggleButton-root": {
-          textTransform: 'none',
-          "&.Mui-selected": {
-            color: '#FFFFFF',
-            backgroundColor: "transparent",
-            backgroundImage: "linear-gradient(136.64deg, #658DD1 0%, #2D3748 100%)",
-          }
-        },
-      }}
+      // sx={{
+      //   height: "40px",
+      //   borderRadius: "1rem",
+      //   "& .MuiToggleButton-root": {
+      //     textTransform: "none",
+      //     "&.Mui-selected": {
+      //       color: "#FFFFFF",
+      //       backgroundColor: "transparent",
+      //       backgroundImage:
+      //         "linear-gradient(136.64deg, #658DD1 0%, #2D3748 100%)",
+      //     },
+      //   },
+      // }}
+      fullWidth
       color="primary"
       value={type}
       exclusive
@@ -30,6 +33,6 @@ export const ToggleType = ({ handleToggleType }) => {
     >
       <ToggleButton value="receita">Entrada</ToggleButton>
       <ToggleButton value="despesa">Saída</ToggleButton>
-    </ToggleButtonGroup>
+    </ToggleButtonGroupStyled>
   );
 };
