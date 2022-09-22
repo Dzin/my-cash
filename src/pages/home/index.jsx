@@ -98,7 +98,7 @@ export default function Home() {
         </Grid>
         <Grid item width={"100%"}>
           <Grid container spacing={2} justifyContent="center">
-            <CardBotton xs={12} md={6}>
+            <CardBotton xs={12} md={8}>
               <TransactionsListCard
                 transactions={transactions}
                 setTransactions={setTransactions}
@@ -106,7 +106,7 @@ export default function Home() {
                 setLoading={setLoadingTransactions}
               />
             </CardBotton>
-            <CardBotton xs={12} md={6}>
+            <CardBotton xs={12} md={4}>
               <CategoriesListCard
                 categories={categories}
                 setCategories={setCategories}
