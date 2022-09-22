@@ -29,16 +29,16 @@ import "dayjs/locale/pt-br";
 import CloseIcon from "@mui/icons-material/Close";
 import CheckIcon from "@mui/icons-material/Check";
 //API
-import api from "../../../services/api";
+import api from "../../services/api";
 // VALIDATION
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 //HELPERS
 import { toast } from "react-toastify";
-import { moneyMask } from "../../../utils/formatter";
+import { moneyMask } from "../../utils/formatter";
 let patternTwoDigisAfterComma = /^\d+(\.\d{0,2})?$/;
-import { pegarItem } from "../../../utils/localStorage";
+import { pegarItem } from "../../utils/localStorage";
 const schema = yup
   .object({
     type: yup.string().required("Selecione um tipo"),
@@ -77,12 +77,12 @@ const schema = yup
   })
   .required();
 
-export default function TransactionRegistration({
+export default function TransactionModal({
   open,
   setOpen,
   categories,
   typeTransactions,
-  setTransactions
+  selectTransaction,
 }) {
   const [openCategories, setOpenCategories] = useState(false);
   const [optionsCategories, setOptionsCategories] = useState([]);
@@ -142,6 +142,22 @@ export default function TransactionRegistration({
     },
   });
 
+  useEffect(() => {
+    selectTransaction?.categoria?.tipo &&
+      setValue("type", selectTransaction?.categoria?.tipo);
+    selectTransaction?.data && setValue("date", dayjs(selectTransaction?.data));
+    selectTransaction?.categoria?._id &&
+      setValue("categorie._id", selectTransaction?.categoria?._id);
+    selectTransaction?.categoria?.nome &&
+      setValue("categorie.nome", selectTransaction?.categoria?.nome);
+    selectTransaction?.categoria?.tipo &&
+      setValue("categorie.tipo", selectTransaction?.categoria?.tipo);
+    selectTransaction?.descricao &&
+      setValue("description", selectTransaction?.descricao);
+    selectTransaction?.valor &&
+      setValue("valueTransaction", selectTransaction?.valor?.toFixed(2));
+  }, [selectTransaction]);
+
   let typeWatch = watch("type");
   let categoriesWatch = watch("categorie");
 
@@ -171,11 +187,6 @@ export default function TransactionRegistration({
         data: dayjs(data.date).format("YYYY-MM-DD"),
       })
 
-      api.get("/transacao").then((res) => {
-        setTransactions(res.data);
-      });
-
-
       toast.success('Transação atualizada', {
         icon: () => <CheckIcon color="primary" />,
         position: "bottom-right",
@@ -204,7 +215,7 @@ export default function TransactionRegistration({
   };
 
   const updateTransactions = async (data) => {
-    const idTransacao = pegarItem("transacaoId");
+    const idTransacao = selectTransaction._id;
 
     try {
       await api
@@ -217,10 +228,6 @@ export default function TransactionRegistration({
           descricao: data.description,
           data: dayjs(data.date).format("YYYY-MM-DD"),
         })
-
-      api.get("/transacao").then((res) => {
-        setTransactions(res.data);
-      });
 
       toast.success('Transação atualizada', {
         icon: () => <CheckIcon color="primary" />,
@@ -237,7 +244,7 @@ export default function TransactionRegistration({
       reset();
     } catch (error) {
       console.error(error.message);
-      toast.error("Não foi possível cadastrar a transação", {
+      toast.error("Não foi possível atualizar transação", {
         icon: () => <CloseIcon color="primary" />,
         position: "bottom-right",
         autoClose: 2000,

@@ -1,5 +1,5 @@
 import React from "react";
-//MUI
+
 import { Grid, Paper } from "@mui/material";
 
 export default function CardBotton(props) {

@@ -1,5 +1,4 @@
 import React from "react";
-//MUI
 import { Typography } from "@mui/material";
 
 export default function Copyrights() {

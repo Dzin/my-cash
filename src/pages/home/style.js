@@ -16,6 +16,7 @@ export const BackgroundHeaderFilter = styled(Box)(({ theme }) => ({
   right: 0,
   backgroundSize: "cover",
 }));
+
 export const BackgroundHeaderImage = styled(Box)(({ theme }) => ({
   position: "absolute",
   opacity: "0.85",

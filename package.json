@@ -1,5 +1,5 @@
 {
-  "name": "control-finances-devfortech",
+  "name": "my-cash",
   "private": true,
   "version": "0.0.0",
   "scripts": {
@@ -29,6 +29,7 @@
     "@types/react": "^18.0.0",
     "@types/react-dom": "^18.0.0",
     "@vitejs/plugin-react": "^1.3.0",
+    "esbuild": "^0.13.4",
     "vite": "^2.9.9"
   }
 }

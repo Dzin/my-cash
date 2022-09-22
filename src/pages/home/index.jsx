@@ -1,49 +1,110 @@
 import React, { useEffect, useState } from "react";
-// MUI
+
+import { toast } from "react-toastify";
+
 import { Container, Grid } from "@mui/material";
-// IMGS
-import Logo from "../../assets/imgs/logo.png";
-// STYLES
+
+import TransactionsListCard from "../../components/TransactionsListCard";
+import CategoriesListCard from "../../components/CategoriesListCard";
+import CardTop from "./components/CardTop";
+import CardBotton from "./components/CardBotton";
+import Copyrights from "./components/Copyrights";
+import CloseIcon from "@mui/icons-material/Close";
+
 import {
   BackgroundHeaderImage,
   BackgroundHeaderFilter,
   GridFullContent,
 } from "./style";
-// SERVICES
+
+import Logo from "../../assets/imgs/logo.png";
+
 import api from "../../services/api";
-// COMPONENTS
-import CategoriesListCard from "../../components/CategoriesListCard";
-// HELPERS
-import { toast } from "react-toastify";
-//COMPONENTS
-import { TransactionListingCard } from "../../components/TransactionListingCard";
-import CardTop from "./components/CardTop";
-import CardBotton from "./components/CardBotton";
-import Copyrights from "./components/Copyrights";
 
 export default function Home() {
   const [transactions, setTransactions] = useState([]);
-  const [loadingRegister, setLoadingRegister] = useState(false);
   const [categories, setCategories] = useState([]);
+  const [loadingTransactions, setLoadingTransactions] = useState(false);
   const [loadingCategories, setLoadingCategories] = useState(false);
+  const [openTransactionModal, setOpenTransactionModal] = useState(false);
+  const [abrirModal, setAbrirModal] = useState(false);
 
   useEffect(() => {
-    setLoadingRegister(true);
+    setLoadingTransactions(true);
     setLoadingCategories(true);
 
     Promise.all([api.get("/transacao"), api.get("/categoria")])
       .then((results) => {
         setTransactions(results[0].data);
-        setLoadingRegister(false);
+        setLoadingTransactions(false);
         setCategories(results[1].data);
         setLoadingCategories(false);
       })
       .catch((error) => {
-        toast.error("Não foi possível carregar os dados das listas");
-        setLoadingRegister(false);
+        toast.error("Não foi possível carregar os dados das listas", {
+          icon: () => <CloseIcon color="primary" />,
+          position: "bottom-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: false,
+          progress: undefined,
+        })
+        setLoadingTransactions(false);
         setLoadingCategories(false);
       });
   }, []);
+
+  useEffect(() => {
+    if (!openTransactionModal) {
+      setLoadingTransactions(true);
+      api
+        .get("/transacao")
+        .then((res) => {
+          setTransactions(res.data);
+          setLoadingTransactions(false);
+        })
+        .catch((error) => {
+          toast.error("Não foi possível carregar os dados das listas", {
+            icon: () => <CloseIcon color="primary" />,
+            position: "bottom-right",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: false,
+            progress: undefined,
+          })
+          setLoadingTransactions(false);
+        });
+    }
+  }, [openTransactionModal]);
+
+  useEffect(() => {
+    if (!abrirModal) {
+      setLoadingCategories(true);
+      api
+        .get("/categoria")
+        .then((res) => {
+          setCategories(res.data);
+          setLoadingCategories(false);
+        })
+        .catch((error) => {
+          toast.error("Não foi possível carregar os dados das listas", {
+            icon: () => <CloseIcon color="primary" />,
+            position: "bottom-right",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: false,
+            progress: undefined,
+          })
+          setLoadingCategories(false);
+        });
+    }
+  }, [abrirModal]);
 
   return (
     <Container
@@ -72,7 +133,7 @@ export default function Home() {
             <CardTop
               type="Receitas"
               transactions={transactions}
-              loading={loadingRegister}
+              loading={loadingTransactions}
               sm={6}
               xs={12}
               md={4}
@@ -81,7 +142,7 @@ export default function Home() {
             <CardTop
               type="Despesas"
               transactions={transactions}
-              loading={loadingRegister}
+              loading={loadingTransactions}
               sm={6}
               xs={12}
               md={4}
@@ -90,7 +151,7 @@ export default function Home() {
             <CardTop
               type="Balanço"
               transactions={transactions}
-              loading={loadingRegister}
+              loading={loadingTransactions}
               sm={12}
               xs={12}
               md={4}
@@ -99,19 +160,24 @@ export default function Home() {
         </Grid>
         <Grid item width={"100%"}>
           <Grid container spacing={2} justifyContent="center">
-            <CardBotton xs={12} md={6}>
-              <TransactionListingCard
+            <CardBotton xs={12} md={8}>
+              <TransactionsListCard
                 transactions={transactions}
                 setTransactions={setTransactions}
-                loading={loadingRegister}
-                setLoading={setLoadingRegister}
+                loading={loadingTransactions}
+                setLoading={setLoadingTransactions}
+                openTransactionModal={openTransactionModal}
+                setOpenTransactionModal={setOpenTransactionModal}
               />
             </CardBotton>
-            <CardBotton xs={12} md={6}>
+            <CardBotton xs={12} md={4}>
               <CategoriesListCard
                 categories={categories}
-                loading={loadingCategories}
                 setCategories={setCategories}
+                loading={loadingCategories}
+                setLoading={setLoadingCategories}
+                abrirModal={abrirModal}
+                setAbrirModal={setAbrirModal}
               />
             </CardBotton>
           </Grid>

@@ -36,7 +36,6 @@ export default function CategoriesModal({
   typeCategories,
   dadosTrans,
   setDadosTrans,
-  setCategories,
   tipoErro,
   setTipoErro,
   nomeErro,
@@ -104,10 +103,6 @@ export default function CategoriesModal({
         nome: "",
       });
 
-      api.get("/categoria").then((res) => {
-        setCategories(res.data);
-      });
-
       setAbrirModal(false);
       feedbackCobrancaSucesso("Categoria cadastrada com sucesso!");
     } catch (error) {
@@ -132,10 +127,6 @@ export default function CategoriesModal({
       setDadosTrans({
         tipo: "",
         nome: "",
-      });
-
-      api.get("/categoria").then((res) => {
-        setCategories(res.data);
       });
 
       setAbrirModal(false);
