@@ -27,6 +27,7 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import "dayjs/locale/pt-br";
 //ICONS
 import CloseIcon from "@mui/icons-material/Close";
+import CheckIcon from "@mui/icons-material/Check";
 //API
 import api from "../../services/api";
 // VALIDATION
@@ -175,8 +176,8 @@ export default function TransactionModal({
   }, [categoriesWatch]);
 
   const addTransactions = async (data) => {
-    await api
-      .post("/transacao", {
+    try {
+      await api.post("/transacao", {
         tipo: data.type,
         valor: Number(
           moneyMask(data.valueTransaction).replace(".", "").replace(",", ".")
@@ -185,37 +186,75 @@ export default function TransactionModal({
         descricao: data.description,
         data: dayjs(data.date).format("YYYY-MM-DD"),
       })
-      .then((res) => {
-        toast.success("Transação cadastrada");
-        handleClose();
-        reset();
-      })
-      .catch((error) => {
-        console.error(error.message);
-        toast.error("Não foi possível cadastrar a transação");
+
+      toast.success('Transação atualizada', {
+        icon: () => <CheckIcon color="primary" />,
+        position: "bottom-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: false,
+        progress: undefined,
       });
+      handleClose();
+      reset();
+    } catch (error) {
+      console.error(error.message);
+      toast.error("Não foi possível cadastrar a transação", {
+        icon: () => <CloseIcon color="primary" />,
+        position: "bottom-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: false,
+        progress: undefined,
+      });
+    }
   };
 
   const updateTransactions = async (data) => {
-    await api
-      .put(`/transacao/${selectTransaction._id}`, {
-        tipo: data.type,
-        valor: Number(
-          moneyMask(data.valueTransaction).replace(".", "").replace(",", ".")
-        ),
-        categoria: data.categorie._id,
-        descricao: data.description,
-        data: dayjs(data.date).format("YYYY-MM-DD"),
+    const idTransacao = selectTransaction._id;
+
+    try {
+      await api
+        .put(`/transacao/${idTransacao}`, {
+          tipo: data.type,
+          valor: Number(
+            moneyMask(data.valueTransaction).replace(".", "").replace(",", ".")
+          ),
+          categoria: data.categorie._id,
+          descricao: data.description,
+          data: dayjs(data.date).format("YYYY-MM-DD"),
+        })
+
+      toast.success('Transação atualizada', {
+        icon: () => <CheckIcon color="primary" />,
+        position: "bottom-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: false,
+        progress: undefined,
       })
-      .then((res) => {
-        toast.success("Transação atualizada");
-        handleClose();
-        reset();
-      })
-      .catch((error) => {
-        console.log(error);
-        toast.error("Não foi possível cadastrar a transação");
+
+      handleClose();
+      reset();
+    } catch (error) {
+      console.error(error.message);
+      toast.error("Não foi possível atualizar transação", {
+        icon: () => <CloseIcon color="primary" />,
+        position: "bottom-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: false,
+        progress: undefined,
       });
+    }
   };
 
   return (
@@ -227,10 +266,11 @@ export default function TransactionModal({
       }}
       sx={{
         " .MuiPaper-root": {
-          padding: "1rem 0 0",
           borderRadius: "1rem",
-          maxWidth: "80rem",
-          margin: { xs: "1rem", sm: "2rem" },
+          display: 'flex',
+          justifyContent: 'center',
+          maxWidth: '68rem',
+          height: '11rem'
         },
       }}
     >
@@ -240,6 +280,7 @@ export default function TransactionModal({
           justifyContent: "center",
           alignItems: "center",
           position: "relative",
+          padding: "1.5rem 1rem 0 1rem",
         }}
       >
         <DialogTitle sx={{ padding: "0" }} fontWeight="bold">
@@ -257,14 +298,14 @@ export default function TransactionModal({
             height: "2rem",
             position: "absolute",
             right: 7,
-            top: -8,
+            top: 10,
           }}
         >
           <CloseIcon />
         </IconButton>
       </Box>
 
-      <DialogContent sx={{ padding: { xs: "0 1rem 1rem" } }}>
+      <DialogContent sx={{ padding: { xs: "1rem" } }}>
         <form
           onSubmit={
             typeTransactions === "Editar"
@@ -275,15 +316,13 @@ export default function TransactionModal({
           <Grid
             container
             sx={{
-              margin: "0.4rem 0 0 0",
-              padding: "0 2rem 0 0",
               "& .MuiInputBase-root.MuiOutlinedInput-root": {
                 borderRadius: "1rem",
               },
             }}
-            spacing={2}
+            spacing={1.5}
           >
-            <Grid item xs={12} sm={6} md={2}>
+            <Grid item xs={12} sm={2}>
               <FormControl
                 fullWidth
                 size="small"
@@ -309,7 +348,7 @@ export default function TransactionModal({
                 <FormHelperText>{errors.type?.message}</FormHelperText>
               </FormControl>
             </Grid>
-            <Grid item xs={12} sm={6} md={2}>
+            <Grid item xs={12} sm={2}>
               <LocalizationProvider
                 dateAdapter={AdapterDayjs}
                 adapterLocale={"pt-br"}
@@ -340,7 +379,7 @@ export default function TransactionModal({
                 />
               </LocalizationProvider>
             </Grid>
-            <Grid item xs={12} sm={6} md={2}>
+            <Grid item xs={12} sm={2}>
               <Controller
                 control={control}
                 name="categorie"
@@ -377,8 +416,8 @@ export default function TransactionModal({
                           fieldState.error?.message
                             ? fieldState.error?.message
                             : !getValues().type
-                            ? "Selecione o tipo da transação"
-                            : false
+                              ? "Selecione o tipo da transação"
+                              : false
                         }
                         InputProps={{
                           ...params.InputProps,
@@ -397,7 +436,7 @@ export default function TransactionModal({
                 )}
               />
             </Grid>
-            <Grid item xs={12} sm={6} md={2}>
+            <Grid item xs={12} sm={2}>
               <Controller
                 name="description"
                 control={control}
@@ -417,7 +456,7 @@ export default function TransactionModal({
                 )}
               />
             </Grid>
-            <Grid item xs={12} sm={6} md={2}>
+            <Grid item xs={12} sm={2}>
               <Controller
                 name="valueTransaction"
                 control={control}
@@ -440,13 +479,12 @@ export default function TransactionModal({
                       sx={{
                         "& input": {
                           fontWeight: "700",
-                          color: `${
-                            getValues().type === "receita"
-                              ? "#5CAB7D"
-                              : getValues().type === "despesa"
+                          color: `${getValues().type === "receita"
+                            ? "#5CAB7D"
+                            : getValues().type === "despesa"
                               ? "#ff6a6a"
                               : "none"
-                          }`,
+                            }`,
                         },
                       }}
                       InputProps={{
@@ -459,7 +497,7 @@ export default function TransactionModal({
                 }}
               />
             </Grid>
-            <Grid item xs={12} sm={6} md={2}>
+            <Grid item xs={12} sm={2}>
               <Button
                 type="submit"
                 variant="contained"
