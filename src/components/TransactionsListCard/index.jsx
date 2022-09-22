@@ -26,6 +26,7 @@ import DeleteForeverOutlinedIcon from "@mui/icons-material/DeleteForeverOutlined
 
 import TransactionModal from "../TransactionModal";
 import Loading from "../Loading";
+import { NoResultText } from "../NoResultText";
 import { DateInput } from "../DateInput";
 import { ToggleType } from "../ToggleType";
 import SearchInput from "../SearchInput";
@@ -40,7 +41,6 @@ export default function TransactionsListCard({
   openTransactionModal,
   setOpenTransactionModal,
 }) {
-
   const [date, setDate] = useState(null);
   const [type, setType] = useState("");
   const [search, setSearch] = useState("");
@@ -54,34 +54,64 @@ export default function TransactionsListCard({
     valueTransaction: "",
   });
 
-  const filterTransactionsByDate = (transaction) => {
-    const currentTransactionDate = new Date(transaction.data);
-    const selectedTransactionDate = new Date(date);
+  const filterTransactionsByDate = (transactionList) => {
+    return transactionList.filter((transaction) => {
+      const currentTransactionDate = dayjs(transaction.data);
 
-    return (
-      currentTransactionDate.getMonth() ===
-      selectedTransactionDate.getMonth() &&
-      currentTransactionDate.getFullYear() ===
-      selectedTransactionDate.getFullYear()
+      return (
+        currentTransactionDate.month() === date.month() &&
+        currentTransactionDate.year() === date.year()
+      );
+    });
+  };
+
+  const filterTransactionsByType = (transactionList) => {
+    return transactionList.filter(
+      (transaction) => transaction.categoria.tipo === type
     );
   };
 
-  const filterTransactionsByType = (transaction) => {
-    return transaction.categoria.tipo === type;
+  const orderTransactionsByDescDate = (transactionList) => {
+    transactionList.sort((firstTransaction, secondTransaction) => {
+      const aDate = dayjs(firstTransaction.data);
+      const bDate = dayjs(secondTransaction.data);
+
+      if (aDate > bDate) return -1;
+      if (aDate < bDate) return 1;
+
+      return 0;
+    });
   };
 
-  const filterTransactionsByName = (transaction) => {
-    return transaction.descricao.includes(search);
+  const filterTransactionsByName = (transactionList) => {
+    return transactionList.filter((transaction) =>
+      transaction.descricao.includes(search)
+    );
   };
 
   const listFilteredTransactions = () => {
     let filteredList = [...transactions];
 
-    if (date) filteredList = filteredList.filter(filterTransactionsByDate);
-    if (type) filteredList = filteredList.filter(filterTransactionsByType);
-    if (search) filteredList = filteredList.filter(filterTransactionsByName);
+    if (date) filteredList = filterTransactionsByDate(filteredList);
+    if (type) filteredList = filterTransactionsByType(filteredList);
+    if (search) filteredList = filterTransactionsByName(filteredList);
+
+    orderTransactionsByDescDate(filteredList);
 
     return filteredList;
+  };
+
+  const formatDate = (date) => {
+    return date ? dayjs(date).format("DD/MM/YYYY") : "Nenhuma data definida";
+  };
+
+  const formatValue = (type, value) => {
+    const mapType = {
+      despesa: `- R$ ${value.toFixed(2)}`,
+      receita: `+ R$ ${value.toFixed(2)}`,
+    };
+
+    return type && value >= 0 ? mapType[type] : "Valor inválido";
   };
 
   const handleSelectDate = function (selectedDate) {
@@ -94,10 +124,6 @@ export default function TransactionsListCard({
 
   const handleSearchTransaction = function (searchValue) {
     setSearch(searchValue);
-  }
-
-  const formatDate = (date) => {
-    return dayjs(date).format("DD/MM/YYYY");
   };
 
   const handleEditTransaction = (transaction) => {
@@ -121,14 +147,14 @@ export default function TransactionsListCard({
           pauseOnHover: true,
           draggable: false,
           progress: undefined,
-        })
+        });
         setTransactions(
           transactions.filter((transaction) => transaction._id !== id)
         );
         setLoading(false);
       })
       .catch((error) => {
-        toast.error('Não foi possível deletar a transação', {
+        toast.error("Não foi possível deletar a transação", {
           icon: () => <CloseIcon color="primary" />,
           position: "bottom-right",
           autoClose: 2000,
@@ -137,7 +163,7 @@ export default function TransactionsListCard({
           pauseOnHover: true,
           draggable: false,
           progress: undefined,
-        })
+        });
         setLoading(false);
       });
   };
@@ -195,7 +221,7 @@ export default function TransactionsListCard({
         <List
           sx={{
             width: "100%",
-            height: "15rem",
+            height: "20rem",
             overflowY: "scroll",
             paddingTop: "0",
             paddingBottom: "0",
@@ -218,15 +244,14 @@ export default function TransactionsListCard({
         >
           {loading ? (
             <Loading />
+          ) : listFilteredTransactions().length === 0 ? (
+            <NoResultText />
           ) : (
             listFilteredTransactions().map((transaction) => (
               <ListItem
                 key={transaction._id}
                 sx={{
-                  paddingTop: "0.2rem",
-                  paddingBottom: "0.2rem",
-                  paddingLeft: "0",
-                  paddingRight: "0",
+                  padding: "0.3rem 0 0.3rem 0",
                 }}
               >
                 <ListItemIcon
@@ -252,75 +277,79 @@ export default function TransactionsListCard({
                   )}
                 </ListItemIcon>
                 <ListItemText
-                  primary={
-                    <>
-                      <Typography
-                        component="p"
-                        fontWeight="400"
-                        fontSize={{
-                          md: "0.7rem",
-                          xs: "1rem",
-                        }}
-                        color="#2D3748"
-                      >
-                        {transaction.categoria.nome}
-                      </Typography>
-                      <Typography
-                        component="p"
-                        fontWeight="600"
-                        fontSize={{
-                          md: "0.9rem",
-                          xs: "1.2rem",
-                        }}
-                        color="#2D3748"
-                        gutterBottom
-                      >
-                        {transaction.descricao}
-                      </Typography>
-                    </>
-                  }
-                  secondary={formatDate(transaction.data)}
-                  secondaryTypographyProps={{
+                  sx={{
+                    margin: "0",
+                    display: "inline-flex",
+                  }}
+                  align="left"
+                  primary={formatDate(transaction.data)}
+                  primaryTypographyProps={{
                     fontSize: {
+                      xs: "0.8rem",
+                      sm: "0.8rem",
                       md: "0.8rem",
-                      xs: "0.6rem",
                     },
                     color: "#2D3748",
                   }}
                 />
-                {transaction.categoria.tipo === "despesa" ? (
-                  <ListItemText
-                    sx={{
-                      marginRight: "1.2rem",
-                    }}
-                    primary={`-R$${transaction.valor.toFixed(2)}`}
-                    primaryTypographyProps={{
-                      fontSize: {
-                        md: "0.9rem",
-                        xs: "0.8rem",
-                      },
-                      fontWeight: "600",
-                      color: "#E53E3E",
-                      align: "right",
-                    }}
-                  />
-                ) : (
-                  <ListItemText
-                    sx={{
-                      marginRight: "1.2rem",
-                    }}
-                    primary={`+R$${transaction.valor.toFixed(2)}`}
-                    primaryTypographyProps={{
-                      fontSize: {
-                        md: "0.9rem",
-                        xs: "0.8rem",
-                      },
-                      fontWeight: "600",
-                      color: "#48BB78",
-                      align: "right",
-                    }}
-                  />
-                )}
+                <ListItemText
+                  sx={{
+                    margin: "0",
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "flex-start",
+                  }}
+                  align="left"
+                  primary={
+                    transaction.categoria.nome ? transaction.categoria.nome : ""
+                  }
+                  primaryTypographyProps={{
+                    component: "p",
+                    fontWeight: "400",
+                    fontSize: {
+                      xs: "0.7rem",
+                      sm: "0.7rem",
+                      md: "0.7rem",
+                    },
+                    color: "#2D3748",
+                  }}
+                  secondary={transaction.descricao ? transaction.descricao : ""}
+                  secondaryTypographyProps={{
+                    component: "p",
+                    fontWeight: "600",
+                    fontSize: {
+                      xs: "0.8rem",
+                      sm: "0.8rem",
+                      md: "0.8rem",
+                    },
+                    color: "#2D3748",
+                  }}
+                />
+                <ListItemText
+                  sx={{
+                    margin: "0 1.2rem 0 0",
+                    display: "inline-flex",
+                    justifyContent: "flex-end",
+                  }}
+                  align="right"
+                  primary={formatValue(
+                    transaction.categoria.tipo,
+                    transaction.valor
+                  )}
+                  primaryTypographyProps={{
+                    component: "p",
+                    fontWeight: "600",
+                    fontSize: {
+                      xs: "0.8rem",
+                      sm: "0.8rem",
+                      md: "0.8rem",
+                    },
+                    color:
+                      transaction.categoria.tipo === "despesa"
+                        ? "#E53E3E"
+                        : "#48BB78",
+                  }}
+                />
                 <IconButton
                   aria-label="edit"
                   onClick={() => handleEditTransaction(transaction)}
@@ -360,7 +389,6 @@ export default function TransactionsListCard({
               "linear-gradient(136.64deg, #658DD1 1.59%, #2D3748 98.89%)",
             padding: "0.4rem 2rem",
             textTransform: "none",
-            // borderRadius: "0.5rem",
           }}
           onClick={() => handleAddNewTransaction()}
         >
