@@ -81,6 +81,7 @@ export default function TransactionModal({
   setOpen,
   categories,
   typeTransactions,
+  selectTransaction,
 }) {
   const [openCategories, setOpenCategories] = useState(false);
   const [optionsCategories, setOptionsCategories] = useState([]);
@@ -140,6 +141,22 @@ export default function TransactionModal({
     },
   });
 
+  useEffect(() => {
+    selectTransaction?.categoria?.tipo &&
+      setValue("type", selectTransaction?.categoria?.tipo);
+    selectTransaction?.data && setValue("date", dayjs(selectTransaction?.data));
+    selectTransaction?.categoria?._id &&
+      setValue("categorie._id", selectTransaction?.categoria?._id);
+    selectTransaction?.categoria?.nome &&
+      setValue("categorie.nome", selectTransaction?.categoria?.nome);
+    selectTransaction?.categoria?.tipo &&
+      setValue("categorie.tipo", selectTransaction?.categoria?.tipo);
+    selectTransaction?.descricao &&
+      setValue("description", selectTransaction?.descricao);
+    selectTransaction?.valor &&
+      setValue("valueTransaction", selectTransaction?.valor?.toFixed(2));
+  }, [selectTransaction]);
+
   let typeWatch = watch("type");
   let categoriesWatch = watch("categorie");
 
@@ -180,10 +197,8 @@ export default function TransactionModal({
   };
 
   const updateTransactions = async (data) => {
-    const idTransacao = pegarItem("transacaoId");
-
     await api
-      .put(`/transacao/${idTransacao}`, {
+      .put(`/transacao/${selectTransaction._id}`, {
         tipo: data.type,
         valor: Number(
           moneyMask(data.valueTransaction).replace(".", "").replace(",", ".")

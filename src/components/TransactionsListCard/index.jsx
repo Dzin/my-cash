@@ -40,7 +40,14 @@ export default function TransactionsListCard({
   const [type, setType] = useState("");
   const [openTransactionModal, setOpenTransactionModal] = useState(false);
   const [typeTransactions, setTypeTransactions] = useState("");
-
+  const [selectTransaction, setSelectTransaction] = useState({
+    id: "",
+    type: undefined,
+    date: new Date(),
+    categorie: { _id: "", nome: "", tipo: "" },
+    description: "",
+    valueTransaction: "",
+  });
   const filterTransactionsByDate = (transaction) => {
     const currentTransactionDate = new Date(transaction.data);
     const selectedTransactionDate = new Date(date);
@@ -81,13 +88,7 @@ export default function TransactionsListCard({
   const handleEditTransaction = (transaction) => {
     setOpenTransactionModal(true);
     setTypeTransactions("Editar");
-
-    console.log(transaction);
-    adicionarItem("transacaoId", transaction._id);
-    adicionarItem("transacaoTipo", transaction.categoria.tipo);
-    adicionarItem("transacaoValor", transaction.valor);
-    adicionarItem("transacaoDescricao", transaction.descricao);
-    adicionarItem("transacaoData", transaction.data);
+    setSelectTransaction(transaction);
   };
 
   const handleDeleteTransaction = (id) => {
@@ -337,6 +338,7 @@ export default function TransactionsListCard({
         open={openTransactionModal}
         setOpen={setOpenTransactionModal}
         typeTransactions={typeTransactions}
+        selectTransaction={selectTransaction}
       />
     </>
   );
