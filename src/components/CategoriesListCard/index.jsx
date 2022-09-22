@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { toast } from "react-toastify";
 // MUI
 import Grid from "@mui/material/Grid";
 import List from "@mui/material/List";
@@ -13,7 +14,8 @@ import ArrowCircleUpOutlinedIcon from "@mui/icons-material/ArrowCircleUpOutlined
 import ArrowCircleDownOutlinedIcon from "@mui/icons-material/ArrowCircleDownOutlined";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteForeverOutlinedIcon from "@mui/icons-material/DeleteForeverOutlined";
-
+import CloseIcon from "@mui/icons-material/Close";
+import CheckIcon from "@mui/icons-material/Check";
 //STYLES
 
 //COMPONENTS
@@ -23,10 +25,17 @@ import { NoResultText } from "../NoResultText";
 import { ToggleType } from "../ToggleType";
 
 //UTILS
-import { adicionarItem, pegarItem } from "../../utils/localStorage";
+import { adicionarItem } from "../../utils/localStorage";
+import api from "../../services/api";
 
-export default function Categories(props) {
-  const [abrirModal, setAbrirModal] = useState(false);
+export default function Categories({
+  categories,
+  setCategories,
+  loading,
+  setLoading,
+  abrirModal,
+  setAbrirModal,
+}) {
   const [typeCategories, setTypeCategories] = useState("");
   const [dadosTrans, setDadosTrans] = useState({
     tipo: "",
@@ -38,10 +47,8 @@ export default function Categories(props) {
   const [categoryFilter, setCategoryFilter] = useState("");
   const filteredCategories =
     categoryFilter.length > 0
-      ? props.categories.filter((category) =>
-          categoryFilter.includes(category.tipo)
-        )
-      : props.categories;
+      ? categories.filter((category) => categoryFilter.includes(category.tipo))
+      : categories;
 
   const handleToggleType = function (category) {
     setCategoryFilter(category || "");
@@ -54,26 +61,50 @@ export default function Categories(props) {
     setTipoErro("");
   }
 
-  const editCategory = (idSelect, nomeSelect, tipoSelect) => {
+  const editCategory = (category) => {
     setNomeErro("");
     setTipoErro("");
     setAbrirModal(true);
     setTypeCategories("Editar");
 
-    adicionarItem("categoriaId", idSelect);
-    adicionarItem("categoriaNome", nomeSelect);
-    adicionarItem("categoriaTipo", tipoSelect);
-    const nomeCategoria = pegarItem("categoriaNome");
-    const tipoCategoria = pegarItem("categoriaTipo");
+    adicionarItem("categoriaId", category._id);
 
     setDadosTrans({
-      tipo: tipoCategoria,
-      nome: nomeCategoria,
+      tipo: category.tipo,
+      nome: category.nome,
     });
   };
 
   const deleteCategory = (id) => {
-    console.log("Deletar categoria!");
+    api
+      .delete(`/categoria/${id}`)
+      .then(() => {
+        toast.success("Categoria deletada com sucesso", {
+          icon: () => <CheckIcon color="primary" />,
+          position: "bottom-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: false,
+          progress: undefined,
+        });
+        setCategories(categories.filter((category) => category._id !== id));
+        setLoading(false);
+      })
+      .catch((error) => {
+        toast.error("Não foi possível deletar a categoria", {
+          icon: () => <CloseIcon color="primary" />,
+          position: "bottom-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: false,
+          progress: undefined,
+        });
+        setLoading(false);
+      });
   };
 
   return (
@@ -142,78 +173,91 @@ export default function Categories(props) {
             },
           }}
         >
-          {props.loading ? (
+          {loading ? (
             <Loading />
           ) : filteredCategories.length === 0 ? (
             <NoResultText />
           ) : (
-            filteredCategories.map((category) => (
-              <ListItem
-                key={category._id}
-                sx={{
-                  paddingTop: "0.2rem",
-                  paddingBottom: "0.2rem",
-                  paddingLeft: "0",
-                  paddingRight: "0",
-                }}
-              >
-                <ListItemIcon
+            filteredCategories
+              .sort((a, b) => {
+                const name1 = a.nome,
+                  name2 = b.nome;
+
+                if (name1 < name2) {
+                  return -1;
+                }
+
+                if (name1 > name2) {
+                  return 1;
+                }
+
+                return 0;
+              })
+              .map((category) => (
+                <ListItem
+                  key={category._id}
                   sx={{
-                    minWidth: "0",
-                    marginRight: "0.5rem",
+                    paddingTop: "0.2rem",
+                    paddingBottom: "0.2rem",
+                    paddingLeft: "0",
+                    paddingRight: "0",
                   }}
                 >
-                  {category.tipo === "despesa" ? (
-                    <ArrowCircleDownOutlinedIcon
-                      fontSize="small"
-                      sx={{
-                        color: "#E53E3E",
-                      }}
-                    />
-                  ) : (
-                    <ArrowCircleUpOutlinedIcon
-                      fontSize="small"
-                      sx={{
-                        color: "#48BB78",
-                      }}
-                    />
-                  )}
-                </ListItemIcon>
-                <ListItemText
-                  primary={category.nome}
-                  primaryTypographyProps={{
-                    fontSize: {
-                      md: "0.9rem",
-                      xs: "0.8rem",
-                    },
-                  }}
-                />
-                <IconButton
-                  aria-label="edit"
-                  onClick={() =>
-                    editCategory(category._id, category.nome, category.tipo)
-                  }
-                >
-                  <EditOutlinedIcon
-                    fontSize="small"
+                  <ListItemIcon
                     sx={{
-                      color: "#000000",
+                      minWidth: "0",
+                      marginRight: "0.5rem",
+                    }}
+                  >
+                    {category.tipo === "despesa" ? (
+                      <ArrowCircleDownOutlinedIcon
+                        fontSize="small"
+                        sx={{
+                          color: "#E53E3E",
+                        }}
+                      />
+                    ) : (
+                      <ArrowCircleUpOutlinedIcon
+                        fontSize="small"
+                        sx={{
+                          color: "#48BB78",
+                        }}
+                      />
+                    )}
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={category.nome}
+                    primaryTypographyProps={{
+                      fontSize: {
+                        md: "0.9rem",
+                        xs: "0.8rem",
+                      },
                     }}
                   />
-                </IconButton>
-                <IconButton
-                  aria-label="delete"
-                  onClick={() => deleteCategory(category._id)}
-                >
-                  <DeleteForeverOutlinedIcon
-                    fontSize="small"
-                    sx={{
-                      color: "#000000",
-                    }}
-                  />
-                </IconButton>
-              </ListItem>
-            ))
+                  <IconButton
+                    aria-label="edit"
+                    onClick={() => editCategory(category)}
+                  >
+                    <EditOutlinedIcon
+                      fontSize="small"
+                      sx={{
+                        color: "#000000",
+                      }}
+                    />
+                  </IconButton>
+                  <IconButton
+                    aria-label="delete"
+                    onClick={() => deleteCategory(category._id)}
+                  >
+                    <DeleteForeverOutlinedIcon
+                      fontSize="small"
+                      sx={{
+                        color: "#000000",
+                      }}
+                    />
+                  </IconButton>
+                </ListItem>
+              ))
           )}
         </List>
         <Button
@@ -241,7 +285,7 @@ export default function Categories(props) {
         typeCategories={typeCategories}
         dadosTrans={dadosTrans}
         setDadosTrans={setDadosTrans}
-        setCategories={props.setCategories}
+        setCategories={setCategories}
         nomeErro={nomeErro}
         setNomeErro={setNomeErro}
         tipoErro={tipoErro}

@@ -14,7 +14,10 @@ import {
   ListItemText,
   IconButton,
   Button,
+  TextField,
 } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+import CheckIcon from "@mui/icons-material/Check";
 
 import ArrowCircleUpOutlinedIcon from "@mui/icons-material/ArrowCircleUpOutlined";
 import ArrowCircleDownOutlinedIcon from "@mui/icons-material/ArrowCircleDownOutlined";
@@ -26,21 +29,30 @@ import Loading from "../Loading";
 import { NoResultText } from "../NoResultText";
 import { DateInput } from "../DateInput";
 import { ToggleType } from "../ToggleType";
+import SearchInput from "../SearchInput";
 
 import api from "../../services/api";
-
-import { adicionarItem, pegarItem } from "../../utils/localStorage";
 
 export default function TransactionsListCard({
   transactions,
   setTransactions,
   loading,
   setLoading,
+  openTransactionModal,
+  setOpenTransactionModal,
 }) {
   const [date, setDate] = useState(null);
   const [type, setType] = useState("");
-  const [openTransactionModal, setOpenTransactionModal] = useState(false);
+  const [search, setSearch] = useState("");
   const [typeTransactions, setTypeTransactions] = useState("");
+  const [selectTransaction, setSelectTransaction] = useState({
+    id: "",
+    type: undefined,
+    date: new Date(),
+    categorie: { _id: "", nome: "", tipo: "" },
+    description: "",
+    valueTransaction: "",
+  });
 
   const filterTransactionsByDate = (transactionList) => {
     return transactionList.filter((transaction) => {
@@ -71,11 +83,18 @@ export default function TransactionsListCard({
     });
   };
 
+  const filterTransactionsByName = (transactionList) => {
+    return transactionList.filter((transaction) =>
+      transaction.descricao.includes(search)
+    );
+  };
+
   const listFilteredTransactions = () => {
     let filteredList = [...transactions];
 
     if (date) filteredList = filterTransactionsByDate(filteredList);
     if (type) filteredList = filterTransactionsByType(filteredList);
+    if (search) filteredList = filterTransactionsByName(filteredList);
 
     orderTransactionsByDescDate(filteredList);
 
@@ -103,15 +122,14 @@ export default function TransactionsListCard({
     setType(selectedValue || "");
   };
 
+  const handleSearchTransaction = function (searchValue) {
+    setSearch(searchValue);
+  };
+
   const handleEditTransaction = (transaction) => {
     setOpenTransactionModal(true);
     setTypeTransactions("Editar");
-
-    adicionarItem("transacaoId", transaction._id);
-    adicionarItem("transacaoTipo", transaction.categoria.tipo);
-    adicionarItem("transacaoValor", transaction.valor);
-    adicionarItem("transacaoDescricao", transaction.descricao);
-    adicionarItem("transacaoData", transaction.data);
+    setSelectTransaction(transaction);
   };
 
   const handleDeleteTransaction = (id) => {
@@ -120,14 +138,32 @@ export default function TransactionsListCard({
     api
       .delete(`/transacao/${id}`)
       .then(() => {
-        toast.success("Transação deletada com sucesso");
+        toast.success("Transação deletada com sucesso", {
+          icon: () => <CheckIcon color="primary" />,
+          position: "bottom-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: false,
+          progress: undefined,
+        });
         setTransactions(
           transactions.filter((transaction) => transaction._id !== id)
         );
         setLoading(false);
       })
       .catch((error) => {
-        toast.error("Não foi possível deletar a transação");
+        toast.error("Não foi possível deletar a transação", {
+          icon: () => <CloseIcon color="primary" />,
+          position: "bottom-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: false,
+          progress: undefined,
+        });
         setLoading(false);
       });
   };
@@ -178,6 +214,7 @@ export default function TransactionsListCard({
             Transações
           </Typography>
           <DateInput handleSelectDate={handleSelectDate} />
+          <SearchInput handleInput={handleSearchTransaction} value={search} />
           <ToggleType handleToggleType={handleToggleType} />
         </Grid>
 
@@ -363,6 +400,7 @@ export default function TransactionsListCard({
         open={openTransactionModal}
         setOpen={setOpenTransactionModal}
         typeTransactions={typeTransactions}
+        selectTransaction={selectTransaction}
       />
     </>
   );
