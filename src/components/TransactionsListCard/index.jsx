@@ -42,14 +42,11 @@ export default function TransactionsListCard({
   const [typeTransactions, setTypeTransactions] = useState("");
 
   const filterTransactionsByDate = (transaction) => {
-    const currentTransactionDate = new Date(transaction.data);
-    const selectedTransactionDate = new Date(date);
+    const currentTransactionDate = dayjs(transaction.data);
 
     return (
-      currentTransactionDate.getMonth() ===
-        selectedTransactionDate.getMonth() &&
-      currentTransactionDate.getFullYear() ===
-        selectedTransactionDate.getFullYear()
+      currentTransactionDate.month() === date.month() &&
+      currentTransactionDate.year() === date.year()
     );
   };
 
@@ -84,14 +81,13 @@ export default function TransactionsListCard({
       receita: `+ R$ ${value.toFixed(2)}`,
     };
 
-    return type && value > 0 ? mapType[type] : "Valor inválido";
+    return type && value >= 0 ? mapType[type] : "Valor inválido";
   };
 
   const handleEditTransaction = (transaction) => {
     setOpenTransactionModal(true);
     setTypeTransactions("Editar");
 
-    console.log(transaction);
     adicionarItem("transacaoId", transaction._id);
     adicionarItem("transacaoTipo", transaction.categoria.tipo);
     adicionarItem("transacaoValor", transaction.valor);
@@ -237,7 +233,9 @@ export default function TransactionsListCard({
                         }}
                         color="#2D3748"
                       >
-                        {transaction.categoria.nome}
+                        {transaction.categoria.nome
+                          ? transaction.categoria.nome
+                          : ""}
                       </Typography>
                       <Typography
                         component="p"
@@ -249,7 +247,7 @@ export default function TransactionsListCard({
                         color="#2D3748"
                         gutterBottom
                       >
-                        {transaction.descricao}
+                        {transaction.descricao ? transaction.descricao : ""}
                       </Typography>
                     </>
                   }
@@ -322,7 +320,6 @@ export default function TransactionsListCard({
               "linear-gradient(136.64deg, #658DD1 1.59%, #2D3748 98.89%)",
             padding: "0.4rem 2rem",
             textTransform: "none",
-            // borderRadius: "0.5rem",
           }}
           onClick={() => handleAddNewTransaction()}
         >
