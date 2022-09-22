@@ -12,8 +12,6 @@ export const ToggleType = ({ handleToggleType }) => {
         height: "40px",
         "& .MuiToggleButton-root": {
           textTransform: 'none',
-          borderColor: "#2D3748",
-          color: "#2D3748",
           "&.Mui-selected": {
             color: '#FFFFFF',
             backgroundColor: "transparent",
