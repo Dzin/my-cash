@@ -16,6 +16,8 @@ import {
   Button,
   TextField,
 } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+import CheckIcon from "@mui/icons-material/Check";
 
 import ArrowCircleUpOutlinedIcon from "@mui/icons-material/ArrowCircleUpOutlined";
 import ArrowCircleDownOutlinedIcon from "@mui/icons-material/ArrowCircleDownOutlined";
@@ -30,8 +32,6 @@ import SearchInput from "../SearchInput";
 
 import api from "../../services/api";
 
-import { adicionarItem, pegarItem } from "../../utils/localStorage";
-
 export default function TransactionsListCard({
   transactions,
   setTransactions,
@@ -40,10 +40,10 @@ export default function TransactionsListCard({
   openTransactionModal,
   setOpenTransactionModal,
 }) {
+
   const [date, setDate] = useState(null);
   const [type, setType] = useState("");
   const [search, setSearch] = useState("");
-  // const [openTransactionModal, setOpenTransactionModal] = useState(false);
   const [typeTransactions, setTypeTransactions] = useState("");
   const [selectTransaction, setSelectTransaction] = useState({
     id: "",
@@ -53,15 +53,16 @@ export default function TransactionsListCard({
     description: "",
     valueTransaction: "",
   });
+
   const filterTransactionsByDate = (transaction) => {
     const currentTransactionDate = new Date(transaction.data);
     const selectedTransactionDate = new Date(date);
 
     return (
       currentTransactionDate.getMonth() ===
-        selectedTransactionDate.getMonth() &&
+      selectedTransactionDate.getMonth() &&
       currentTransactionDate.getFullYear() ===
-        selectedTransactionDate.getFullYear()
+      selectedTransactionDate.getFullYear()
     );
   };
 
@@ -111,14 +112,32 @@ export default function TransactionsListCard({
     api
       .delete(`/transacao/${id}`)
       .then(() => {
-        toast.success("Transação deletada com sucesso");
+        toast.success("Transação deletada com sucesso", {
+          icon: () => <CheckIcon color="primary" />,
+          position: "bottom-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: false,
+          progress: undefined,
+        })
         setTransactions(
           transactions.filter((transaction) => transaction._id !== id)
         );
         setLoading(false);
       })
       .catch((error) => {
-        toast.error("Não foi possível deletar a transação");
+        toast.error('Não foi possível deletar a transação', {
+          icon: () => <CloseIcon color="primary" />,
+          position: "bottom-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: false,
+          progress: undefined,
+        })
         setLoading(false);
       });
   };

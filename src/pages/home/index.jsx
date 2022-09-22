@@ -9,6 +9,7 @@ import CategoriesListCard from "../../components/CategoriesListCard";
 import CardTop from "./components/CardTop";
 import CardBotton from "./components/CardBotton";
 import Copyrights from "./components/Copyrights";
+import CloseIcon from "@mui/icons-material/Close";
 
 import {
   BackgroundHeaderImage,
@@ -26,6 +27,7 @@ export default function Home() {
   const [loadingTransactions, setLoadingTransactions] = useState(false);
   const [loadingCategories, setLoadingCategories] = useState(false);
   const [openTransactionModal, setOpenTransactionModal] = useState(false);
+  const [abrirModal, setAbrirModal] = useState(false);
 
   useEffect(() => {
     setLoadingTransactions(true);
@@ -39,7 +41,16 @@ export default function Home() {
         setLoadingCategories(false);
       })
       .catch((error) => {
-        toast.error("Não foi possível carregar os dados das listas");
+        toast.error("Não foi possível carregar os dados das listas", {
+          icon: () => <CloseIcon color="primary" />,
+          position: "bottom-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: false,
+          progress: undefined,
+        })
         setLoadingTransactions(false);
         setLoadingCategories(false);
       });
@@ -55,11 +66,45 @@ export default function Home() {
           setLoadingTransactions(false);
         })
         .catch((error) => {
-          toast.error("Não foi possível carregar os dados das listas");
+          toast.error("Não foi possível carregar os dados das listas", {
+            icon: () => <CloseIcon color="primary" />,
+            position: "bottom-right",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: false,
+            progress: undefined,
+          })
           setLoadingTransactions(false);
         });
     }
   }, [openTransactionModal]);
+
+  useEffect(() => {
+    if (!abrirModal) {
+      setLoadingCategories(true);
+      api
+        .get("/categoria")
+        .then((res) => {
+          setCategories(res.data);
+          setLoadingCategories(false);
+        })
+        .catch((error) => {
+          toast.error("Não foi possível carregar os dados das listas", {
+            icon: () => <CloseIcon color="primary" />,
+            position: "bottom-right",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: false,
+            progress: undefined,
+          })
+          setLoadingCategories(false);
+        });
+    }
+  }, [abrirModal]);
 
   return (
     <Container
@@ -131,6 +176,8 @@ export default function Home() {
                 setCategories={setCategories}
                 loading={loadingCategories}
                 setLoading={setLoadingCategories}
+                abrirModal={abrirModal}
+                setAbrirModal={setAbrirModal}
               />
             </CardBotton>
           </Grid>
