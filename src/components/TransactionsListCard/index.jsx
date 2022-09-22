@@ -181,7 +181,7 @@ export default function TransactionsListCard({
           xs: "1.5rem 1.2rem",
         }}
       >
-        <Grid
+        {/* <Grid
           sx={{
             display: "flex",
             flexDirection: {
@@ -198,25 +198,37 @@ export default function TransactionsListCard({
               xs: "0.5rem",
             },
           }}
-        >
-          <Typography
-            component="h3"
-            fontWeight="700"
-            fontSize={{
-              xs: "1.2rem",
-            }}
-            textAlign={{
-              sm: "left",
-              xs: "center",
-            }}
-            color="#2D3748"
-          >
-            Transações
-          </Typography>
-          <DateInput handleSelectDate={handleSelectDate} />
-          <SearchInput handleInput={handleSearchTransaction} value={search} />
-          <ToggleType handleToggleType={handleToggleType} />
+        > */}
+        <Grid container spacing={1} alignItems="center">
+          <Grid item xs={12} sm={6} md={6} lg={2}>
+            <Typography
+              component="h3"
+              fontWeight="700"
+              fontSize={{
+                xs: "1.2rem",
+              }}
+              textAlign={{
+                sm: "center",
+                xs: "center",
+                md: "center",
+              }}
+              color="#2D3748"
+            >
+              Transações
+            </Typography>
+          </Grid>
+          <Grid item xs={12} sm={6} md={6} lg={4}>
+            <DateInput handleSelectDate={handleSelectDate} />
+          </Grid>
+          <Grid item xs={12} sm={6} md={6} lg={3}>
+            <SearchInput handleInput={handleSearchTransaction} value={search} />
+          </Grid>
+          <Grid item xs={12} sm={6} md={6} lg={3}>
+            <ToggleType handleToggleType={handleToggleType} />
+          </Grid>
         </Grid>
+
+        {/* </Grid> */}
 
         <List
           sx={{
@@ -249,129 +261,147 @@ export default function TransactionsListCard({
           ) : (
             listFilteredTransactions().map((transaction) => (
               <ListItem
+                // alignItems="center"
                 key={transaction._id}
                 sx={{
                   padding: "0.3rem 0 0.3rem 0",
                 }}
               >
-                <ListItemIcon
-                  sx={{
-                    minWidth: "0",
-                    marginRight: "0.5rem",
-                  }}
-                >
-                  {transaction.categoria.tipo === "despesa" ? (
-                    <ArrowCircleDownOutlinedIcon
-                      fontSize="medium"
-                      sx={{
-                        color: "#E53E3E",
-                      }}
-                    />
-                  ) : (
-                    <ArrowCircleUpOutlinedIcon
-                      fontSize="medium"
-                      sx={{
-                        color: "#48BB78",
-                      }}
-                    />
-                  )}
-                </ListItemIcon>
-                <ListItemText
-                  sx={{
-                    margin: "0",
-                    display: "inline-flex",
-                  }}
-                  align="left"
-                  primary={formatDate(transaction.data)}
-                  primaryTypographyProps={{
-                    fontSize: {
-                      xs: "0.8rem",
-                      sm: "0.8rem",
-                      md: "0.8rem",
-                    },
-                    color: "#2D3748",
-                  }}
-                />
-                <ListItemText
-                  sx={{
-                    margin: "0",
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "flex-start",
-                  }}
-                  align="left"
-                  primary={
-                    transaction.categoria.nome ? transaction.categoria.nome : ""
-                  }
-                  primaryTypographyProps={{
-                    component: "p",
-                    fontWeight: "400",
-                    fontSize: {
-                      xs: "0.7rem",
-                      sm: "0.7rem",
-                      md: "0.7rem",
-                    },
-                    color: "#2D3748",
-                  }}
-                  secondary={transaction.descricao ? transaction.descricao : ""}
-                  secondaryTypographyProps={{
-                    component: "p",
-                    fontWeight: "600",
-                    fontSize: {
-                      xs: "0.8rem",
-                      sm: "0.8rem",
-                      md: "0.8rem",
-                    },
-                    color: "#2D3748",
-                  }}
-                />
-                <ListItemText
-                  sx={{
-                    margin: "0 1.2rem 0 0",
-                    display: "inline-flex",
-                    justifyContent: "flex-end",
-                  }}
-                  align="right"
-                  primary={formatValue(
-                    transaction.categoria.tipo,
-                    transaction.valor
-                  )}
-                  primaryTypographyProps={{
-                    component: "p",
-                    fontWeight: "600",
-                    fontSize: {
-                      xs: "0.8rem",
-                      sm: "0.8rem",
-                      md: "0.8rem",
-                    },
-                    color:
-                      transaction.categoria.tipo === "despesa"
-                        ? "#E53E3E"
-                        : "#48BB78",
-                  }}
-                />
-                <IconButton
-                  aria-label="edit"
-                  onClick={() => handleEditTransaction(transaction)}
-                >
-                  <EditOutlinedIcon
-                    fontSize="small"
+                <Grid container alignItems="center">
+                  <Grid item>
+                    <Grid container>
+                      <Grid item>
+                        <ListItemIcon
+                          sx={{
+                            minWidth: "0",
+                            marginRight: "0.5rem",
+                          }}
+                        >
+                          {transaction.categoria.tipo === "despesa" ? (
+                            <ArrowCircleDownOutlinedIcon
+                              fontSize="medium"
+                              sx={{
+                                color: "#E53E3E",
+                              }}
+                            />
+                          ) : (
+                            <ArrowCircleUpOutlinedIcon
+                              fontSize="medium"
+                              sx={{
+                                color: "#48BB78",
+                              }}
+                            />
+                          )}
+                        </ListItemIcon>
+                      </Grid>
+                      <Grid item>
+                        <ListItemText
+                          sx={
+                            {
+                              // margin: "0",
+                              // display: "inline-flex",
+                            }
+                          }
+                          align="left"
+                          primary={formatDate(transaction.data)}
+                          primaryTypographyProps={{
+                            fontSize: {
+                              xs: "0.8rem",
+                              sm: "0.8rem",
+                              md: "0.8rem",
+                            },
+                            color: "#2D3748",
+                          }}
+                        />
+                      </Grid>
+                    </Grid>
+                  </Grid>
+
+                  <ListItemText
                     sx={{
-                      color: "#000000",
+                      margin: "0 1rem",
+                      // display: "flex",
+                      // flexDirection: "column",
+                      // alignItems: "flex-start",
+                    }}
+                    align="left"
+                    primary={
+                      transaction.categoria.nome
+                        ? transaction.categoria.nome
+                        : ""
+                    }
+                    primaryTypographyProps={{
+                      component: "p",
+                      fontWeight: "600",
+                      fontSize: {
+                        xs: "0.8rem",
+                        sm: "0.8rem",
+                        md: "0.8rem",
+                      },
+                      color: "#2D3748",
+                    }}
+                    secondary={
+                      transaction.descricao ? transaction.descricao : ""
+                    }
+                    secondaryTypographyProps={{
+                      component: "p",
+                      fontWeight: "400",
+                      fontSize: {
+                        xs: "0.7rem",
+                        sm: "0.7rem",
+                        md: "0.7rem",
+                      },
+                      color: "#2D3748",
                     }}
                   />
-                </IconButton>
-                <IconButton
-                  aria-label="delete"
-                  onClick={() => handleDeleteTransaction(transaction._id)}
-                >
-                  <DeleteForeverOutlinedIcon
-                    fontSize="small"
+                  <ListItemText
                     sx={{
-                      color: "#000000",
+                      margin: "0 1.2rem 0 0",
+                      // display: "inline-flex",
+                      // justifyContent: "flex-end",
+                    }}
+                    align="right"
+                    primary={formatValue(
+                      transaction.categoria.tipo,
+                      transaction.valor
+                    )}
+                    primaryTypographyProps={{
+                      component: "p",
+                      fontWeight: "600",
+                      fontSize: {
+                        xs: "0.8rem",
+                        sm: "0.8rem",
+                        md: "0.8rem",
+                      },
+                      color:
+                        transaction.categoria.tipo === "despesa"
+                          ? "#E53E3E"
+                          : "#48BB78",
                     }}
                   />
-                </IconButton>
+                  <IconButton
+                    aria-label="edit"
+                    onClick={() => handleEditTransaction(transaction)}
+                  >
+                    <EditOutlinedIcon
+                      fontSize="small"
+                      sx={{
+                        color: "#000000",
+                      }}
+                    />
+                  </IconButton>
+                  <IconButton
+                    aria-label="delete"
+                    onClick={() => handleDeleteTransaction(transaction._id)}
+                  >
+                    <DeleteForeverOutlinedIcon
+                      fontSize="small"
+                      sx={{
+                        color: "#000000",
+                      }}
+                    />
+                  </IconButton>
+                </Grid>
               </ListItem>
             ))
           )}
