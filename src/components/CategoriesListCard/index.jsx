@@ -142,6 +142,8 @@ export default function Categories(props) {
         >
           {props.loading ? (
             <Loading />
+          ) : filteredCategories.length === 0 ? (
+            <NoResultText />
           ) : (
             filteredCategories.map((category) => (
               <ListItem

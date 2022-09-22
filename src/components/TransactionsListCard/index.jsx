@@ -23,6 +23,7 @@ import DeleteForeverOutlinedIcon from "@mui/icons-material/DeleteForeverOutlined
 
 import TransactionModal from "../TransactionModal";
 import Loading from "../Loading";
+import { NoResultText } from "../NoResultText";
 import { DateInput } from "../DateInput";
 import { ToggleType } from "../ToggleType";
 
@@ -81,14 +82,6 @@ export default function TransactionsListCard({
     return filteredList;
   };
 
-  const handleSelectDate = function (selectedDate) {
-    setDate(selectedDate);
-  };
-
-  const handleToggleType = function (selectedValue) {
-    setType(selectedValue || "");
-  };
-
   const formatDate = (date) => {
     return date ? dayjs(date).format("DD/MM/YYYY") : "Nenhuma data definida";
   };
@@ -100,6 +93,14 @@ export default function TransactionsListCard({
     };
 
     return type && value >= 0 ? mapType[type] : "Valor inválido";
+  };
+
+  const handleSelectDate = function (selectedDate) {
+    setDate(selectedDate);
+  };
+
+  const handleToggleType = function (selectedValue) {
+    setType(selectedValue || "");
   };
 
   const handleEditTransaction = (transaction) => {
@@ -206,6 +207,8 @@ export default function TransactionsListCard({
         >
           {loading ? (
             <Loading />
+          ) : listFilteredTransactions().length === 0 ? (
+            <NoResultText />
           ) : (
             listFilteredTransactions().map((transaction) => (
               <ListItem
