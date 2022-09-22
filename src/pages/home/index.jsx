@@ -25,6 +25,7 @@ export default function Home() {
   const [categories, setCategories] = useState([]);
   const [loadingTransactions, setLoadingTransactions] = useState(false);
   const [loadingCategories, setLoadingCategories] = useState(false);
+  const [openTransactionModal, setOpenTransactionModal] = useState(false);
 
   useEffect(() => {
     setLoadingTransactions(true);
@@ -43,6 +44,22 @@ export default function Home() {
         setLoadingCategories(false);
       });
   }, []);
+
+  useEffect(() => {
+    if (!openTransactionModal) {
+      setLoadingTransactions(true);
+      api
+        .get("/transacao")
+        .then((res) => {
+          setTransactions(res.data);
+          setLoadingTransactions(false);
+        })
+        .catch((error) => {
+          toast.error("Não foi possível carregar os dados das listas");
+          setLoadingTransactions(false);
+        });
+    }
+  }, [openTransactionModal]);
 
   return (
     <Container
@@ -104,6 +121,8 @@ export default function Home() {
                 setTransactions={setTransactions}
                 loading={loadingTransactions}
                 setLoading={setLoadingTransactions}
+                openTransactionModal={openTransactionModal}
+                setOpenTransactionModal={setOpenTransactionModal}
               />
             </CardBotton>
             <CardBotton xs={12} md={4}>

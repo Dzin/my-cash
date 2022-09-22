@@ -35,10 +35,12 @@ export default function TransactionsListCard({
   setTransactions,
   loading,
   setLoading,
+  openTransactionModal,
+  setOpenTransactionModal,
 }) {
   const [date, setDate] = useState(null);
   const [type, setType] = useState("");
-  const [openTransactionModal, setOpenTransactionModal] = useState(false);
+  // const [openTransactionModal, setOpenTransactionModal] = useState(false);
   const [typeTransactions, setTypeTransactions] = useState("");
   const [selectTransaction, setSelectTransaction] = useState({
     id: "",
