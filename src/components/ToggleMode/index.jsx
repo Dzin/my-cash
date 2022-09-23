@@ -19,8 +19,11 @@ export default function ToggleMode({ setColorMode }) {
           onChange={() => {
             setColorMode((prevState) => {
               if (prevState === "light") {
+                localStorage.setItem("colorMode", "dark");
                 return "dark";
               } else {
+                localStorage.setItem("colorMode", "light");
+
                 return "light";
               }
             });

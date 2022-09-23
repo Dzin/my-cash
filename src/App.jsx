@@ -8,7 +8,8 @@ import "react-toastify/dist/ReactToastify.css";
 import ToggleMode from "./components/ToggleMode";
 
 export default function App() {
-  const [colorMode, setColorMode] = React.useState("light");
+  const color = localStorage.getItem("colorMode") || "light";
+  const [colorMode, setColorMode] = React.useState(color);
 
   return (
     <>
