@@ -1,6 +1,6 @@
 import React from "react";
 //MUI
-import { Typography, Grid, Paper, Box } from "@mui/material";
+import { Typography, Grid, Paper, Box, useTheme, alpha } from "@mui/material";
 //ICONS
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
@@ -12,7 +12,7 @@ import { moneyMask } from "../../../../utils/formatter";
 
 export default function CardTop(props) {
   let data;
-
+  const theme = useTheme();
   const receita = props?.transactions
     ?.filter(
       (transaction) => transaction?.categoria?.tipo?.toLowerCase() === "receita"
@@ -83,20 +83,23 @@ export default function CardTop(props) {
             }}
           >
             <Box sx={{ display: "flex", flexDirection: "column" }}>
-              <Typography variant="subtitle2" color="#A0AEC0">
+              <Typography
+                variant="subtitle2"
+                color={theme.palette.text.secondary}
+              >
                 {props.type}
               </Typography>
               <Typography
                 color={`${
                   props.type === "Balanço"
                     ? data >= 1
-                      ? "#5CAB7D"
+                      ? theme.palette.receita
                       : data < 0
-                      ? "#ff6a6a"
-                      : "#2D3748"
+                      ? theme.palette.despesa
+                      : theme.palette.text.primary
                     : props.type === "Receitas"
-                    ? "#5CAB7D"
-                    : "#ff6a6a"
+                    ? theme.palette.receita
+                    : theme.palette.despesa
                 }`}
                 fontWeight="700"
               >{`R$ ${data < 0 ? "-" : ""}${moneyMask(
@@ -107,8 +110,7 @@ export default function CardTop(props) {
               sx={{
                 width: "45px",
                 height: "45px",
-                background:
-                  "linear-gradient(136.64deg, #658DD1 1.59%, #2D3748 98.89%)",
+                background: `linear-gradient(136.64deg,${theme.palette.gradientType1} 1.59%,${theme.palette.gradientType2} 98.89%)`,
                 borderRadius: "1rem",
                 display: "flex",
                 justifyContent: "center",
@@ -120,7 +122,13 @@ export default function CardTop(props) {
                   fontWeight: "700",
                   width: "1.2rem",
                   height: "1.2rem",
-                  background: `${props.type !== "Balanço" ? "#fff" : "none"}`,
+                  background: `${
+                    props.type !== "Balanço"
+                      ? theme.palette.mode === "light"
+                        ? theme.palette.background.default
+                        : alpha(theme.palette.background.default, 0.8)
+                      : "none"
+                  }`,
                   borderRadius: "1rem",
                   display: "flex",
                   justifyContent: "center",
@@ -128,11 +136,24 @@ export default function CardTop(props) {
                 }}
               >
                 {props.type === "Receitas" ? (
-                  <AddIcon fontSize="0.625rem" sx={{ color: "#5879B1" }} />
+                  <AddIcon
+                    fontSize="0.625rem"
+                    sx={{ color: theme.palette.iconCardTop }}
+                  />
                 ) : props.type === "Despesas" ? (
-                  <RemoveIcon fontSize="0.625rem" sx={{ color: "#5879B1" }} />
+                  <RemoveIcon
+                    fontSize="0.625rem"
+                    sx={{ color: theme.palette.iconCardTop }}
+                  />
                 ) : (
-                  <AccountBalanceWalletIcon sx={{ color: "#ffffff" }} />
+                  <AccountBalanceWalletIcon
+                    sx={{
+                      color:
+                        theme.palette.mode === "light"
+                          ? theme.palette.background.default
+                          : alpha(theme.palette.background.default, 0.8),
+                    }}
+                  />
                 )}
               </Box>
             </Box>
