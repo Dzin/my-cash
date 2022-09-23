@@ -9,6 +9,13 @@ const theme = createTheme({
         },
       },
     },
+    MuiDivider: {
+      styleOverrides: {
+        root: {
+          borderColor: "rgba(0, 0, 0, 0.06)",
+        },
+      },
+    },
   },
 });
 
