@@ -51,6 +51,7 @@ O MyCash tem como propósito maior auxiliar os usuários no controle de suas fin
 - Exibição do total de despesas
 - Exibição do balanço, diferença entre os totais de receitas e despesas
 - Seleção de tema claro ou escuro (Dark mode)
+- Responsividade em diferentes dispositivos
 
 ## ⚠️ Pré-requisitos para execução
 
