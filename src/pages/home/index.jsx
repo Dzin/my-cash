@@ -50,7 +50,7 @@ export default function Home() {
           pauseOnHover: true,
           draggable: false,
           progress: undefined,
-        })
+        });
         setLoadingTransactions(false);
         setLoadingCategories(false);
       });
@@ -75,7 +75,7 @@ export default function Home() {
             pauseOnHover: true,
             draggable: false,
             progress: undefined,
-          })
+          });
           setLoadingTransactions(false);
         });
     }
@@ -100,7 +100,7 @@ export default function Home() {
             pauseOnHover: true,
             draggable: false,
             progress: undefined,
-          })
+          });
           setLoadingCategories(false);
         });
     }
