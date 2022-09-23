@@ -185,9 +185,9 @@ export default function TransactionModal({
         categoria: data.categorie._id,
         descricao: data.description,
         data: dayjs(data.date).format("YYYY-MM-DD"),
-      })
+      });
 
-      toast.success('Transação atualizada', {
+      toast.success("Transação atualizada", {
         icon: () => <CheckIcon color="primary" />,
         position: "bottom-right",
         autoClose: 2000,
@@ -218,18 +218,17 @@ export default function TransactionModal({
     const idTransacao = selectTransaction._id;
 
     try {
-      await api
-        .put(`/transacao/${idTransacao}`, {
-          tipo: data.type,
-          valor: Number(
-            moneyMask(data.valueTransaction).replace(".", "").replace(",", ".")
-          ),
-          categoria: data.categorie._id,
-          descricao: data.description,
-          data: dayjs(data.date).format("YYYY-MM-DD"),
-        })
+      await api.put(`/transacao/${idTransacao}`, {
+        tipo: data.type,
+        valor: Number(
+          moneyMask(data.valueTransaction).replace(".", "").replace(",", ".")
+        ),
+        categoria: data.categorie._id,
+        descricao: data.description,
+        data: dayjs(data.date).format("YYYY-MM-DD"),
+      });
 
-      toast.success('Transação atualizada', {
+      toast.success("Transação atualizada", {
         icon: () => <CheckIcon color="primary" />,
         position: "bottom-right",
         autoClose: 2000,
@@ -238,7 +237,7 @@ export default function TransactionModal({
         pauseOnHover: true,
         draggable: false,
         progress: undefined,
-      })
+      });
 
       handleClose();
       reset();
@@ -267,10 +266,10 @@ export default function TransactionModal({
       sx={{
         " .MuiPaper-root": {
           borderRadius: "1rem",
-          display: 'flex',
-          justifyContent: 'center',
-          maxWidth: '68rem',
-          height: '11rem'
+          display: "flex",
+          justifyContent: "center",
+          maxWidth: "68rem",
+          // height: '11rem'
         },
       }}
     >
@@ -322,7 +321,7 @@ export default function TransactionModal({
             }}
             spacing={1.5}
           >
-            <Grid item xs={12} sm={2}>
+            <Grid item xs={12} md={4} sm={6} lg={2}>
               <FormControl
                 fullWidth
                 size="small"
@@ -348,7 +347,7 @@ export default function TransactionModal({
                 <FormHelperText>{errors.type?.message}</FormHelperText>
               </FormControl>
             </Grid>
-            <Grid item xs={12} sm={2}>
+            <Grid item xs={12} md={4} sm={6} lg={2}>
               <LocalizationProvider
                 dateAdapter={AdapterDayjs}
                 adapterLocale={"pt-br"}
@@ -379,7 +378,7 @@ export default function TransactionModal({
                 />
               </LocalizationProvider>
             </Grid>
-            <Grid item xs={12} sm={2}>
+            <Grid item xs={12} md={4} sm={6} lg={2}>
               <Controller
                 control={control}
                 name="categorie"
@@ -416,8 +415,8 @@ export default function TransactionModal({
                           fieldState.error?.message
                             ? fieldState.error?.message
                             : !getValues().type
-                              ? "Selecione o tipo da transação"
-                              : false
+                            ? "Selecione o tipo da transação"
+                            : false
                         }
                         InputProps={{
                           ...params.InputProps,
@@ -436,7 +435,7 @@ export default function TransactionModal({
                 )}
               />
             </Grid>
-            <Grid item xs={12} sm={2}>
+            <Grid item xs={12} md={4} sm={6} lg={2}>
               <Controller
                 name="description"
                 control={control}
@@ -456,7 +455,7 @@ export default function TransactionModal({
                 )}
               />
             </Grid>
-            <Grid item xs={12} sm={2}>
+            <Grid item xs={12} md={4} sm={6} lg={2}>
               <Controller
                 name="valueTransaction"
                 control={control}
@@ -479,12 +478,13 @@ export default function TransactionModal({
                       sx={{
                         "& input": {
                           fontWeight: "700",
-                          color: `${getValues().type === "receita"
-                            ? "#5CAB7D"
-                            : getValues().type === "despesa"
+                          color: `${
+                            getValues().type === "receita"
+                              ? "#5CAB7D"
+                              : getValues().type === "despesa"
                               ? "#ff6a6a"
                               : "none"
-                            }`,
+                          }`,
                         },
                       }}
                       InputProps={{
@@ -497,7 +497,7 @@ export default function TransactionModal({
                 }}
               />
             </Grid>
-            <Grid item xs={12} sm={2}>
+            <Grid item xs={12} md={4} sm={6} lg={2}>
               <Button
                 type="submit"
                 variant="contained"

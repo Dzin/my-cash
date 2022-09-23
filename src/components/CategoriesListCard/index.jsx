@@ -9,6 +9,8 @@ import ListItemText from "@mui/material/ListItemText";
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
 import Button from "@mui/material/Button";
+import Box from "@mui/material/Box";
+import Divider from "@mui/material/Divider";
 //ICONS
 import ArrowCircleUpOutlinedIcon from "@mui/icons-material/ArrowCircleUpOutlined";
 import ArrowCircleDownOutlinedIcon from "@mui/icons-material/ArrowCircleDownOutlined";
@@ -116,6 +118,38 @@ export default function Categories({
         }}
       >
         <Grid
+          container
+          justifyContent={"space-between"}
+          alignItems={"center"}
+          spacing={1}
+        >
+          <Grid item md={12} sm={6} lg={6}>
+            <Box
+              height={"40px"}
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <Typography
+                component="h3"
+                fontWeight="700"
+                fontSize={{
+                  xs: "1.2rem",
+                }}
+                align={"center"}
+                color="#2D3748"
+              >
+                Categorias
+              </Typography>
+            </Box>
+          </Grid>
+          <Grid item md={12} sm={6} lg={6}>
+            <ToggleType handleToggleType={handleToggleType} />
+          </Grid>
+        </Grid>
+        {/* <Grid
           sx={{
             display: "flex",
             flexDirection: {
@@ -132,23 +166,9 @@ export default function Categories({
               xs: "0.5rem",
             },
           }}
-        >
-          <Typography
-            component="h3"
-            fontWeight="700"
-            fontSize={{
-              xs: "1.2rem",
-            }}
-            textAlign={{
-              sm: "left",
-              xs: "center",
-            }}
-            color="#2D3748"
-          >
-            Categorias
-          </Typography>
-          <ToggleType handleToggleType={handleToggleType} />
-        </Grid>
+        > */}
+
+        {/* </Grid> */}
         <List
           sx={{
             width: "100%",
@@ -194,69 +214,72 @@ export default function Categories({
                 return 0;
               })
               .map((category) => (
-                <ListItem
-                  key={category._id}
-                  sx={{
-                    paddingTop: "0.2rem",
-                    paddingBottom: "0.2rem",
-                    paddingLeft: "0",
-                    paddingRight: "0",
-                  }}
-                >
-                  <ListItemIcon
+                <>
+                  <ListItem
+                    key={category._id}
                     sx={{
-                      minWidth: "0",
-                      marginRight: "0.5rem",
+                      paddingTop: "0.2rem",
+                      paddingBottom: "0.2rem",
+                      paddingLeft: "0",
+                      paddingRight: "0",
                     }}
                   >
-                    {category.tipo === "despesa" ? (
-                      <ArrowCircleDownOutlinedIcon
-                        fontSize="small"
-                        sx={{
-                          color: "#E53E3E",
-                        }}
-                      />
-                    ) : (
-                      <ArrowCircleUpOutlinedIcon
-                        fontSize="small"
-                        sx={{
-                          color: "#48BB78",
-                        }}
-                      />
-                    )}
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={category.nome}
-                    primaryTypographyProps={{
-                      fontSize: {
-                        md: "0.9rem",
-                        xs: "0.8rem",
-                      },
-                    }}
-                  />
-                  <IconButton
-                    aria-label="edit"
-                    onClick={() => editCategory(category)}
-                  >
-                    <EditOutlinedIcon
-                      fontSize="small"
+                    <ListItemIcon
                       sx={{
-                        color: "#000000",
+                        minWidth: "0",
+                        marginRight: "0.5rem",
+                      }}
+                    >
+                      {category.tipo === "despesa" ? (
+                        <ArrowCircleDownOutlinedIcon
+                          fontSize="small"
+                          sx={{
+                            color: "#E53E3E",
+                          }}
+                        />
+                      ) : (
+                        <ArrowCircleUpOutlinedIcon
+                          fontSize="small"
+                          sx={{
+                            color: "#48BB78",
+                          }}
+                        />
+                      )}
+                    </ListItemIcon>
+                    <ListItemText
+                      primary={category.nome}
+                      primaryTypographyProps={{
+                        fontSize: {
+                          md: "0.9rem",
+                          xs: "0.8rem",
+                        },
                       }}
                     />
-                  </IconButton>
-                  <IconButton
-                    aria-label="delete"
-                    onClick={() => deleteCategory(category._id)}
-                  >
-                    <DeleteForeverOutlinedIcon
-                      fontSize="small"
-                      sx={{
-                        color: "#000000",
-                      }}
-                    />
-                  </IconButton>
-                </ListItem>
+                    <IconButton
+                      aria-label="edit"
+                      onClick={() => editCategory(category)}
+                    >
+                      <EditOutlinedIcon
+                        fontSize="small"
+                        sx={{
+                          color: "#000000",
+                        }}
+                      />
+                    </IconButton>
+                    <IconButton
+                      aria-label="delete"
+                      onClick={() => deleteCategory(category._id)}
+                    >
+                      <DeleteForeverOutlinedIcon
+                        fontSize="small"
+                        sx={{
+                          color: "#000000",
+                        }}
+                      />
+                    </IconButton>
+                  </ListItem>
+                  <Divider />
+                </>
               ))
           )}
         </List>

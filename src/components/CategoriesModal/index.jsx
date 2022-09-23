@@ -146,7 +146,7 @@ export default function CategoriesModal({
           display: "flex",
           justifyContent: "center",
           width: "29rem",
-          height: '9.5rem'
+          // height: "9.5rem",
         },
       }}
     >
