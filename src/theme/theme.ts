@@ -15,6 +15,7 @@ const theme = (mode = undefined) =>
             colorButton: "#fff",
             toggle: "rgba(0, 0, 0, 0.87)",
             gamaAcademy: "rgb(0, 240, 80)",
+            background: { default: "#f3f3f3" },
           }
         : {
             text: { primary: "#fff", secondary: "#fff" },
@@ -26,6 +27,9 @@ const theme = (mode = undefined) =>
             colorButton: "rgba(0, 0, 0, 0.87)",
             toggle: "#fff",
             gamaAcademy: "rgb(0, 240, 80)",
+            background: {
+              paper: "#232323",
+            },
           }),
     },
     components: {
