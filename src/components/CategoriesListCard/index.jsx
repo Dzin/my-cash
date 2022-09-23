@@ -19,7 +19,7 @@ import DeleteForeverOutlinedIcon from "@mui/icons-material/DeleteForeverOutlined
 import CloseIcon from "@mui/icons-material/Close";
 import CheckIcon from "@mui/icons-material/Check";
 //STYLES
-
+import { useTheme } from "@mui/material/styles";
 //COMPONENTS
 import CategoriesModal from "../CategoriesModal";
 import Loading from "../Loading";
@@ -45,7 +45,7 @@ export default function Categories({
   });
   const [tipoErro, setTipoErro] = useState("");
   const [nomeErro, setNomeErro] = useState("");
-
+  const theme = useTheme();
   const [categoryFilter, setCategoryFilter] = useState("");
   const filteredCategories =
     categoryFilter.length > 0
@@ -139,7 +139,6 @@ export default function Categories({
                   xs: "1.2rem",
                 }}
                 align={"center"}
-                color="#2D3748"
               >
                 Categorias
               </Typography>
@@ -261,8 +260,9 @@ export default function Categories({
                     >
                       <EditOutlinedIcon
                         fontSize="small"
+                        color=""
                         sx={{
-                          color: "#000000",
+                          color: theme.palette.text.primary,
                         }}
                       />
                     </IconButton>
@@ -273,7 +273,7 @@ export default function Categories({
                       <DeleteForeverOutlinedIcon
                         fontSize="small"
                         sx={{
-                          color: "#000000",
+                          color: theme.palette.text.primary,
                         }}
                       />
                     </IconButton>

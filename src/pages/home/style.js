@@ -4,12 +4,15 @@ import BackgroungHeader from "../../assets/imgs/backgroundHeader.png";
 
 export const BackgroundHeaderFilter = styled(Box)(({ theme }) => ({
   position: "absolute",
-  opacity: "0.85",
+  opacity: theme.palette.mode === "light" ? 0.85 : 0.5,
   borderRadius: "1rem",
   width: "95%",
   margim: "0 0 0 0",
   height: "22rem",
-  background: "linear-gradient(136.64deg, #658DD1 1.59%, #2D3748 98.89%)",
+  background:
+    theme.palette.mode === "light"
+      ? "linear-gradient(136.64deg, #658DD1 1.59%, #2D3748 98.89%)"
+      : "linear-gradient(136.64deg, #262930 1.59%, #2D3748 98.89%)",
   zIndex: 4,
   top: 12,
   left: "calc(2.5%)",
@@ -19,7 +22,7 @@ export const BackgroundHeaderFilter = styled(Box)(({ theme }) => ({
 
 export const BackgroundHeaderImage = styled(Box)(({ theme }) => ({
   position: "absolute",
-  opacity: "0.85",
+  opacity: theme.palette.mode === "light" ? 0.85 : 0.5,
   borderRadius: "1rem",
   width: "95%",
   margim: "0 0 0 0",

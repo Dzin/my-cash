@@ -19,7 +19,7 @@ import {
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import CheckIcon from "@mui/icons-material/Check";
-
+import { useTheme } from "@mui/material/styles";
 import ArrowCircleUpOutlinedIcon from "@mui/icons-material/ArrowCircleUpOutlined";
 import ArrowCircleDownOutlinedIcon from "@mui/icons-material/ArrowCircleDownOutlined";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
@@ -54,7 +54,7 @@ export default function TransactionsListCard({
     description: "",
     valueTransaction: "",
   });
-
+  const theme = useTheme();
   const filterTransactionsByDate = (transactionList) => {
     return transactionList.filter((transaction) => {
       const currentTransactionDate = dayjs(transaction.data);
@@ -195,7 +195,7 @@ export default function TransactionsListCard({
                 xs: "center",
                 md: "center",
               }}
-              color="#2D3748"
+              // color="#2D3748"
             >
               Transações
             </Typography>
@@ -312,7 +312,7 @@ export default function TransactionsListCard({
                                     sm: "0.8rem",
                                     md: "0.8rem",
                                   },
-                                  color: "#2D3748",
+                                  // color: "#2D3748",
                                 }}
                               />
                             </Grid>
@@ -342,7 +342,7 @@ export default function TransactionsListCard({
                                 sm: "0.7rem",
                                 md: "0.7rem",
                               },
-                              color: "#2D3748",
+                              // color: "#2D3748",
                             }}
                             secondary={
                               transaction.descricao ? transaction.descricao : ""
@@ -355,7 +355,11 @@ export default function TransactionsListCard({
                                 sm: "0.8rem",
                                 md: "0.8rem",
                               },
-                              color: "#2D3748",
+                              color: `${
+                                theme.palette.mode === "light"
+                                  ? theme.palette.text.primary
+                                  : theme.palette.text.secondary
+                              }`,
                             }}
                           />
                         </Grid>
@@ -410,7 +414,7 @@ export default function TransactionsListCard({
                                 <EditOutlinedIcon
                                   fontSize="small"
                                   sx={{
-                                    color: "#000000",
+                                    color: theme.palette.text.primary,
                                   }}
                                 />
                               </IconButton>
@@ -425,7 +429,7 @@ export default function TransactionsListCard({
                                 <DeleteForeverOutlinedIcon
                                   fontSize="small"
                                   sx={{
-                                    color: "#000000",
+                                    color: theme.palette.text.primary,
                                   }}
                                 />
                               </IconButton>
@@ -450,10 +454,10 @@ export default function TransactionsListCard({
             },
             fontWeight: "500",
             backgroundColor: "transparent",
-            backgroundImage:
-              "linear-gradient(136.64deg, #658DD1 1.59%, #2D3748 98.89%)",
+            background: `linear-gradient(136.64deg, ${theme.palette.gradientType1} 1.59%, ${theme.palette.gradientType2} 98.89%)`,
             padding: "0.4rem 2rem",
             textTransform: "none",
+            // color: theme.palette.colorButton,
           }}
           onClick={() => handleAddNewTransaction()}
         >
