@@ -116,7 +116,8 @@ npm run dev
 - Deploy: [Vercel](https://my-cash-three.vercel.app/)
 - Layout: [Figma](https://www.figma.com/file/Tc3KHUqZmSEmHCa7uELQJP/MyCash---Gest%C3%A3o-Financeira?node-id=0%3A1)
 - Kanban: [Trello](https://trello.com/b/dzj0Q9ej/gama-academy-pi)
-- Repositório: [GitHub](https://github.com/Dzin/pi-gamaacademy)
+- Repositório frontend: [GitHub](https://github.com/Dzin/pi-gamaacademy)
+- Repositório backend: [GitHub](https://github.com/AyrlonDouglas/finances-control-backend-DevForTech)
 
 ## 🤝 Colaboradores
 
